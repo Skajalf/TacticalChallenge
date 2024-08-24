@@ -13,6 +13,11 @@ public class Player : Character
         PlayerInput input = GetComponent<PlayerInput>();
         InputActionMap actionMap = input.actions.FindActionMap("Player");
 
+        //actionMap.FindAction("Attack").started += context =>
+        //{
+        //    Action.SetAttackMode();
+        //};
+
         //TODO: 스킬 컴포넌트를 만들어서 연결해야함
         //actionMap.FindAction("Skill").started += context =>
         //{
