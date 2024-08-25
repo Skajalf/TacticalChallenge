@@ -403,6 +403,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 195226100}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bf8e678cc70f6fb40936f1f70afcba8e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 195226108}
     - targetCorrespondingSourceObject: {fileID: 6090860051088098725, guid: bf8e678cc70f6fb40936f1f70afcba8e,
         type: 3}
       insertIndex: -1
@@ -549,11 +553,27 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 68255975-ffdf-4b98-a6a1-7a427ba34d94
     m_ActionName: Player/Attack[/Mouse/press]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1fea8f6f-63a2-46e3-ae9a-c814b4e19f33
+    m_ActionName: Player/Aim[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &195226108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195226099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92ccc95f19c28c44d8d7be2f347981cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

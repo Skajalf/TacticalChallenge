@@ -5,7 +5,7 @@ public class StateComponent : MonoBehaviour
 {
     public enum StateType
     {
-        Idle, Equip, Action, Skill, Reload, Damaged, Dead,
+        Idle, Equip, Action, Skill, Damaged, Dead,
     }
     private StateType type = StateType.Idle;
 
@@ -15,7 +15,6 @@ public class StateComponent : MonoBehaviour
     public bool EquipMode { get => type == StateType.Equip; }
     public bool ActionMode { get => type == StateType.Action; }
     public bool SkillMode { get => type == StateType.Skill; }
-    public bool ReloadMode { get => type == StateType.Reload; }
     public bool DamagedMode { get => type == StateType.Damaged; }
     public bool DeadMode { get => type == StateType.Dead; }
 
@@ -23,7 +22,6 @@ public class StateComponent : MonoBehaviour
     public void SetEquipMode() => ChangeType(StateType.Equip);
     public void SetActionMode() => ChangeType(StateType.Action);
     public void SetSkillMode() => ChangeType(StateType.Skill);
-    public void SetReloadMode() => ChangeType(StateType.Reload);
     public void SetDamagedMode() => ChangeType(StateType.Damaged);
     public void SetDeadMode() => ChangeType(StateType.Dead);
 

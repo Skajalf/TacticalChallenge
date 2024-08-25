@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.EventSystems.StandaloneInputModule;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(MovingComponent))]
@@ -13,12 +14,16 @@ public class Player : Character
         PlayerInput input = GetComponent<PlayerInput>();
         InputActionMap actionMap = input.actions.FindActionMap("Player");
 
+        InputAction attack = actionMap.FindAction("Attack");
+        attack.started += startAttack;
+        attack.canceled += cancelAttack;
+
+        //TODO: ActionComponent를 따로 만들고 거기다가 공격기능 집어넣기
         //actionMap.FindAction("Attack").started += context =>
         //{
         //    Action.SetAttackMode();
         //};
 
-        //TODO: 스킬 컴포넌트를 만들어서 연결해야함
         //actionMap.FindAction("Skill").started += context =>
         //{
         //    Action.SetSkillMode();
@@ -33,5 +38,15 @@ public class Player : Character
         //{
         //    Action.SetReloadMode();
         //};
+    }
+
+    private void startAttack(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void cancelAttack(InputAction.CallbackContext context)
+    {
+
     }
 }
