@@ -33,18 +33,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Skill",
+                    "name": "EXSkill",
                     "type": "Button",
-                    "id": "e41ecac3-21bf-4062-805d-5560042b1cf7",
+                    "id": "a7f6febe-4aa5-4d81-b51a-15b3e85aead0",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "EXS",
+                    "name": "Skill",
                     "type": "Button",
-                    "id": "a7f6febe-4aa5-4d81-b51a-15b3e85aead0",
+                    "id": "e41ecac3-21bf-4062-805d-5560042b1cf7",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -169,17 +169,6 @@
                 },
                 {
                     "name": "",
-                    "id": "7d406455-7de5-4a56-8196-0335cd55b5e0",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "EXS",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "c9e38685-28a8-443c-9bab-43c7d0c0e87a",
                     "path": "<Keyboard>/r",
                     "interactions": "",
@@ -208,6 +197,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7d406455-7de5-4a56-8196-0335cd55b5e0",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "EXSkill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

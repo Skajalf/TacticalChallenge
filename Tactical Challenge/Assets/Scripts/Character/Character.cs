@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(StateComponent))]
 //[RequireComponent(typeof(HealthPointComponent))]
 [RequireComponent(typeof(WeaponComponent))]
+[RequireComponent(typeof(SkillComponent))]
+[RequireComponent(typeof(ActionComponent))]
 public abstract class Character : MonoBehaviour, IStoppable
 {
     protected Animator animator;
