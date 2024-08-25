@@ -8,9 +8,11 @@ public class ActionComponent : MonoBehaviour
 
     private Animator animator;
 
-    private bool IsAttack;
-    private bool IsAim;
-    private bool IsReload;
+    public bool IsAim { private set; get; }
+    public bool IsReload { private set; get; }
+    public bool IsAttack { private set; get; }
+
+
 
     public void Awake()
     {
