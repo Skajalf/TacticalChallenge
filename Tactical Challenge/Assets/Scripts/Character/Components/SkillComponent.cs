@@ -27,14 +27,14 @@ public class SkillComponent : MonoBehaviour
 
         InputActionMap actionMap = input.actions.FindActionMap("Player");
 
-        InputAction EXSkill = actionMap.FindAction("EXSkill");
-        EXSkill.started += startEXSkill;
+        InputAction Skill = actionMap.FindAction("Skill");
+        Skill.started += startSkill;
 
         InputAction MeleeAttack = actionMap.FindAction("MeleeAttack");
         MeleeAttack.started += startMeleeAttack;
     }
 
-    private void startEXSkill(InputAction.CallbackContext context)
+    private void startSkill(InputAction.CallbackContext context)
     {
         IsEXSkill = true;
 
@@ -43,7 +43,7 @@ public class SkillComponent : MonoBehaviour
             weapon.SetActive(false);
         }
 
-        animator.SetTrigger("EXSkill");
+        animator.SetTrigger("Skill");
         StartCoroutine(EndSkill());
     }
 
