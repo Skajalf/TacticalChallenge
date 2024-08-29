@@ -193,6 +193,7 @@ public class MovingComponent : MonoBehaviour
 
         Vector3 direction = Vector3.zero;
         float speed = bRun ? runSpeed : walkSpeed;
+        animator.SetBool("IsRun", bRun);
 
         if (currInputMove.magnitude > deadZone)
         {
