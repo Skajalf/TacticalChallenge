@@ -408,6 +408,14 @@ MonoBehaviour:
   runSpeed: 3
   jumpForce: 0.5
   gravity: -9.81
+  bUseCamera: 1
+  followTargetName: Camera Root
+  mouseSensitivity: {x: 0.5, y: 0.5}
+  limitPitchAngle: {x: 80, y: 350}
+  mouseRotationLerp: 0.25
+  zoomSensitivity: 0.1
+  zoomLerp: 25
+  zoomRange: {x: 1, y: 3}
   sensitivity: 100.3
   deadZone: 0.01
 --- !u!114 &195226105
@@ -695,8 +703,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.11474853, y: -0.09788032, z: -0.011362342, w: 0.9884954}
-  m_LocalPosition: {x: 0.5, y: 0, z: -2.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0.6, z: -2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1562,8 +1570,8 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 1858893775}
-  m_Follow: {fileID: 543450653538618905}
+  m_LookAt: {fileID: 0}
+  m_Follow: {fileID: 1858893775}
   m_Lens:
     FieldOfView: 45
     OrthographicSize: 5
@@ -1592,7 +1600,7 @@ Transform:
   m_GameObject: {fileID: 1171058461}
   serializedVersion: 2
   m_LocalRotation: {x: -0.11474853, y: -0.09788032, z: -0.011362342, w: 0.9884954}
-  m_LocalPosition: {x: 0.5, y: 0, z: -2.5}
+  m_LocalPosition: {x: 0.5, y: 0.6, z: -2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1749,7 +1757,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1858893775}
   m_Layer: 0
-  m_Name: Camera Mount
+  m_Name: Camera Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
