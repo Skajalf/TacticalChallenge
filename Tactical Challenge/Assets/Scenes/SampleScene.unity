@@ -325,7 +325,9 @@ MonoBehaviour:
     HitParticle: {fileID: 0}
     HitParticlePositionOffset: {x: 0, y: 0, z: 0}
     HitParticleScaleOffset: {x: 1, y: 1, z: 1}
-  projectilePrefab: {fileID: 0}
+  damage: 0
+  projectilePrefab: {fileID: 8962590840163497300, guid: 029b1c68fdf16e6428de986f08509b3a,
+    type: 3}
   firePoint: {fileID: 3919364656382770055}
   WeaponHolster: Bip001_Weapon
   muzzleTransformName: fire_01
@@ -412,7 +414,6 @@ MonoBehaviour:
   followTargetName: Camera Root
   mouseSensitivity: {x: 0.5, y: 0.5}
   limitPitchAngle: {x: 80, y: 350}
-  mouseRotationLerp: 0.25
   zoomSensitivity: 0.1
   zoomLerp: 25
   zoomRange: {x: 1, y: 3}
@@ -480,6 +481,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 190a6b80-ebbe-480f-b43d-9d78acd7007e
     m_ActionName: Player/MeleeAttack[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c773f2d1-76d3-422f-b973-efac38e1c937
+    m_ActionName: Player/Look[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a4ae185d-1454-45a4-8772-147b9e5ae4a1
+    m_ActionName: Player/Zoom[/Mouse/scroll/y]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: Player
@@ -1747,6 +1756,74 @@ Transform:
   - {fileID: 1080469655}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1744582222
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1399630920879889691, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_Name
+      value: 01_baricade_metal_cover_B
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.047816157
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.045234147
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.9470754
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bb29a268cee1c5542bb7d2c664e6debf, type: 3}
 --- !u!1 &1858893774
 GameObject:
   m_ObjectHideFlags: 0
@@ -6863,3 +6940,4 @@ SceneRoots:
   - {fileID: 55830289}
   - {fileID: 457144512}
   - {fileID: 1171058463}
+  - {fileID: 1744582222}

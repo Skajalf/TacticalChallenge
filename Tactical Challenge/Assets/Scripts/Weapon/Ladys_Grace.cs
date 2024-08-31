@@ -30,6 +30,8 @@ public class Ladys_Grace : Ranged
         Debug.Assert(muzzleTransform != null);
 
         gameObject.SetActive(true);
+
+        Begin_Equip();
     }
 
     public override void Begin_Equip()

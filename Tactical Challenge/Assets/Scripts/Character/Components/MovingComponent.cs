@@ -90,11 +90,7 @@ public class MovingComponent : MonoBehaviour
 
     private void Update()
     {
-        if (bUseCamera)
-        {
-            Update_RotateCamera();
-            Update_ZoomCamera();
-        }
+        
     }
 
     public void FixedUpdate()
@@ -102,6 +98,15 @@ public class MovingComponent : MonoBehaviour
         Movement();
         Jump();
         Gravity();
+    }
+
+    private void LateUpdate()
+    {
+        if (bUseCamera)
+        {
+            Update_RotateCamera();
+            Update_ZoomCamera();
+        }
     }
 
     private void performMove(InputAction.CallbackContext context)

@@ -15,9 +15,11 @@ public class WeaponData
 
     public GameObject Particle;
 
+    [Header(" Impulse Setting")]
     public Vector3 ImpulseDirection;
     public Cinemachine.NoiseSettings ImpulseSettings;
 
+    [Header(" Impact Setting")]
     public int HitImpactIndex;
 
     public GameObject HitParticle;
@@ -29,15 +31,20 @@ public abstract class Weapon : MonoBehaviour
 {
     [SerializeField] protected WeaponType type;
     [SerializeField] protected WeaponData weapondata;
+    [SerializeField] private int damage;
 
     public WeaponType Type { get => type; }
+
+    public int Damage
+    {
+        get { return damage; }
+    }
 
     public bool Equipping { get => bEquipping; }
     private bool bEquipping;
     protected bool bEquipped;
 
     protected GameObject rootObject;
-
     protected StateComponent state;
     protected Animator animator;
 
