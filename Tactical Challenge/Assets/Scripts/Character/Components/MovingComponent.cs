@@ -43,6 +43,7 @@ public class MovingComponent : MonoBehaviour
     private bool bCanMove = true;
     private bool bRun;
     private bool bJump;
+    private bool bCover;
 
     public void Awake()
     {
@@ -70,6 +71,10 @@ public class MovingComponent : MonoBehaviour
 
         InputAction zoomAction = actionMap.FindAction("Zoom");
         zoomAction.performed += Input_Zoom_Performed;
+
+        InputAction cover = actionMap.FindAction("Cover");
+        cover.started += startCover;
+        cover.canceled += cancelCover;
     }
 
     private void Start()
@@ -150,6 +155,16 @@ public class MovingComponent : MonoBehaviour
 
         zoomDistance += value;
         zoomDistance = Mathf.Clamp(zoomDistance, zoomRange.x, zoomRange.y);
+    }
+
+    private void startCover(InputAction.CallbackContext context)
+    {
+        bCover = true;
+    }
+
+    private void cancelCover(InputAction.CallbackContext context)
+    {
+        bCover = false;
     }
 
     private void Update_RotateCamera()

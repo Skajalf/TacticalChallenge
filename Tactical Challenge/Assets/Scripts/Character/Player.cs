@@ -14,14 +14,4 @@ public class Player : Character
         PlayerInput input = GetComponent<PlayerInput>();
         InputActionMap actionMap = input.actions.FindActionMap("Player");
     }
-
-    private void startAttack(InputAction.CallbackContext context)
-    {
-
-    }
-
-    private void cancelAttack(InputAction.CallbackContext context)
-    {
-
-    }
 }

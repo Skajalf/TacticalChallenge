@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Security.Claims;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,11 +8,12 @@ public class ActionComponent : MonoBehaviour
     //TODO: Attack, Aim, Reload 기능을 구현해야함
 
     private Animator animator;
+    [SerializeField] private GameObject weapon; // Bip001_Weapon을 참조할 변수
 
     public bool IsAim { private set; get; }
     public bool IsReload { private set; get; }
     public bool IsAttack { private set; get; }
-
+    public bool IsMeleeAttack { private set; get; }
 
 
     public void Awake()
@@ -32,6 +34,9 @@ public class ActionComponent : MonoBehaviour
 
         InputAction Reload = actionMap.FindAction("Reload");
         Reload.started += startReload;
+
+        InputAction MeleeAttack = actionMap.FindAction("MeleeAttack");
+        MeleeAttack.started += startMeleeAttack;
     }
 
     private void startAttack(InputAction.CallbackContext context)
@@ -56,6 +61,32 @@ public class ActionComponent : MonoBehaviour
     {
         IsAim = false;
         animator.SetBool("IsAim", false);
+    }
+
+    private void startMeleeAttack(InputAction.CallbackContext context)
+    {
+        IsMeleeAttack = true;
+
+        if (weapon != null)
+        {
+            weapon.SetActive(false);
+        }
+
+        animator.SetTrigger("MeleeAttack");
+
+        StartCoroutine(EndMeleeAttack());
+    }
+
+    private IEnumerator EndMeleeAttack()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        if (weapon != null)
+        {
+            weapon.SetActive(true);
+        }
+
+        IsMeleeAttack = false;
     }
 
     private void startReload(InputAction.CallbackContext context)

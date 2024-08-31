@@ -418,7 +418,7 @@ MonoBehaviour:
   zoomLerp: 25
   zoomRange: {x: 1, y: 3}
   sensitivity: 100.3
-  deadZone: 0.01
+  deadZone: 0.1
 --- !u!114 &195226105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,6 +489,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: a4ae185d-1454-45a4-8772-147b9e5ae4a1
     m_ActionName: Player/Zoom[/Mouse/scroll/y]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f15af43f-394d-4051-b305-0579f704dacc
+    m_ActionName: Player/Cover[/Keyboard/z]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: Player
@@ -506,6 +510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92ccc95f19c28c44d8d7be2f347981cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapon: {fileID: 6090860050960329815}
 --- !u!114 &195226111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,7 +523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f176c69925e9aea41b83e7e73c5d7c6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
+  weapon: {fileID: 6090860050960329815}
 --- !u!1 &201037435
 GameObject:
   m_ObjectHideFlags: 0

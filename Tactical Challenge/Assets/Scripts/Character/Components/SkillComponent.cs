@@ -10,7 +10,6 @@ public class SkillComponent : MonoBehaviour
 
     public bool IsEXSkill { private set; get; }
     public bool IsNormalSkill { private set; get; }
-    public bool IsMeleeAttack { private set; get; }
 
     public void Awake()
     {
@@ -29,9 +28,6 @@ public class SkillComponent : MonoBehaviour
 
         InputAction Skill = actionMap.FindAction("Skill");
         Skill.started += startSkill;
-
-        InputAction MeleeAttack = actionMap.FindAction("MeleeAttack");
-        MeleeAttack.started += startMeleeAttack;
     }
 
     private void startSkill(InputAction.CallbackContext context)
@@ -45,32 +41,6 @@ public class SkillComponent : MonoBehaviour
 
         animator.SetTrigger("Skill");
         StartCoroutine(EndSkill());
-    }
-
-    private void startMeleeAttack(InputAction.CallbackContext context)
-    {
-        IsMeleeAttack = true;
-
-        if (weapon != null)
-        {
-            weapon.SetActive(false);
-        }
-
-        animator.SetTrigger("MeleeAttack");
-
-        StartCoroutine(EndMeleeAttack());
-    }
-
-    private IEnumerator EndMeleeAttack()
-    {
-        yield return new WaitForSeconds(1.0f);
-
-        if (weapon != null)
-        {
-            weapon.SetActive(true);
-        }
-
-        IsMeleeAttack = false;
     }
 
     private IEnumerator EndSkill()
