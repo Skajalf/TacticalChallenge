@@ -457,19 +457,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &195226108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132149350651043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92ccc95f19c28c44d8d7be2f347981cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
 --- !u!1 &201037435
 GameObject:
   m_ObjectHideFlags: 0
@@ -2274,12 +2261,6 @@ GameObject:
   - component: {fileID: 5866666021718479974}
   - component: {fileID: 5866666021718479973}
   - component: {fileID: 5866666021718479972}
-  - component: {fileID: 5866666021718479972}
-  - component: {fileID: 195226103}
-  - component: {fileID: 195226101}
-  - component: {fileID: 195226102}
-  - component: {fileID: 195226108}
-  - component: {fileID: 5866666021718479973}
   m_Layer: 0
   m_Name: CH0137
   m_TagString: Untagged
@@ -5101,26 +5082,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638007f62bd3dff49b06f08bec5a1668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoint: 100
-  maxActionPoint: 10
-  APRegen: 0.01
---- !u!114 &5866666021718479973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132149350651043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cbaf69bb7d67b148ac1564efced6e35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bUseCamera: 1
-  zoomRange: {x: 1, y: 3}
-  zoomSensitivity: 0.1
-  zoomLerp: 25
-  mouseSensitivity: {x: 0.5, y: 0.5}
 --- !u!1 &5879474117350448041
 GameObject:
   m_ObjectHideFlags: 0
