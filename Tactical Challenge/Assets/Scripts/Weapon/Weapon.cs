@@ -2,24 +2,24 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class WeaponData
+public class WeaponData // 무기 데이터
 {
     public bool bCanMove;
 
-    public float Power;
-    public float Ammo;
-    public float currentAmmo;
-    public float ReloadTime;
-    public float Distance;
-    public int StopFrame;
+    public float Power; // 데미지
+    public float Ammo; // 최대 탄약량
+    public float currentAmmo; // 현재 잔탄
+    public float ReloadTime; // 재장전 시간
+    public float Distance; // 사거리
+    public int StopFrame; // 적한테 총알이 맞았을때 히트스탑
 
-    public GameObject Particle;
+    public GameObject Particle; // 총구 화염
 
-    [Header(" Impulse Setting")]
+    [Header(" Impulse Setting")] // 카메라 쉐이킹(반동?)
     public Vector3 ImpulseDirection;
     public Cinemachine.NoiseSettings ImpulseSettings;
 
-    [Header(" Impact Setting")]
+    [Header(" Impact Setting")] // 이 총으로 맞았을때 이펙트
     public int HitImpactIndex;
 
     public GameObject HitParticle;

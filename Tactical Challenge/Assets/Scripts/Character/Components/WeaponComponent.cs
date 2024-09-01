@@ -5,7 +5,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-//TODO: 왜 자꾸 충돌이 나지???
 public class WeaponComponent : MonoBehaviour
 {
     private Transform weaponModel; // CH0137_weapon같은 무기 모델
