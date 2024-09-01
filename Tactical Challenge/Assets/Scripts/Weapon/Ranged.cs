@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-//TODO: 원거리 잘 작동하는지 테스트 해봐야 함
 public class Ranged : Weapon
 {
     [SerializeField] protected GameObject projectilePrefab; // 발사체 프리팹
