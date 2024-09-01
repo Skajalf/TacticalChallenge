@@ -1,17 +1,24 @@
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.EventSystems.StandaloneInputModule;
 
-[RequireComponent(typeof(PlayerInput))]
-[RequireComponent(typeof(MovingComponent))]
-public class Player : Character
+public class Player : Character 
 {
-    protected override void Awake()
-    {
-        base.Awake();
+    PlayerInput playerInput;
+    InputActionMap inputActions;
 
-        PlayerInput input = GetComponent<PlayerInput>();
-        InputActionMap actionMap = input.actions.FindActionMap("Player");
+    private void Awake()
+    {
+        Init();
+    }
+
+    public override void Init()
+    {
+        base.Init();
+        if (!(playerInput = GetComponent<PlayerInput>()))
+            playerInput = this.AddComponent<PlayerInput>();
+        inputActions = playerInput.actions.FindActionMap("Player");
     }
 }

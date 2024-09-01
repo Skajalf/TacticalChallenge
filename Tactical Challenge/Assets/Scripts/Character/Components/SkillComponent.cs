@@ -1,15 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SkillComponent : MonoBehaviour
 {
     private Animator animator;
-    [SerializeField] private GameObject weapon; // Bip001_WeaponÀ» ÂüÁ¶ÇÒ º¯¼ö
+    [SerializeField] private GameObject weapon; // Bip001_Weaponï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     public bool IsEXSkill { private set; get; }
     public bool IsNormalSkill { private set; get; }
+
+    PlayerInput input;
+    InputActionMap actionMap;
+    InputAction Skill;
+    InputAction MeleeAttack;
 
     public void Awake()
     {
@@ -22,12 +28,21 @@ public class SkillComponent : MonoBehaviour
             Debug.LogError("Weapon not found! Make sure the weapon is named 'Bip001_Weapon'.");
         }
 
-        PlayerInput input = GetComponent<PlayerInput>();
+        if (!(input = GetComponent<PlayerInput>()))
+            this.AddComponent<PlayerInput>();
 
-        InputActionMap actionMap = input.actions.FindActionMap("Player");
+        Init();
+    }
 
-        InputAction Skill = actionMap.FindAction("Skill");
+    private void Init() // SkillComponent Init();
+    {
+        actionMap = input.actions.FindActionMap("Player");
+
+        Skill = actionMap.FindAction("Skill");
         Skill.started += startSkill;
+
+        MeleeAttack = actionMap.FindAction("MeleeAttack");
+        MeleeAttack.started += startMeleeAttack;
     }
 
     private void startSkill(InputAction.CallbackContext context)

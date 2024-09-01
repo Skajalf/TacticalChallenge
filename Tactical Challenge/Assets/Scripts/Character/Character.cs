@@ -1,51 +1,27 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent (typeof(CharacterController))]
+//[RequireComponent(typeof(StatComponent))]
 [RequireComponent(typeof(StateComponent))]
-//[RequireComponent(typeof(HealthPointComponent))]
 [RequireComponent(typeof(WeaponComponent))]
-[RequireComponent(typeof(SkillComponent))]
-[RequireComponent(typeof(ActionComponent))]
-public abstract class Character : MonoBehaviour, IStoppable
+public class Character : MonoBehaviour, IStoppable
 {
-    protected Animator animator;
-    protected CharacterController controller;
-    protected StateComponent state;
-    //protected HealthPointComponent healthPoint;
-    protected WeaponComponent weapon;
+    private Animator animator; 
+    private StateComponent state;
+    private WeaponComponent weapon;
+    // private StatComponent stat;
 
-    protected virtual void Awake()
+    public virtual void Init()
     {
         animator = GetComponent<Animator>();
-        controller = GetComponent<CharacterController>();
-
         state = GetComponent<StateComponent>();
-        //healthPoint = GetComponent<HealthPointComponent>();
         weapon = GetComponent<WeaponComponent>();
+        // stat = GetComponent<StatComponent>();
     }
 
-    protected virtual void Start()
-    {
-        Regist_MovableStopper();
-    }
-
-    protected virtual void Update()
-    {
-
-    }
-
-    protected virtual void FixedUpdate()
-    {
-
-    }
-
-    protected virtual void OnDestroy()
-    {
-        Remove_MovableStopper();
-    }
-
+    #region IStoppable
     public void Regist_MovableStopper()
     {
         MovableStopper.Instance.Regist(this);
@@ -65,14 +41,5 @@ public abstract class Character : MonoBehaviour, IStoppable
 
         animator.speed = 1.0f;
     }
-
-    protected virtual void End_Damaged()
-    {
-
-    }
-
-    private void OnAnimatorMove()
-    {
-        transform.position += animator.deltaPosition;
-    }
+    #endregion
 }
