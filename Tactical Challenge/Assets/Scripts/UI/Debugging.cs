@@ -19,8 +19,6 @@ public class Debugging : MonoBehaviour
 
     public void Update()
     {
-        isAimTrack = component.IsAim;
 
-        GetComponent<Text>().text = $"{isAimTrack}";
     }
 }

@@ -352,31 +352,6 @@ MonoBehaviour:
   firePoint: {fileID: 3919364656382770055}
   WeaponHolster: Bip001_Weapon
   muzzleTransformName: fire_01
---- !u!114 &195226101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132149350651043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9b73556f242f1a4598729fe378439b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  originPrefabs: []
---- !u!114 &195226102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132149350651043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638007f62bd3dff49b06f08bec5a1668, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!143 &195226103
 CharacterController:
   m_ObjectHideFlags: 0
@@ -473,23 +448,15 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: a4ae185d-1454-45a4-8772-147b9e5ae4a1
     m_ActionName: Player/Zoom[/Mouse/scroll/y]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f15af43f-394d-4051-b305-0579f704dacc
+    m_ActionName: Player/Cover[/Keyboard/z]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &195226108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132149350651043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92ccc95f19c28c44d8d7be2f347981cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &201037435
 GameObject:
   m_ObjectHideFlags: 0
@@ -2288,13 +2255,11 @@ GameObject:
   - component: {fileID: 543450653538618905}
   - component: {fileID: 5866666021718479971}
   - component: {fileID: 195226105}
-  - component: {fileID: 5866666021718479972}
-  - component: {fileID: 5866666021718479973}
   - component: {fileID: 195226103}
-  - component: {fileID: 195226101}
-  - component: {fileID: 195226102}
-  - component: {fileID: 195226108}
-  - component: {fileID: 195226111}
+  - component: {fileID: 5866666021718479976}
+  - component: {fileID: 5866666021718479975}
+  - component: {fileID: 5866666021718479974}
+  - component: {fileID: 5866666021718479973}
   - component: {fileID: 5866666021718479972}
   m_Layer: 0
   m_Name: CH0137
@@ -5054,12 +5019,69 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132149350651043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2ab59bacf6f3fc44897618a25b7d606, type: 3}
+  m_Script: {fileID: 11500000, guid: c2dd195561b544f48a76ac9060d6163e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoint: 100
-  maxActionPoint: 10
-  APRegen: 0.01
+  walkSpeed: 2
+  runSpeed: 3
+  jumpForce: 1.2
+  gravity: -9.81
+  sensitivity: 100
+  deadZone: 0.01
+--- !u!114 &5866666021718479973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149350651043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cbaf69bb7d67b148ac1564efced6e35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bUseCamera: 1
+  zoomRange: {x: 1, y: 3}
+  zoomSensitivity: 0.1
+  zoomLerp: 25
+  mouseSensitivity: {x: 0.5, y: 0.5}
+--- !u!114 &5866666021718479974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149350651043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 156672a302bba5f43a874064e166d628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5866666021718479975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149350651043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9b73556f242f1a4598729fe378439b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originPrefabs: []
+--- !u!114 &5866666021718479976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149350651043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 638007f62bd3dff49b06f08bec5a1668, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5879474117350448041
 GameObject:
   m_ObjectHideFlags: 0
@@ -6859,4 +6881,3 @@ SceneRoots:
   - {fileID: 457144512}
   - {fileID: 543450653538618905}
   - {fileID: 1171058463}
-  - {fileID: 1744582222}

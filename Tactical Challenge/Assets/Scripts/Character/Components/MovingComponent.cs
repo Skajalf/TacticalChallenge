@@ -19,20 +19,19 @@ public class MovingComponent : MonoBehaviour
     [Header("Tech Settings")]
     [SerializeField] private float sensitivity = 100.0f;
     [SerializeField] private float deadZone = 0.01f;
+
     private Vector2 velocity;
-
     private Vector2 inputMove;
-    private Vector2 currInputMove;
+    private Vector2 currentInputMove;
     private Vector3 verticalVelocity = Vector3.zero;
-
 
     private CharacterController controller;
     private Animator animator;
 
-    private bool bCanMove = true;
-    private bool bRun;
-    private bool bJump;
-    private bool bCover;
+    public bool bCanMove { get; private set; } = true;
+    public bool bRun { get; private set; }
+    public bool bJump { get; private set; }
+    public bool bCover { get; private set; }
 
     public void Awake()
     {
@@ -62,15 +61,7 @@ public class MovingComponent : MonoBehaviour
         Gravity();
     }
 
-    private void LateUpdate()
-    {
-        if (bUseCamera)
-        {
-            Update_RotateCamera();
-            Update_ZoomCamera();
-        }
-    }
-
+    #region actionMethods
     private void performMove(InputAction.CallbackContext context)
     {
         inputMove = context.ReadValue<Vector2>();
@@ -96,29 +87,31 @@ public class MovingComponent : MonoBehaviour
         bJump = true;
     }
 
+    #endregion
+
     public void Movement()
     {
-        Transform testTransfom = transform.FindChildByName("CameraRoot").transform;
+        Transform carmeraRootTransfom = transform.FindChildByName("CameraRoot").transform;
 
         if (!bCanMove) return;
 
-        currInputMove = Vector2.SmoothDamp(currInputMove, inputMove, ref velocity, 1.0f / sensitivity);
+        currentInputMove = Vector2.SmoothDamp(currentInputMove, inputMove, ref velocity, 1.0f / sensitivity);
 
         Vector3 direction = Vector3.zero;
         float speed = bRun ? runSpeed : walkSpeed;
         animator.SetBool("IsRun", bRun);
 
-        if (currInputMove.magnitude > deadZone)
+        if (currentInputMove.magnitude > deadZone)
         {
-            Vector3 forward = testTransfom.forward;
+            Vector3 forward = carmeraRootTransfom.forward;
             forward.y = 0;
             forward.Normalize();
 
-            Vector3 right = testTransfom.right;
+            Vector3 right = carmeraRootTransfom.right;
             right.y = 0;
             right.Normalize();
 
-            direction = (right * currInputMove.x) + (forward * currInputMove.y);
+            direction = (right * currentInputMove.x) + (forward * currentInputMove.y);
             direction = direction.normalized * speed;
 
             Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -172,11 +165,5 @@ public class MovingComponent : MonoBehaviour
         {
             verticalVelocity.y = 0f;
         }
-    }
-    private void FindVcamDirection()
-    {
-        vcam = FindAnyObjectByType<CinemachineVirtualCamera>();
-        Transform cameraTransform = vcam.transform;
-        camDirection = cameraTransform.forward;
     }
 }
