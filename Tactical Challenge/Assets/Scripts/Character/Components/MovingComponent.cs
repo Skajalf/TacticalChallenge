@@ -91,32 +91,38 @@ public class MovingComponent : MonoBehaviour
 
     public void Movement()
     {
-        Transform carmeraRootTransfom = transform.FindChildByName("CameraRoot").transform;
+        Transform cameraRootTransform = transform.FindChildByName("CameraRoot").transform;
 
         if (!bCanMove) return;
 
         currentInputMove = Vector2.SmoothDamp(currentInputMove, inputMove, ref velocity, 1.0f / sensitivity);
 
-        Vector3 direction = Vector3.zero;
+        Vector3 characterDirection = Vector3.zero;
         float speed = bRun ? runSpeed : walkSpeed;
         animator.SetBool("IsRun", bRun);
 
-        if (currentInputMove.magnitude > deadZone)
+        if (currentInputMove.magnitude > deadZone )
         {
-            Vector3 forward = carmeraRootTransfom.forward;
-            forward.y = 0;
-            forward.Normalize();
+            Vector3 cameraForward = cameraRootTransform.forward;
+            cameraForward.y = 0;
+            cameraForward.Normalize();
 
-            Vector3 right = carmeraRootTransfom.right;
-            right.y = 0;
-            right.Normalize();
+            Vector3 cameraRight = cameraRootTransform.right;
+            cameraRight.y = 0;
+            cameraRight.Normalize();
 
-            direction = (right * currentInputMove.x) + (forward * currentInputMove.y);
-            direction = direction.normalized * speed;
+            characterDirection = (cameraRight * currentInputMove.x) + (cameraForward * currentInputMove.y);
+            characterDirection = characterDirection.normalized * speed;
 
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * sensitivity);
-
+            if(speed != 0) // 카메라 고정을 위한 것
+            {
+                transform.rotation = Quaternion.LookRotation(cameraForward);
+            }
+            else
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(characterDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * sensitivity);
+            }
             animator.SetBool("IsMove", true);
         }
         else
@@ -129,7 +135,7 @@ public class MovingComponent : MonoBehaviour
             verticalVelocity.y = 0f;
         }
 
-        Vector3 move = direction * Time.deltaTime;
+        Vector3 move = characterDirection * Time.deltaTime;
         move.y = verticalVelocity.y * Time.deltaTime;
 
         controller.Move(move);
