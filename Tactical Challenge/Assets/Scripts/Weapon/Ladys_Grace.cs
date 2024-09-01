@@ -11,11 +11,10 @@ public class Ladys_Grace : Ranged
 
     protected Ranged ranged;
 
+
     protected override void Reset()
     {
         base.Reset();
-
-        type = WeaponType.AR;
     }
 
     protected override void Awake()

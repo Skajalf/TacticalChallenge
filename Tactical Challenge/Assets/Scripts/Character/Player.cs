@@ -6,6 +6,10 @@ using UnityEngine.InputSystem;
 
 public class Player : Character 
 {
+    [SerializeField] private string codeName;
+
+    public string CodeName { get { return codeName; } }
+
     PlayerInput playerInput;
     InputActionMap inputActions;
 

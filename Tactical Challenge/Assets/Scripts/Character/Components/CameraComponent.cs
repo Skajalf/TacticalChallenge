@@ -60,7 +60,7 @@ public class CameraComponent : MonoBehaviour
         zoomAction.performed += Input_Zoom_Performed;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (bUseCamera)
             UpdateCamera();

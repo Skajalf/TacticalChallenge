@@ -54,7 +54,7 @@ public class MovingComponent : MonoBehaviour
         jump.started += startJump;
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         Movement();
         Jump();

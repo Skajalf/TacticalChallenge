@@ -29,11 +29,8 @@ public class WeaponData
 
 public abstract class Weapon : MonoBehaviour
 {
-    [SerializeField] protected WeaponType type;
     [SerializeField] protected WeaponData weapondata;
     [SerializeField] private int damage;
-
-    public WeaponType Type { get => type; }
 
     public int Damage
     {
