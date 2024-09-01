@@ -1,15 +1,46 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public enum WeaponType
-{
-    Unarmed = 0, HG, SMG, AR, SR, SG, MG, GL, RL, RG, MT, FT, Max
-}
 
 public class WeaponComponent : MonoBehaviour
 {
+    private Transform weaponModel; // CH0137_weapon같은 무기 모델
+    private Transform weaponTransform; // Bip001_weapon 같은 무기 리깅정보가 담긴 오브젝트
+    private Player character; // 무기를 들고 있는 캐릭터모델 정보
+
+    private PlayerInput playerInput;
+
+    private void Awake()
+    {
+        Init();
+    }
+
+    private void Init() // 무기에 대한 정보를 가져온다. 없다면, 추가해서 가져온다.
+    {
+        playerInput = GetComponent<PlayerInput>();
+
+        weaponModel = transform.FindChildByName($"{gameObject.name}_Weapon");
+        if( weaponModel == null )
+        {
+            GameObject go = Resources.Load<GameObject>($"Prefabs/{gameObject.name}_Weapon");
+            GameObject gopre = Instantiate<GameObject>(go, gameObject.transform);
+
+            int index = gopre.name.IndexOf("(Clone)");
+            if (index > 0)
+                gopre.name = gopre.name.Substring(0, index);
+
+            weaponModel = gopre.transform;
+        }
+
+        character = GetComponent<Player>();
+        weaponTransform = transform.FindChildByName($"{character.CodeName}_Weapon");
+    }
+
+    /*
     [SerializeField] private GameObject[] originPrefabs;
 
     private Animator animator;
@@ -49,65 +80,15 @@ public class WeaponComponent : MonoBehaviour
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>(); // 장착모션 추가용.
         state = GetComponent<StateComponent>();
     }
 
     private void Start()
     {
-        weaponTable = new Dictionary<WeaponType, Weapon>();
 
-        for (int i = 0; i < originPrefabs.Length; i++)
-        {
-            GameObject obj = Instantiate<GameObject>(originPrefabs[i], transform);
-            Weapon weapon = obj.GetComponent<Weapon>();
-            obj.name = weapon.Type.ToString();
-
-            weaponTable[weapon.Type] = weapon;
-        }
     }
 
-    private void SetMode(WeaponType type)
-    {
-        if (this.type == type)
-        {
-            SetUnarmedMode();
-
-            return;
-        }
-        else if (UnarmedMode == false)
-        {
-            weaponTable[this.type].UnEquip();
-        }
-
-        if (weaponTable[type] == null)
-        {
-            SetUnarmedMode();
-
-            return;
-        }
-
-        //TODO: 상호작용키로 무기 교체 가능하도록 변경.
-        //animator.SetBool("IsEquipping", true);
-        //animator.SetInteger("WeaponType", (int)type);
-
-        weaponTable[type].Equip();
-
-
-        ChangeType(type);
-    }
-
-    private void ChangeType(WeaponType type)
-    {
-        if (this.type == type)
-            return;
-
-
-        WeaponType prevType = this.type;
-        this.type = type;
-
-        OnWeaponTyeChanged?.Invoke(prevType, type);
-    }
 
     public void SetUnarmedMode()
     {
@@ -124,83 +105,6 @@ public class WeaponComponent : MonoBehaviour
         ChangeType(WeaponType.Unarmed);
     }
 
-    public void SetHGMode()
-    {
-        if(state.IdleMode == false) return;
-
-        SetMode(WeaponType.HG);
-    }
-
-    public void SetSMGMode()
-    {
-        if (state.IdleMode == false) return;
-
-        SetMode(WeaponType.SMG);
-    }
-
-    public void SetARMode()
-    {
-        if (state.IdleMode == false) return;
-
-        SetMode(WeaponType.AR);
-    }
-
-    public void SetSRMode()
-    {
-        if (state.IdleMode == false) return;
-
-        SetMode(WeaponType.SR);
-    }
-
-    public void SetSGMode()
-    {
-        if (state.IdleMode == false) return;
-
-        SetMode(WeaponType.SG);
-    }
-
-    public void SetMGMode()
-    {
-        if (state.IdleMode == false) return;
-
-        SetMode(WeaponType.MG);
-    }
-
-    public void SetGLMode()
-    {
-        if (state.IdleMode == false) return;
-
-        SetMode(WeaponType.GL);
-    }
-
-    public void SetRLMode()
-    {
-        if (state.IdleMode == false) return;
-
-        SetMode(WeaponType.RL);
-    }
-
-    public void SetRGMode()
-    {
-        if (state.IdleMode == false) return;
-
-        SetMode(WeaponType.RG);
-    }
-
-    public void SetMTMode()
-    {
-        if (state.IdleMode == false) return;
-
-        SetMode(WeaponType.MT);
-    }
-
-    public void SetFTMode()
-    {
-        if (state.IdleMode == false) return;
-
-        SetMode(WeaponType.FT);
-    }
-
     public void Begin_Equip()
     {
         weaponTable[type].Begin_Equip();
@@ -214,27 +118,5 @@ public class WeaponComponent : MonoBehaviour
         weaponTable[type].End_Equip();
         OnEndEquip?.Invoke();
     }
-
-    public void DoAction()
-    {
-        if (weaponTable[type] == null) return;
-
-        if (weaponTable[type].CanDoAction() == false) return;
-
-        //animator.SetBool("IsAction", true);
-        weaponTable[type].DoAction();
-    }
-
-    public void Begin_DoAction()
-    {
-        weaponTable[type].Begin_DoAction();
-    }
-
-    public void End_DoAction()
-    {
-        //animator.SetBool("IsAction", false);
-
-        weaponTable[type].End_DoAction();
-        OnEndDoAction?.Invoke();
-    }
+*/
 }
