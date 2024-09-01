@@ -40,9 +40,6 @@ public class SkillComponent : MonoBehaviour
 
         Skill = actionMap.FindAction("Skill");
         Skill.started += startSkill;
-
-        MeleeAttack = actionMap.FindAction("MeleeAttack");
-        MeleeAttack.started += startMeleeAttack;
     }
 
     private void startSkill(InputAction.CallbackContext context)
