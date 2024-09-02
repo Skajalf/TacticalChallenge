@@ -20,7 +20,8 @@ public class CameraComponent : MonoBehaviour
     //[SerializeField] private float mouseRotationLerp = 0.25f;
 
     private Vector2 inputLook; // 현재 마우스 입력
-    private float zoomDistance; // 카메라와 캐릭터 거리
+    private float currentZoomDistance; // 카메라와 캐릭터 거리
+    private float prevZoomDistance; // 이전 거리
 
     private CinemachineVirtualCamera cinemachineVirtualCamera;
     private Cinemachine3rdPersonFollow tpsFollowCamera;
@@ -31,6 +32,7 @@ public class CameraComponent : MonoBehaviour
 
     InputAction lookAction;
     InputAction zoomAction;
+    InputAction aimAction;
 
     private void Awake()
     {
@@ -47,7 +49,7 @@ public class CameraComponent : MonoBehaviour
         cinemachineVirtualCamera = FindAnyObjectByType<CinemachineVirtualCamera>(); // Virtual 카메라를 가져옴.
         tpsFollowCamera = cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         cinemachineVirtualCamera.Follow = targetTransform; // Follow 설정.
-        zoomDistance = tpsFollowCamera.CameraDistance;
+        currentZoomDistance = tpsFollowCamera.CameraDistance;
 
         PlayerInput input = GetComponent<PlayerInput>();
         actionMap = input.actions.FindActionMap("Player");
@@ -58,6 +60,10 @@ public class CameraComponent : MonoBehaviour
 
         zoomAction = actionMap.FindAction("Zoom");
         zoomAction.performed += Input_Zoom_Performed;
+
+        aimAction = actionMap.FindAction("Aim");
+        aimAction.performed += Input_Aim_Performed;
+        aimAction.canceled += Input_Aim_Canceled;
     }
 
     private void Update()
@@ -95,14 +101,14 @@ public class CameraComponent : MonoBehaviour
     // 원본 코드 그대로
     private void Update_Zoom()
     {
-        if (MathHelpers.IsNearlyEqual(tpsFollowCamera.CameraDistance, zoomDistance, 0.01f))
+        if (MathHelpers.IsNearlyEqual(tpsFollowCamera.CameraDistance, currentZoomDistance, 0.01f))
         {
-            tpsFollowCamera.CameraDistance = zoomDistance;
+            tpsFollowCamera.CameraDistance = currentZoomDistance;
 
             return;
         }
 
-        tpsFollowCamera.CameraDistance = Mathf.SmoothStep(tpsFollowCamera.CameraDistance, zoomDistance, zoomLerp * Time.deltaTime);
+        tpsFollowCamera.CameraDistance = Mathf.SmoothStep(tpsFollowCamera.CameraDistance, currentZoomDistance, zoomLerp * Time.deltaTime);
     }
 
     #region Input_Look Methods
@@ -120,8 +126,19 @@ public class CameraComponent : MonoBehaviour
     {
         float value = -context.ReadValue<float>() * zoomSensitivity;
 
-        zoomDistance += value;
-        zoomDistance = Mathf.Clamp(zoomDistance, zoomRange.x, zoomRange.y);
+        currentZoomDistance += value;
+        currentZoomDistance = Mathf.Clamp(currentZoomDistance, zoomRange.x, zoomRange.y);
+    }
+
+    private void Input_Aim_Performed(InputAction.CallbackContext context)
+    {
+        prevZoomDistance = currentZoomDistance;
+        currentZoomDistance = zoomRange.x;
+    }
+
+    private void Input_Aim_Canceled(InputAction.CallbackContext context)
+    {
+        currentZoomDistance = prevZoomDistance;
     }
     #endregion
 }
