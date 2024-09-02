@@ -8156,7 +8156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bUseCamera: 1
   zoomRange: {x: 1, y: 3}
-  zoomSensitivity: 0.1
+  zoomSensitivity: 0.005
   zoomLerp: 25
   mouseSensitivity: {x: 0.5, y: 0.5}
 --- !u!114 &5866666021718479974
