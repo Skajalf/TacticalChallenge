@@ -161,6 +161,7 @@ public abstract class Weapon : MonoBehaviour
     {
         if (state.CurrentState == StateType.Reload)
             yield break;
+
         state.SetReloadMode();
 
         animator.SetTrigger("Reload");

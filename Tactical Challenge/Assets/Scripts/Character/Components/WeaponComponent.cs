@@ -128,6 +128,11 @@ public class WeaponComponent : MonoBehaviour
 
     private void Reload(InputAction.CallbackContext context)
     {
+        if (weapon != null && !weapon.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
         if (bIsEquip)
         {
             weapon.Reload();

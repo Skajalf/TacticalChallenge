@@ -7,7 +7,9 @@ using UnityEngine.InputSystem;
 public class SkillComponent : MonoBehaviour
 {
     private Animator animator;
-    [SerializeField] private GameObject weapon; // Bip001_Weapon�� ������ ����
+    [SerializeField] private GameObject weapon; // Bip001_Weapon              
+    [SerializeField] private float ExSkillCoolDown;
+    [SerializeField] private float NormalSkillCoolDown;
 
     public bool IsEXSkill { private set; get; }
     public bool IsNormalSkill { private set; get; }
@@ -16,10 +18,12 @@ public class SkillComponent : MonoBehaviour
     InputActionMap actionMap;
     InputAction Skill;
     InputAction MeleeAttack;
+    StateComponent state;
 
     public void Awake()
     {
         animator = GetComponent<Animator>();
+        state = GetComponent<StateComponent>();
 
         weapon = transform.FindChildByName("Bip001_Weapon")?.gameObject;
 
@@ -44,7 +48,12 @@ public class SkillComponent : MonoBehaviour
 
     private void startSkill(InputAction.CallbackContext context)
     {
-        IsEXSkill = true;
+        if (state.CurrentState == StateType.Skill || state.CurrentState == StateType.Reload)
+        {
+            return;
+        }
+
+        state.SetSkillMode();
 
         if (weapon != null)
         {
@@ -57,13 +66,13 @@ public class SkillComponent : MonoBehaviour
 
     private IEnumerator EndSkill()
     {
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(NormalSkillCoolDown);
 
         if (weapon != null)
         {
             weapon.SetActive(true);
         }
 
-        IsEXSkill = false;
+        state.SetIdleMode();
     }
 }

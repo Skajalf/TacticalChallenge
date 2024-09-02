@@ -21,6 +21,7 @@ public class StateComponent : MonoBehaviour
     public bool SkillMode { get => currentState == StateType.Skill; }
     public bool DamagedMode { get => currentState == StateType.Damaged; }
     public bool DeadMode { get => currentState == StateType.Dead; }
+    public bool ReloadMode {  get => currentState == StateType.Reload; }
 
     public void SetIdleMode() => ChangeType(StateType.Idle);
     public void SetEquipMode() => ChangeType(StateType.Equip);
