@@ -1,10 +1,10 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-//TODO: 원거리 잘 작동하는지 테스트 해봐야 함
 public class Ranged : Weapon
 {
     [SerializeField] protected GameObject projectilePrefab; // 발사체 프리팹
@@ -60,6 +60,11 @@ public class Ranged : Weapon
         if (damageable != null)
         {
             damageable.OnDamage(rootObject, this, hitPoint, weapondata);
+        }
+        else
+        {
+            if (weapondata.HitParticle != null)
+                Instantiate<GameObject>(weapondata.HitParticle, hitPoint, rootObject.transform.rotation);
         }
 
         // 충돌 이펙트 실행
