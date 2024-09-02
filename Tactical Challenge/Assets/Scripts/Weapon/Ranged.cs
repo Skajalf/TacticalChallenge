@@ -38,15 +38,6 @@ public class Ranged : Weapon
         base.Update();
     }
 
-    public override void DoAction()
-    {
-        if (isReloading || !CanDoAction())
-            return;
-
-        base.DoAction();
-        FireProjectile();
-    }
-
     private void FireProjectile()
     {
         // 발사체를 발사 위치에서 생성

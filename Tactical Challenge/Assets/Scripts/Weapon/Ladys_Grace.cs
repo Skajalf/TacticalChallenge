@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 //TODO: 무기 하나 만들어야 함
 public class Ladys_Grace : Ranged
@@ -31,6 +32,8 @@ public class Ladys_Grace : Ranged
         gameObject.SetActive(true);
 
         Begin_Equip();
+
+        weapondata.currentAmmo = weapondata.Ammo;
     }
 
     public override void Begin_Equip()

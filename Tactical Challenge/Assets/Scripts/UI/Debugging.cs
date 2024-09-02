@@ -7,18 +7,22 @@ using UnityEngine.UI;
 
 public class Debugging : MonoBehaviour
 {
-    ActionComponent component;
+    WeaponComponent component;
+    Weapon weapon;
     GameObject obj;
-    private bool isAimTrack;
+    Text text;
 
     public void Awake()
     {
         obj = GetComponent<GameObject>();
-        component = GameObject.Find("CH0137").GetComponent<ActionComponent>();
+        component = GameObject.Find("CH0137").GetComponent<WeaponComponent>();
+        weapon = component.weapon;
+        text = gameObject.GetComponent<Text>();
     }
 
     public void Update()
     {
-
+        weapon = component.weapon;
+        text.text = $"{weapon.weapondata.currentAmmo}/{weapon.weapondata.Ammo}";
     }
 }

@@ -130,10 +130,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapondata:
     bCanMove: 0
-    Power: 0
-    Ammo: 0
+    Power: 30
+    Ammo: 15
     currentAmmo: 0
-    ReloadTime: 0
+    ReloadTime: 2
     Distance: 0
     StopFrame: 0
     Particle: {fileID: 0}

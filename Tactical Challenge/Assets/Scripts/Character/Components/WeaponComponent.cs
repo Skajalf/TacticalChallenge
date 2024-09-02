@@ -1,29 +1,43 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class WeaponComponent : MonoBehaviour
 {
-    private Transform weaponModel; // CH0137_weapon같은 무기 모델
-    private Transform weaponTransform; // Bip001_weapon 같은 무기 리깅정보가 담긴 오브젝트
-    private Player character; // 무기를 들고 있는 캐릭터모델 정보
+    public Weapon weapon;
+
+    private Transform weaponTransform; // CH0137_weapon같은 무기 모델 Transform
+    private Transform BIPTransform; // Bip001_weapon 같은 무기 리깅정보가 담긴 Transform
+    public Player Character { get; private set; } // 무기를 들고 있는 캐릭터모델 정보
+
+    private bool bIsEquip = false;
 
     private PlayerInput playerInput;
+    private InputActionMap playerInputActionMap;
+    
+    private Animator animator;
 
     private void Awake()
     {
         Init();
+        EventInit();
     }
 
-    private void Init() // 무기에 대한 정보를 가져온다. 없다면, 추가해서 가져온다.
+    private void Init()
     {
         playerInput = GetComponent<PlayerInput>();
+        playerInputActionMap = playerInput.actions.FindActionMap("Player");
 
-        weaponModel = transform.FindChildByName($"{gameObject.name}_Weapon");
-        if( weaponModel == null )
+        weaponTransform = transform.FindChildByName($"{gameObject.name}_Weapon");
+        Character = GetComponent<Player>();
+
+        animator = GetComponent<Animator>();
+
+        if (weaponTransform == null) // 어째선지 비어있으면 추가해주는 것 
         {
             GameObject go = Resources.Load<GameObject>($"Prefabs/{gameObject.name}_Weapon");
             GameObject gopre = Instantiate<GameObject>(go, gameObject.transform);
@@ -32,90 +46,91 @@ public class WeaponComponent : MonoBehaviour
             if (index > 0)
                 gopre.name = gopre.name.Substring(0, index);
 
-            weaponModel = gopre.transform;
+            weaponTransform = gopre.transform;
         }
 
-        character = GetComponent<Player>();
-        weaponTransform = transform.FindChildByName($"{character.CodeName}_Weapon");
+        weapon = weaponTransform.GetComponent<Weapon>(); // weapon 정보 가져오기
+
+        BIPTransform = transform.FindChildByName($"{Character.CodeName}_Weapon"); // BIP 가져오기
+        bIsEquip = true; // 장착완료
     }
 
-    /*
-    [SerializeField] private GameObject[] originPrefabs;
-
-    private Animator animator;
-    private StateComponent state;
-
-    private WeaponType type = WeaponType.Unarmed;
-    public WeaponType Type { get => type; }
-
-    private Dictionary<WeaponType, Weapon> weaponTable;
-    public event Action<WeaponType, WeaponType> OnWeaponTyeChanged;
-
-    public event Action OnEndEquip;
-    public event Action OnEndDoAction;
-
-    public bool UnarmedMode { get => type == WeaponType.Unarmed; }
-    public bool HGMode { get => type == WeaponType.HG; }
-    public bool SMGMode { get => type == WeaponType.SMG; }
-    public bool ARMode { get => type == WeaponType.AR; }
-    public bool SRMode { get => type == WeaponType.SR; }
-    public bool SGMode { get => type == WeaponType.SG; }
-    public bool MGMode { get => type == WeaponType.MG; }
-    public bool GLMode { get => type == WeaponType.GL; }
-    public bool RLMode { get => type == WeaponType.RL; }
-    public bool RGMode { get => type == WeaponType.RG; }
-    public bool MTMode { get => type == WeaponType.MT; }
-    public bool FTMode { get => type == WeaponType.FT; }
-
-    public bool IsEquippingMode()
+    private void EventInit()
     {
-        if (UnarmedMode) return false;
+        InputAction attack = playerInputActionMap.FindAction("Attack"); // Shoot으로 바꿀 것.
+        attack.started += StartShoot;
+        attack.canceled += CancelShoot;
 
-        Weapon weapon = weaponTable[type];
-        if(weapon == null) return false;
+        InputAction aim = playerInputActionMap.FindAction("Aim");
+        aim.started += StartAim;
+        aim.canceled += CancelAim;
 
-        return weapon.Equipping;
+        InputAction ReloadAction = playerInputActionMap.FindAction("Reload");
+        ReloadAction.started += Reload;
     }
 
-    private void Awake()
+    private void UnEquip()
     {
-        animator = GetComponent<Animator>(); // 장착모션 추가용.
-        state = GetComponent<StateComponent>();
+        bIsEquip = false;
+        weaponTransform = null;
     }
 
-    private void Start()
+    private void Equip()
     {
-
+        weaponTransform = transform.FindChildByName($"{Character.CodeName}_Weapon");
+        bIsEquip = true;
     }
 
-
-    public void SetUnarmedMode()
+    private void StartShoot(InputAction.CallbackContext context)
     {
-        if (state.IdleMode == false)
-            return;
-
-
-        animator.SetInteger("WeaponType", (int)WeaponType.Unarmed);
-
-        if (weaponTable[type] != null)
-            weaponTable[type].UnEquip();
-
-
-        ChangeType(WeaponType.Unarmed);
+        if(bIsEquip)
+        {
+            if (weapon.weapondata.currentAmmo > 0)
+                animator.SetBool("IsAttack", true);
+            else
+                weapon.Reload();
+        }
     }
 
-    public void Begin_Equip()
+    public void Shoot()
     {
-        weaponTable[type].Begin_Equip();
+        if(bIsEquip)
+        {
+            weapon.CheckAmmoWhileShoot();
+        }
+        return;
     }
 
-    public void End_Equip()
+    private void CancelShoot(InputAction.CallbackContext context)
     {
-        //TODO : 트랜지션 확인 필요
-        //animator.SetBool("IsEquipping", false);
-
-        weaponTable[type].End_Equip();
-        OnEndEquip?.Invoke();
+        if (bIsEquip)
+        {
+            weapon.End_DoAction();
+            animator.SetBool("IsAttack", false);
+        }
     }
-*/
+
+    private void StartAim(InputAction.CallbackContext context)
+    {
+        if (bIsEquip)
+        {
+            
+        }
+    }
+
+    private void CancelAim(InputAction.CallbackContext context)
+    {
+        if (bIsEquip)
+        {
+
+        }
+    }
+
+    private void Reload(InputAction.CallbackContext context)
+    {
+        if (bIsEquip)
+        {
+            weapon.Reload();
+        }
+    }
 }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [Serializable]
 public class WeaponData // 무기 데이터
@@ -29,7 +30,7 @@ public class WeaponData // 무기 데이터
 
 public abstract class Weapon : MonoBehaviour
 {
-    [SerializeField] protected WeaponData weapondata;
+    [SerializeField] public WeaponData weapondata;
     [SerializeField] private int damage;
 
     public int Damage
@@ -40,6 +41,8 @@ public abstract class Weapon : MonoBehaviour
     public bool Equipping { get => bEquipping; }
     private bool bEquipping;
     protected bool bEquipped;
+
+    public bool IsReload { private set; get; }
 
     protected GameObject rootObject;
     protected StateComponent state;
@@ -97,13 +100,6 @@ public abstract class Weapon : MonoBehaviour
         return true;
     }
 
-    public virtual void DoAction()
-    {
-        state.SetActionMode();
-
-        CheckStop(0);
-    }
-
     public virtual void Begin_DoAction()
     {
 
@@ -120,6 +116,27 @@ public abstract class Weapon : MonoBehaviour
     {
 
     }
+
+    public void CheckAmmoWhileShoot() // 잔탄 확인하고 쏘는 것!
+    {
+        if (weapondata.currentAmmo > 0)
+        {
+            weapondata.currentAmmo -= 1;
+            Begin_DoAction();
+        }
+        else
+            animator.SetBool("IsAttack", false);
+    }
+
+    public void Reload()
+    {
+        //TODO: 탄창이 꽉찼는지 확인하고 맞으면 return, 상태이상 상태인지 확인하고 맞으면 return
+        IsReload = true;
+        animator.SetTrigger("Reload");
+        weapondata.currentAmmo = weapondata.Ammo;
+        IsReload = false;
+    }
+
 
     protected void Move()
     {

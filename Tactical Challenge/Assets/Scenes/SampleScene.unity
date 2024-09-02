@@ -4964,6 +4964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9b73556f242f1a4598729fe378439b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
 --- !u!114 &5866666021718479976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4985,7 +4986,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132149350651043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92ccc95f19c28c44d8d7be2f347981cf, type: 3}
+  m_Script: {fileID: 11500000, guid: f176c69925e9aea41b83e7e73c5d7c6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 2560292506416122466, guid: 577d8e292769b7244baa80400bb75c78, type: 3}
@@ -6767,6 +6768,6 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 1676168765}
   - {fileID: 55830289}
-  - {fileID: 457144512}
   - {fileID: 543450653538618905}
+  - {fileID: 457144512}
   - {fileID: 1171058463}
