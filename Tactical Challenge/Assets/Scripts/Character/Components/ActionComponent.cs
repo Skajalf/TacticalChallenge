@@ -10,9 +10,9 @@ public class ActionComponent : MonoBehaviour
     private Animator animator;
     [SerializeField] private GameObject weapon; // Bip001_Weapon을 참조할 변수
 
-    public bool IsAim { private set; get; }
-    public bool IsReload { private set; get; }
-    public bool IsAttack { private set; get; }
+    //public bool IsAim { private set; get; }
+    //public bool IsReload { private set; get; }
+    //public bool IsAttack { private set; get; }
     public bool IsMeleeAttack { private set; get; }
 
 
@@ -24,44 +24,44 @@ public class ActionComponent : MonoBehaviour
 
         InputActionMap actionMap = input.actions.FindActionMap("Player");
 
-        InputAction attack = actionMap.FindAction("Attack");
-        attack.started += startAttack;
-        attack.canceled += cancelAttack;
+        //InputAction attack = actionMap.FindAction("Attack");
+        //attack.started += startAttack;
+        //attack.canceled += cancelAttack;
 
-        InputAction aim = actionMap.FindAction("Aim");
-        aim.started += startAim;
-        aim.canceled += cancelAim;
+        //InputAction aim = actionMap.FindAction("Aim");
+        //aim.started += startAim;
+        //aim.canceled += cancelAim;
 
-        InputAction Reload = actionMap.FindAction("Reload");
-        Reload.started += startReload;
+        //InputAction Reload = actionMap.FindAction("Reload");
+        //Reload.started += startReload;
 
         InputAction MeleeAttack = actionMap.FindAction("MeleeAttack");
         MeleeAttack.started += startMeleeAttack;
     }
 
-    private void startAttack(InputAction.CallbackContext context)
-    {
-        IsAttack = true;
-        animator.SetBool("IsAttack", true);
-    }
+    //private void startAttack(InputAction.CallbackContext context)
+    //{
+    //    IsAttack = true;
+    //    animator.SetBool("IsAttack", true);
+    //}
 
-    private void cancelAttack(InputAction.CallbackContext context)
-    {
-        IsAttack = false;
-        animator.SetBool("IsAttack", false);
-    }
+    //private void cancelAttack(InputAction.CallbackContext context)
+    //{
+    //    IsAttack = false;
+    //    animator.SetBool("IsAttack", false);
+    //}
 
-    private void startAim(InputAction.CallbackContext context)
-    {
-        IsAim = true;
-        animator.SetBool("IsAim", true);
-    }
+    //private void startAim(InputAction.CallbackContext context)
+    //{
+    //    IsAim = true;
+    //    animator.SetBool("IsAim", true);
+    //}
 
-    private void cancelAim(InputAction.CallbackContext context)
-    {
-        IsAim = false;
-        animator.SetBool("IsAim", false);
-    }
+    //private void cancelAim(InputAction.CallbackContext context)
+    //{
+    //    IsAim = false;
+    //    animator.SetBool("IsAim", false);
+    //}
 
     private void startMeleeAttack(InputAction.CallbackContext context)
     {
@@ -89,11 +89,11 @@ public class ActionComponent : MonoBehaviour
         IsMeleeAttack = false;
     }
 
-    private void startReload(InputAction.CallbackContext context)
-    {
-        //TODO: 탄창이 꽉찼는지 확인하고 맞으면 return, 상태이상 상태인지 확인하고 맞으면 return
-        IsReload = true;
-        animator.SetTrigger("Reload");
-        IsReload = false;
-    }
+    //private void startReload(InputAction.CallbackContext context)
+    //{
+    //    //TODO: 탄창이 꽉찼는지 확인하고 맞으면 return, 상태이상 상태인지 확인하고 맞으면 return
+    //    IsReload = true;
+    //    animator.SetTrigger("Reload");
+    //    IsReload = false;
+    //}
 }

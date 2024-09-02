@@ -38,8 +38,7 @@ public class StatComponent : MonoBehaviour
 
     public void OnDamage(GameObject attacker, Weapon causer, Vector3 hitPoint, WeaponData data)
     {
-        Damage(data.Power); // Assuming `Power` is the damage amount in `WeaponData`
-        Debug.Log($"{attacker.name}의 {causer.name}가 {gameObject.name}에 {data.Power}만큼의 피해를 입혔습니다. 위치: {hitPoint}");
+        Damage(data.Power); // 데미지 처리
     }
 
     private void Update()

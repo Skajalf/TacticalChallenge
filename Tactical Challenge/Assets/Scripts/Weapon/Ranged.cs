@@ -57,27 +57,23 @@ public class Ranged : Weapon
     {
         // 충돌한 오브젝트에 대한 데미지 처리
         IDamagable damageable = hitCollider.GetComponent<IDamagable>();
-        if (damageable != null)
-        {
-            damageable.OnDamage(rootObject, this, hitPoint, weapondata);
-        }
-        else
-        {
-            if (weapondata.HitParticle != null)
-                Instantiate<GameObject>(weapondata.HitParticle, hitPoint, rootObject.transform.rotation);
-        }
+        StatComponent stat = hitCollider.GetComponent<StatComponent>();
+        float damageAmount = weapondata.Power;
+
+        // `IDamagable.OnDamage` 호출
+        damageable.OnDamage(rootObject, this, hitPoint, damage);
 
         // 충돌 이펙트 실행
-        PlayHitEffect(hitPoint);
+        //PlayHitEffect(hitPoint);
     }
 
-    private void PlayHitEffect(Vector3 hitPoint)
-    {
-        if (weapondata.HitParticle != null)
-        {
-            Instantiate(weapondata.HitParticle, hitPoint + weapondata.HitParticlePositionOffset, Quaternion.identity);
-        }
-    }
+    //private void PlayHitEffect(Vector3 hitPoint)
+    //{
+    //    if (weapondata.HitParticle != null)
+    //    {
+    //        Instantiate(weapondata.HitParticle, hitPoint + weapondata.HitParticlePositionOffset, Quaternion.identity);
+    //    }
+    //}
 
     private IEnumerator Reload()
     {

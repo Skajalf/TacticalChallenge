@@ -14,18 +14,18 @@ public class WeaponData // 무기 데이터
     public float Distance; // 사거리
     public int StopFrame; // 적한테 총알이 맞았을때 히트스탑
 
-    public GameObject Particle; // 총구 화염
+    //public GameObject Particle; // 총구 화염
 
-    [Header(" Impulse Setting")] // 카메라 쉐이킹(반동?)
-    public Vector3 ImpulseDirection;
-    public Cinemachine.NoiseSettings ImpulseSettings;
+    //[Header(" Impulse Setting")] // 카메라 쉐이킹(반동?)
+    //public Vector3 ImpulseDirection;
+    //public Cinemachine.NoiseSettings ImpulseSettings;
 
-    [Header(" Impact Setting")] // 이 총으로 맞았을때 이펙트
-    public int HitImpactIndex;
+    //[Header(" Impact Setting")] // 이 총으로 맞았을때 이펙트
+    //public int HitImpactIndex;
 
-    public GameObject HitParticle;
-    public Vector3 HitParticlePositionOffset;
-    public Vector3 HitParticleScaleOffset = Vector3.one;
+    //public GameObject HitParticle;
+    //public Vector3 HitParticlePositionOffset;
+    //public Vector3 HitParticleScaleOffset = Vector3.one;
 }
 
 public abstract class Weapon : MonoBehaviour

@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-//[RequireComponent(typeof(StatComponent))]
+[RequireComponent(typeof(StatComponent))]
 [RequireComponent(typeof(StateComponent))]
 [RequireComponent(typeof(WeaponComponent))]
 public class Character : MonoBehaviour, IStoppable
 {
     private Animator animator; 
-    private StateComponent state;
+    protected StateComponent state;
     private WeaponComponent weapon;
-    // private StatComponent stat;
+    private StatComponent stat;
 
     public virtual void Init()
     {
         animator = GetComponent<Animator>();
         state = GetComponent<StateComponent>();
         weapon = GetComponent<WeaponComponent>();
-        // stat = GetComponent<StatComponent>();
+        stat = GetComponent<StatComponent>();
     }
 
     #region IStoppable

@@ -50,17 +50,17 @@ public class Ladys_Grace : Ranged
         gameObject.SetActive(false);
     }
 
-    public override void Play_Particle()
-    {
-        base.Play_Particle();
+    //public override void Play_Particle()
+    //{
+    //    base.Play_Particle();
 
-        if (weapondata.Particle == null) return;
+    //    if (weapondata.Particle == null) return;
 
-        Vector3 position = muzzleTransform.position;
-        Quaternion rotation = rootObject.transform.rotation;
+    //    Vector3 position = muzzleTransform.position;
+    //    Quaternion rotation = rootObject.transform.rotation;
 
-        Instantiate<GameObject>(weapondata.Particle, position, rotation);
-    }
+    //    Instantiate<GameObject>(weapondata.Particle, position, rotation);
+    //}
 
     public override void Begin_DoAction()
     {
@@ -80,20 +80,27 @@ public class Ladys_Grace : Ranged
         obj.SetActive(true);
     }
 
-    private void OnProjectileHit(Collider self, Collider other, Vector3 point)
+    private void OnProjectileHit(Collider self, Collider hitCollider, Vector3 hitPoint)
     {
-        IDamagable damage = other.GetComponent<IDamagable>();
+        IDamagable damageable = hitCollider.GetComponent<IDamagable>();
 
-        if (damage != null)
+        if (damageable != null)
         {
-            Vector3 hitPoint = self.ClosestPoint(other.transform.position);
-            hitPoint = other.transform.InverseTransformPoint(hitPoint);
-            damage?.OnDamage(rootObject, this, hitPoint, weapondata);
+            StatComponent stat = hitCollider.GetComponent<StatComponent>();
+            float damageAmount = weapondata.Power;
 
-            return;
+            // `IDamagable.OnDamage` 호출
+            damageable.OnDamage(rootObject, this, hitPoint, damageAmount);
+
+            // 추가로 체력 상태를 로그로 출력
+            if (stat != null)
+            {
+                Debug.Log($"{hitCollider.name}의 현재 체력: {stat.GetCurrentHealth()}");
+            }
         }
 
-        if (weapondata.HitParticle != null)
-            Instantiate<GameObject>(weapondata.HitParticle, point, rootObject.transform.rotation);
+        //if (weapondata.HitParticle != null)
+        //    Instantiate<GameObject>(weapondata.HitParticle, point, rootObject.transform.rotation);
     }
+
 }
