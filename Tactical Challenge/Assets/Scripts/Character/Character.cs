@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(StatComponent))]
 [RequireComponent(typeof(StateComponent))]
-[RequireComponent(typeof(WeaponComponent))]
 public class Character : MonoBehaviour, IStoppable
 {
     private Animator animator; 
@@ -19,6 +17,11 @@ public class Character : MonoBehaviour, IStoppable
         state = GetComponent<StateComponent>();
         weapon = GetComponent<WeaponComponent>();
         stat = GetComponent<StatComponent>();
+    }
+
+    public virtual void OnDamage(float damage)
+    {
+
     }
 
     #region IStoppable

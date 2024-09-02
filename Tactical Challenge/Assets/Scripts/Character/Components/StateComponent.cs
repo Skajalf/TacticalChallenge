@@ -1,22 +1,26 @@
 using System;
 using UnityEngine;
 
+
+public enum StateType
+{
+    Idle, Equip, Action, Skill, Damaged, Dead, Reload
+}
+
 public class StateComponent : MonoBehaviour
 {
-    public enum StateType
-    {
-        Idle, Equip, Action, Skill, Damaged, Dead,
-    }
-    private StateType type = StateType.Idle;
+    private StateType currentState = StateType.Idle;
+
+    public StateType CurrentState { private set { currentState = value; }  get { return currentState; } }
 
     public event Action<StateType, StateType> OnStateTypeChanged;
 
-    public bool IdleMode { get => type == StateType.Idle; }
-    public bool EquipMode { get => type == StateType.Equip; }
-    public bool ActionMode { get => type == StateType.Action; }
-    public bool SkillMode { get => type == StateType.Skill; }
-    public bool DamagedMode { get => type == StateType.Damaged; }
-    public bool DeadMode { get => type == StateType.Dead; }
+    public bool IdleMode { get => currentState == StateType.Idle; }
+    public bool EquipMode { get => currentState == StateType.Equip; }
+    public bool ActionMode { get => currentState == StateType.Action; }
+    public bool SkillMode { get => currentState == StateType.Skill; }
+    public bool DamagedMode { get => currentState == StateType.Damaged; }
+    public bool DeadMode { get => currentState == StateType.Dead; }
 
     public void SetIdleMode() => ChangeType(StateType.Idle);
     public void SetEquipMode() => ChangeType(StateType.Equip);
@@ -24,13 +28,14 @@ public class StateComponent : MonoBehaviour
     public void SetSkillMode() => ChangeType(StateType.Skill);
     public void SetDamagedMode() => ChangeType(StateType.Damaged);
     public void SetDeadMode() => ChangeType(StateType.Dead);
+    public void SetReloadMode() => ChangeType(StateType.Reload);
 
     private void ChangeType(StateType type)
     {
-        if(this.type == type) return;
+        if(this.currentState == type) return;
 
-        StateType prevtype = this.type;
-        this.type = type;
+        StateType prevtype = this.currentState;
+        this.currentState = type;
 
         OnStateTypeChanged?.Invoke(prevtype, type);
     }

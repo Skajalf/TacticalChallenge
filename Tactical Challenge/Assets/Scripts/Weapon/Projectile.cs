@@ -6,6 +6,8 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float force = 1000.0f;
     [SerializeField] private float DestroyTime = 10.0f;
 
+    public Weapon owner;
+
     private new Rigidbody rigidbody;
     private new Collider collider;
 
@@ -24,10 +26,11 @@ public class Projectile : MonoBehaviour
         rigidbody.AddForce(transform.forward * force);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) // Character이면 데미지를 입힌다.
     {
-        OnProjectileHit?.Invoke(collider, other, transform.position);
-
-        Destroy(gameObject);
+        if (other.gameObject.layer == LayerMask.NameToLayer("Character"))
+            other.gameObject.GetComponent<Character>().OnDamage(owner.weapondata.Power);
+        else
+            Destroy(gameObject);
     }
 }

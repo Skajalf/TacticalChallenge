@@ -10,13 +10,9 @@ public class Ranged : Weapon
     [SerializeField] protected GameObject projectilePrefab; // 발사체 프리팹
     [SerializeField] private Transform firePoint;         // 발사 위치
 
-    private bool isReloading = false;
-
     protected CinemachineImpulseSource impulse;
     protected CinemachineBrain brain;
 
-    private MovingComponent moving;
-    private WeaponData data;
 
     protected override void Awake()
     {
@@ -24,8 +20,6 @@ public class Ranged : Weapon
 
         impulse = GetComponent<CinemachineImpulseSource>();
         brain = Camera.main.GetComponent<CinemachineBrain>();
-
-        moving = rootObject.GetComponent<MovingComponent>();
     }
 
     protected override void Start()
@@ -38,17 +32,19 @@ public class Ranged : Weapon
         base.Update();
     }
 
-    private void FireProjectile()
+    private void FireProjectile() // 총알을 발사함
     {
         // 발사체를 발사 위치에서 생성
         GameObject projectileInstance = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+        if (projectileInstance == null) // 없으면 실행이 안되도록 함.
+            return;
 
         // 발사체가 `Projectile` 스크립트를 가지고 있는지 확인
         Projectile projectile = projectileInstance.GetComponent<Projectile>();
-        if (projectile != null)
-        {
-            projectile.OnProjectileHit += OnProjectileHit;
-        }
+        if (projectile == null)
+                projectileInstance.AddComponent<Projectile>();
+
+        projectile.owner = this;
 
         weapondata.currentAmmo--;
     }
@@ -61,26 +57,19 @@ public class Ranged : Weapon
         float damageAmount = weapondata.Power;
 
         // `IDamagable.OnDamage` 호출
-        damageable.OnDamage(rootObject, this, hitPoint, damage);
 
         // 충돌 이펙트 실행
         //PlayHitEffect(hitPoint);
     }
 
-    //private void PlayHitEffect(Vector3 hitPoint)
-    //{
-    //    if (weapondata.HitParticle != null)
-    //    {
-    //        Instantiate(weapondata.HitParticle, hitPoint + weapondata.HitParticlePositionOffset, Quaternion.identity);
-    //    }
-    //}
-
-    private IEnumerator Reload()
+    public override void Begin_DoAction()
     {
-        isReloading = true;
-        yield return new WaitForSeconds(data.ReloadTime);
+        muzzlePosition = muzzleTransform.position;
 
-        weapondata.currentAmmo = weapondata.Ammo;
-        isReloading = false;
+        GameObject obj = Instantiate<GameObject>(projectilePrefab, muzzlePosition, rootObject.transform.rotation);
+        Projectile projectile = obj.GetComponent<Projectile>();
+        projectile.owner = this;
+
+        obj.SetActive(true);
     }
 }

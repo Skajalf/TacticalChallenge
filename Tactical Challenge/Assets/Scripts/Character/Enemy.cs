@@ -3,16 +3,17 @@ using UnityEngine;
 
 [RequireComponent(typeof(CapsuleCollider))]
 
-public class Enemy : Character, IDamagable
+public class Enemy : Character
 {
-    private StatComponent stat;
+    private StatComponent statComponent;
 
-    public void OnDamage(GameObject attacker, Weapon causer, Vector3 hitPoint, WeaponData data)
+    private void Awake()
     {
-        stat.Damage(data.Power);
-        MovableStopper.Instance.Start_Delay(data.StopFrame);
+        statComponent = GetComponent<StatComponent>();
+    }
 
-        transform.LookAt(attacker.transform, Vector3.up);
-        return;
+    public override void OnDamage(float damage)
+    {
+        statComponent.Damage(damage);
     }
 }

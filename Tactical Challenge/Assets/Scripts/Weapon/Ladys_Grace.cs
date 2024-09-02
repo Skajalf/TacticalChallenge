@@ -8,7 +8,6 @@ public class Ladys_Grace : Ranged
     [SerializeField] private string muzzleTransformName = "fire_01";
 
     private Transform WeaponTransform;
-    private Transform muzzleTransform;
 
     protected Ranged ranged;
 
@@ -64,43 +63,11 @@ public class Ladys_Grace : Ranged
 
     public override void Begin_DoAction()
     {
-        base.Begin_DoAction();
-
         if (projectilePrefab == null)
             return;
 
-        Vector3 muzzlePosition = muzzleTransform.position;
         muzzlePosition += rootObject.transform.forward * 0.5f;
-
-        GameObject obj = Instantiate<GameObject>(projectilePrefab, muzzlePosition, rootObject.transform.rotation);
-        Projectile projectile = obj.GetComponent<Projectile>();
-        {
-            projectile.OnProjectileHit += OnProjectileHit;
-        }
-        obj.SetActive(true);
-    }
-
-    private void OnProjectileHit(Collider self, Collider hitCollider, Vector3 hitPoint)
-    {
-        IDamagable damageable = hitCollider.GetComponent<IDamagable>();
-
-        if (damageable != null)
-        {
-            StatComponent stat = hitCollider.GetComponent<StatComponent>();
-            float damageAmount = weapondata.Power;
-
-            // `IDamagable.OnDamage` 호출
-            damageable.OnDamage(rootObject, this, hitPoint, damageAmount);
-
-            // 추가로 체력 상태를 로그로 출력
-            if (stat != null)
-            {
-                Debug.Log($"{hitCollider.name}의 현재 체력: {stat.GetCurrentHealth()}");
-            }
-        }
-
-        //if (weapondata.HitParticle != null)
-        //    Instantiate<GameObject>(weapondata.HitParticle, point, rootObject.transform.rotation);
+        base.Begin_DoAction();
     }
 
 }

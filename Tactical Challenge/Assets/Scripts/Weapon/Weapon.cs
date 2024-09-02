@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 [Serializable]
 public class WeaponData // 무기 데이터
@@ -39,14 +40,17 @@ public abstract class Weapon : MonoBehaviour
     }
 
     public bool Equipping { get => bEquipping; }
-    private bool bEquipping;
+    protected bool bEquipping;
     protected bool bEquipped;
 
-    public bool IsReload { private set; get; }
+    public bool IsReload { protected set; get; }
 
     protected GameObject rootObject;
     protected StateComponent state;
     protected Animator animator;
+
+    protected Transform muzzleTransform;
+    protected Vector3 muzzlePosition;
 
     protected virtual void Reset()
     {
@@ -102,7 +106,7 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void Begin_DoAction()
     {
-
+        
     }
 
     public virtual void End_DoAction()
@@ -128,13 +132,9 @@ public abstract class Weapon : MonoBehaviour
             animator.SetBool("IsAttack", false);
     }
 
-    public void Reload()
+    public virtual void Reload()
     {
-        //TODO: 탄창이 꽉찼는지 확인하고 맞으면 return, 상태이상 상태인지 확인하고 맞으면 return
-        IsReload = true;
-        animator.SetTrigger("Reload");
-        weapondata.currentAmmo = weapondata.Ammo;
-        IsReload = false;
+        StartCoroutine(OnReload());
     }
 
 
@@ -155,5 +155,19 @@ public abstract class Weapon : MonoBehaviour
             if (moving != null)
                 moving.Stop();
         }
+    }
+
+    private IEnumerator OnReload()
+    {
+        if (state.CurrentState == StateType.Reload)
+            yield break;
+        state.SetReloadMode();
+
+        animator.SetTrigger("Reload");
+
+        yield return new WaitForSeconds(weapondata.ReloadTime);
+
+        weapondata.currentAmmo = weapondata.Ammo;
+        state.SetIdleMode();
     }
 }

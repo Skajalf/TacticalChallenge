@@ -2,20 +2,28 @@ using UnityEngine;
 
 public class StatComponent : MonoBehaviour
 {
-    [SerializeField] private float maxHealthPoint = 100.0f;
-    [SerializeField] private float maxActionPoint = 10.0f;
-    [SerializeField] private float APRegen = 0.01f;
+    [SerializeField] public float maxHealthPoint = 100.0f;
+    [SerializeField] public float maxActionPoint = 10.0f;
 
-    private float currHealthPoint;
-    private float currActionPoint;
+    [SerializeField] private float APRegen = 0.01f;  // TODO : Coroutine으로 수정.
 
+    private float currentHealthPoint; // 현재 HP
+    private float currentActionPoint; // 현재 AP
 
-    public bool Dead { get => currHealthPoint <= 0.0f; }
+    public float CurrentHP { get { return currentHealthPoint; } private set { currentHealthPoint = value; } }
+    public float CurrentAP => currentActionPoint;
 
-    private void Start()
+    public bool Dead { get => currentHealthPoint <= 0.0f; }
+
+    private void Awake()
     {
-        currHealthPoint = maxHealthPoint;
-        currActionPoint = 0.0f;
+        Init();
+    }
+
+    private void Init()
+    {
+        currentHealthPoint = maxHealthPoint;
+        currentActionPoint = 0.0f;
     }
 
     public void Damage(float amount)
@@ -23,26 +31,21 @@ public class StatComponent : MonoBehaviour
         if (amount < 1.0f)
             return;
 
-        currHealthPoint += (amount * -1.0f);
-        currHealthPoint = Mathf.Clamp(currHealthPoint, 0.0f, maxHealthPoint);
+        currentHealthPoint += (amount * -1.0f);
+        currentHealthPoint = Mathf.Clamp(currentHealthPoint, 0.0f, maxHealthPoint);
     }
 
     public void APUse(float amount)
     {
-        if (currActionPoint < amount)
+        if (currentActionPoint < amount)
             return;
 
-        currActionPoint += (amount * -1.0f);
-        currActionPoint = Mathf.Clamp(currActionPoint, 0.0f, maxActionPoint);
-    }
-
-    public void OnDamage(GameObject attacker, Weapon causer, Vector3 hitPoint, WeaponData data)
-    {
-        Damage(data.Power); // 데미지 처리
+        currentActionPoint += (amount * -1.0f);
+        currentActionPoint = Mathf.Clamp(currentActionPoint, 0.0f, maxActionPoint);
     }
 
     private void Update()
     {
-        currActionPoint += APRegen;
+        currentActionPoint += APRegen;
     }
 }

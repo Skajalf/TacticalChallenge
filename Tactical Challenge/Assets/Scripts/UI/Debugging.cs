@@ -12,17 +12,26 @@ public class Debugging : MonoBehaviour
     GameObject obj;
     Text text;
 
+    StatComponent dummy;
+
     public void Awake()
     {
         obj = GetComponent<GameObject>();
         component = GameObject.Find("CH0137").GetComponent<WeaponComponent>();
         weapon = component.weapon;
         text = gameObject.GetComponent<Text>();
+        
+        GetDummyInfo();
+    }
+
+    private void GetDummyInfo()
+    {
+        dummy = GameObject.Find("Dummy").GetComponent<StatComponent>();
     }
 
     public void Update()
     {
         weapon = component.weapon;
-        text.text = $"{weapon.weapondata.currentAmmo}/{weapon.weapondata.Ammo}";
+        text.text = $"{weapon.weapondata.currentAmmo}/{weapon.weapondata.Ammo} Dummy's HP:{dummy.CurrentHP}/{dummy.maxHealthPoint}";
     }
 }
