@@ -456,6 +456,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: f15af43f-394d-4051-b305-0579f704dacc
     m_ActionName: Player/Cover[/Keyboard/z]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 57e474d0-5ef3-47f0-b766-c4a615ef7561
+    m_ActionName: Player/Alt[/Keyboard/alt]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: Player
@@ -8212,7 +8216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 2
   runSpeed: 3
-  jumpForce: 1.2
+  jumpForce: 0.6
   gravity: -9.81
   sensitivity: 100
   deadZone: 0.01
