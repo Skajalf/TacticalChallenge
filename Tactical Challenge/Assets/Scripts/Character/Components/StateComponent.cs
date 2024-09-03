@@ -19,17 +19,17 @@ public class StateComponent : MonoBehaviour
     public bool EquipMode { get => currentState == StateType.Equip; }
     public bool ActionMode { get => currentState == StateType.Action; }
     public bool SkillMode { get => currentState == StateType.Skill; }
+    public bool ReloadMode {  get => currentState == StateType.Reload; }
     public bool DamagedMode { get => currentState == StateType.Damaged; }
     public bool DeadMode { get => currentState == StateType.Dead; }
-    public bool ReloadMode {  get => currentState == StateType.Reload; }
 
     public void SetIdleMode() => ChangeType(StateType.Idle);
     public void SetEquipMode() => ChangeType(StateType.Equip);
     public void SetActionMode() => ChangeType(StateType.Action);
     public void SetSkillMode() => ChangeType(StateType.Skill);
+    public void SetReloadMode() => ChangeType(StateType.Reload);
     public void SetDamagedMode() => ChangeType(StateType.Damaged);
     public void SetDeadMode() => ChangeType(StateType.Dead);
-    public void SetReloadMode() => ChangeType(StateType.Reload);
 
     private void ChangeType(StateType type)
     {
