@@ -11,8 +11,6 @@ public class Projectile : MonoBehaviour
     private new Rigidbody rigidbody;
     private new Collider collider;
 
-    public event Action<Collider, Collider, Vector3> OnProjectileHit;
-
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
