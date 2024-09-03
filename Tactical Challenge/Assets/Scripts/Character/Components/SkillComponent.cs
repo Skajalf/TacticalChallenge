@@ -13,10 +13,12 @@ public class SkillComponent : MonoBehaviour
 
     public bool IsEXSkill { private set; get; }
     public bool IsNormalSkill { private set; get; }
+    public bool IsMeleeAttack { private set; get; }
 
     PlayerInput input;
     InputActionMap actionMap;
     InputAction Skill;
+    InputAction EXSkill;
     InputAction MeleeAttack;
     StateComponent state;
 
@@ -44,6 +46,12 @@ public class SkillComponent : MonoBehaviour
 
         Skill = actionMap.FindAction("Skill");
         Skill.started += startSkill;
+
+        EXSkill = actionMap.FindAction("EXSkill");
+        EXSkill.started += startEXSkill;
+
+        MeleeAttack = actionMap.FindAction("MeleeAttack");
+        MeleeAttack.started += startMeleeAttack;
     }
 
     private void startSkill(InputAction.CallbackContext context)
@@ -64,6 +72,24 @@ public class SkillComponent : MonoBehaviour
         StartCoroutine(EndSkill());
     }
 
+    private void startEXSkill(InputAction.CallbackContext context)
+    {
+        if (state.CurrentState == StateType.Skill || state.CurrentState == StateType.Reload)
+        {
+            return;
+        }
+
+        state.SetSkillMode();
+
+        if (weapon != null)
+        {
+            weapon.SetActive(false);
+        }
+
+        animator.SetTrigger("EXSkill");
+        StartCoroutine(EndEXSkill());
+    }
+
     private IEnumerator EndSkill()
     {
         yield return new WaitForSeconds(NormalSkillCoolDown);
@@ -74,5 +100,43 @@ public class SkillComponent : MonoBehaviour
         }
 
         state.SetIdleMode();
+    }
+
+    private IEnumerator EndEXSkill()
+    {
+        yield return new WaitForSeconds(ExSkillCoolDown);
+
+        if (weapon != null)
+        {
+            weapon.SetActive(true);
+        }
+
+        state.SetIdleMode();
+    }
+
+    private void startMeleeAttack(InputAction.CallbackContext context)
+    {
+        IsMeleeAttack = true;
+
+        if (weapon != null)
+        {
+            weapon.SetActive(false);
+        }
+
+        animator.SetTrigger("MeleeAttack");
+
+        StartCoroutine(EndMeleeAttack());
+    }
+
+    private IEnumerator EndMeleeAttack()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        if (weapon != null)
+        {
+            weapon.SetActive(true);
+        }
+
+        IsMeleeAttack = false;
     }
 }
