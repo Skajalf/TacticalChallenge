@@ -6,10 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(StateComponent))]
 public class Character : MonoBehaviour, IStoppable
 {
-    private Animator animator; 
+    protected Animator animator; 
     protected StateComponent state;
-    private WeaponComponent weapon;
-    private StatComponent stat;
+    protected WeaponComponent weapon;
+    protected StatComponent stat;
 
     public virtual void Init()
     {
@@ -20,6 +20,11 @@ public class Character : MonoBehaviour, IStoppable
     }
 
     public virtual void OnDamage(float damage)
+    {
+
+    }
+
+    protected virtual void End_Damaged()
     {
 
     }
