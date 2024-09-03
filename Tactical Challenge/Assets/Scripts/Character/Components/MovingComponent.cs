@@ -25,6 +25,13 @@ public class MovingComponent : MonoBehaviour
     private Vector2 currentInputMove;
     private Vector3 verticalVelocity = Vector3.zero;
 
+    [Header("Cover Settings")]
+    [SerializeField] private float coverRadius = 0.5f;
+    [SerializeField] private LayerMask coverLayer;
+    [SerializeField] private float coverDetectionTime = 0.5f;
+
+    private float coverTimer = 0f;
+
     private CharacterController controller;
     private Animator animator;
 
@@ -59,6 +66,7 @@ public class MovingComponent : MonoBehaviour
         Movement();
         Jump();
         Gravity();
+        Cover(); // Cover 상태를 확인하는 메서드 호출
     }
 
     #region actionMethods
@@ -153,6 +161,13 @@ public class MovingComponent : MonoBehaviour
 
     private void Jump()
     {
+        // 엄폐 상태 해제
+        if (bCover)
+        {
+            bCover = false;
+            animator.SetBool("Cover", false);
+        }
+
         if (bJump && controller.isGrounded)
         {
             verticalVelocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
@@ -170,6 +185,32 @@ public class MovingComponent : MonoBehaviour
         else if (verticalVelocity.y < 0)
         {
             verticalVelocity.y = 0f;
+        }
+    }
+
+    private void Cover()
+    {
+        // 플레이어 위치에서 coverRadius 반경 내의 Collider들을 감지
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, coverRadius, coverLayer);
+
+        // Cover 태그가 붙은 오브젝트가 감지되면
+        if (hitColliders.Length > 0)
+        {
+            // 일정 시간 동안 Cover 상태를 유지하도록 타이머를 증가
+            coverTimer += Time.deltaTime;
+
+            if (coverTimer >= coverDetectionTime)
+            {
+                bCover = true;
+                animator.SetBool("Cover", true);
+            }
+        }
+        else
+        {
+            // Cover 상태에서 벗어나면 타이머 리셋하고 상태 해제
+            coverTimer = 0f;
+            bCover = false;
+            animator.SetBool("Cover", false);
         }
     }
 }
