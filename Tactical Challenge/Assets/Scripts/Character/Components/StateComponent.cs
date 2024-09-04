@@ -38,4 +38,20 @@ public class StateComponent : MonoBehaviour
 
         OnStateTypeChanged?.Invoke(prevtype, type);
     }
+
+    /// <summary>
+    /// 기본적으로 True를 반환하는 메서드. 스킬상태와 재장전할 때만 False를 반환한다.
+    /// </summary>
+    /// <returns>boolean</returns>
+    public bool CanDoSomething()
+    {
+        if(currentState == StateType.Idle)
+            return true;
+
+        if(currentState == StateType.Skill ||  currentState == StateType.Reload)
+            return false;
+
+        return true; 
+    }
+
 }
