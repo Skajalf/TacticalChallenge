@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealthPoint: 200
-  maxActionPoint: 10
+  maxActionPoint: 10.09
   APRegen: 0.01
 --- !u!136 &75313136
 CapsuleCollider:
@@ -2570,7 +2570,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132149350651043}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.043}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8286,8 +8286,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 2560292506416122466, guid: 577d8e292769b7244baa80400bb75c78, type: 3}
-  ExSkillCoolDown: 2
-  NormalSkillCoolDown: 2
+  ExSkillDelay: 2.07
+  NormalSkillDelay: 4.06
 --- !u!114 &5866666021718479978
 MonoBehaviour:
   m_ObjectHideFlags: 0

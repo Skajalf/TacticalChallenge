@@ -46,17 +46,4 @@ public class Player : Character
         
         
     }
-    
-    /*
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-
-        bullet = hit.gameObject.GetComponent<Projectile>();
-        if (bullet == null)
-            return;
-
-        float damage = bullet.owner.weapondata.Power;
-        OnDamage(damage);
-    }
-    */
 }

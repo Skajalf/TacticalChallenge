@@ -8,8 +8,8 @@ public class SkillComponent : MonoBehaviour
 {
     private Animator animator;
     [SerializeField] private GameObject weapon; // Bip001_Weapon              
-    [SerializeField] private float ExSkillCoolDown;
-    [SerializeField] private float NormalSkillCoolDown;
+    [SerializeField] private float ExSkillDelay;
+    [SerializeField] private float NormalSkillDelay;
 
     public bool IsEXSkill { private set; get; }
     public bool IsNormalSkill { private set; get; }
@@ -92,7 +92,7 @@ public class SkillComponent : MonoBehaviour
 
     private IEnumerator EndSkill()
     {
-        yield return new WaitForSeconds(NormalSkillCoolDown);
+        yield return new WaitForSeconds(NormalSkillDelay);
 
         if (weapon != null)
         {
@@ -104,7 +104,7 @@ public class SkillComponent : MonoBehaviour
 
     private IEnumerator EndEXSkill()
     {
-        yield return new WaitForSeconds(ExSkillCoolDown);
+        yield return new WaitForSeconds(ExSkillDelay);
 
         if (weapon != null)
         {

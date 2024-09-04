@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum StateType
 {
-    Idle, Equip, Action, Skill, Damaged, Dead, Reload
+    Idle, Equip, Skill, Damaged, Dead, Reload
 }
 
 public class StateComponent : MonoBehaviour
@@ -17,7 +17,6 @@ public class StateComponent : MonoBehaviour
 
     public bool IdleMode { get => currentState == StateType.Idle; }
     public bool EquipMode { get => currentState == StateType.Equip; }
-    public bool ActionMode { get => currentState == StateType.Action; }
     public bool SkillMode { get => currentState == StateType.Skill; }
     public bool ReloadMode {  get => currentState == StateType.Reload; }
     public bool DamagedMode { get => currentState == StateType.Damaged; }
@@ -25,7 +24,6 @@ public class StateComponent : MonoBehaviour
 
     public void SetIdleMode() => ChangeType(StateType.Idle);
     public void SetEquipMode() => ChangeType(StateType.Equip);
-    public void SetActionMode() => ChangeType(StateType.Action);
     public void SetSkillMode() => ChangeType(StateType.Skill);
     public void SetReloadMode() => ChangeType(StateType.Reload);
     public void SetDamagedMode() => ChangeType(StateType.Damaged);

@@ -306,7 +306,7 @@
                     "path": "<Keyboard>/alt",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "PC",
                     "action": "Alt",
                     "isComposite": false,
                     "isPartOfComposite": false

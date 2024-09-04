@@ -37,6 +37,7 @@ public class MovingComponent : MonoBehaviour
 
     public bool bCanMove { get; private set; } = true;
     public bool bRun { get; private set; }
+    public bool bAlt { get; private set; }
     public bool bJump { get; private set; }
     public bool bCover { get; private set; }
 
@@ -59,6 +60,10 @@ public class MovingComponent : MonoBehaviour
 
         InputAction jump = actionMap.FindAction("Jump");
         jump.started += startJump;
+
+        InputAction alt = actionMap.FindAction("Alt");
+        alt.started += startAlt;
+        alt.canceled += cancelAlt;
     }
 
     public void Update()
@@ -95,6 +100,16 @@ public class MovingComponent : MonoBehaviour
         bJump = true;
     }
 
+    private void startAlt(InputAction.CallbackContext context)
+    {
+        bAlt = true;
+    }
+
+    private void cancelAlt(InputAction.CallbackContext context)
+    {
+        bAlt = false;
+    }
+
     #endregion
 
     public void Movement()
@@ -109,6 +124,11 @@ public class MovingComponent : MonoBehaviour
         float speed = bRun ? runSpeed : walkSpeed;
         animator.SetBool("IsRun", bRun);
 
+        // 카메라의 Y축 회전을 캐릭터의 회전에 반영
+        Quaternion cameraRotation = cameraRootTransform.rotation;
+        Quaternion characterRotation = Quaternion.Euler(0, cameraRotation.eulerAngles.y, 0);
+
+
         if (currentInputMove.magnitude > deadZone )
         {
             Vector3 cameraForward = cameraRootTransform.forward;
@@ -122,19 +142,21 @@ public class MovingComponent : MonoBehaviour
             characterDirection = (cameraRight * currentInputMove.x) + (cameraForward * currentInputMove.y);
             characterDirection = characterDirection.normalized * speed;
 
-            if(speed != 0) // 카메라 고정을 위한 것
+            if (!bAlt)
             {
-                transform.rotation = Quaternion.LookRotation(cameraForward);
+                transform.rotation = characterRotation;
             }
-            else
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(characterDirection);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * sensitivity);
-            }
+
             animator.SetBool("IsMove", true);
         }
         else
         {
+            // 캐릭터가 이동하지 않더라도 Alt 키가 눌리지 않은 경우에만 카메라의 Y축 회전을 따라 회전
+            if (!bAlt)
+            {
+                transform.rotation = characterRotation;
+            }
+
             animator.SetBool("IsMove", false);
         }
 
