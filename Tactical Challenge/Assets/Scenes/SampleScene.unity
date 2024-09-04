@@ -1527,7 +1527,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1676168765}
     m_Modifications:
     - target: {fileID: 1399630920879889691, guid: bb29a268cee1c5542bb7d2c664e6debf,
         type: 3}
@@ -1547,17 +1547,17 @@ PrefabInstance:
     - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.14602995
+      value: 0.4319232
       objectReference: {fileID: 0}
     - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.04523403
+      value: 2.7044632
       objectReference: {fileID: 0}
     - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.6902378
+      value: 4.561082
       objectReference: {fileID: 0}
     - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
         type: 3}
@@ -1567,7 +1567,7 @@ PrefabInstance:
     - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
         type: 3}
@@ -1813,6 +1813,7 @@ Transform:
   - {fileID: 742049250}
   - {fileID: 1219612216}
   - {fileID: 1080469655}
+  - {fileID: 1911361997}
   - {fileID: 201037439}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1843,6 +1844,12 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.8, z: 0.3}
   m_Center: {x: 0, y: 0.4, z: 0}
+--- !u!4 &1911361997 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4272171976690356674, guid: bb29a268cee1c5542bb7d2c664e6debf,
+    type: 3}
+  m_PrefabInstance: {fileID: 1108324793}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &34089703569079302
 Transform:
   m_ObjectHideFlags: 0
@@ -11853,5 +11860,4 @@ SceneRoots:
   - {fileID: 543450653538618905}
   - {fileID: 457144512}
   - {fileID: 1171058463}
-  - {fileID: 1108324793}
   - {fileID: 543450652354256938}
