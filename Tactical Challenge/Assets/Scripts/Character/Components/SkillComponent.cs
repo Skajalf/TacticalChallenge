@@ -7,9 +7,12 @@ using UnityEngine.InputSystem;
 public class SkillComponent : MonoBehaviour
 {
     private Animator animator;
-    [SerializeField] private GameObject weapon; // Bip001_Weapon              
+    [SerializeField] private GameObject weapon; // Bip001_Weapon
+    [SerializeField] private SkillObject EXSkillObject; // EX스킬
+    [SerializeField] private SkillObject NormalSkillObject; // 노말스킬
     [SerializeField] private float ExSkillDelay;
     [SerializeField] private float NormalSkillDelay;
+    [SerializeField] private LayerMask TargetingLayerMask; // 타겟팅 감지하기 위한 레이어 마스크
 
     public bool IsEXSkill { private set; get; }
     public bool IsNormalSkill { private set; get; }
@@ -21,11 +24,17 @@ public class SkillComponent : MonoBehaviour
     InputAction EXSkill;
     InputAction MeleeAttack;
     StateComponent state;
+    private InputAction Attack;
+    private StatComponent playerStat;
+    private bool isTargetingMode = false; // 타겟팅 모드 여부
+    private bool isSkillReady = false; // 스킬 준비 완료 여부
+    private SkillObject currentSkillObject; // 현재 스킬 객체
 
     public void Awake()
     {
         animator = GetComponent<Animator>();
         state = GetComponent<StateComponent>();
+        playerStat = GetComponent<StatComponent>(); // 플레이어의 StatComponent를 참조
 
         weapon = transform.FindChildByName("Bip001_Weapon")?.gameObject;
 
@@ -52,6 +61,17 @@ public class SkillComponent : MonoBehaviour
 
         MeleeAttack = actionMap.FindAction("MeleeAttack");
         MeleeAttack.started += startMeleeAttack;
+
+        Attack = actionMap.FindAction("Attack"); // Attack 액션 가져오기
+        Attack.started += OnMouseClick;
+    }
+
+    private void Update() //타게팅 스킬의 마우스 커서의 위치를 계속 반환해주는 부분
+    {
+        if (isTargetingMode && NormalSkillObject.skillType == SkillType.Targeting)
+        {
+            UpdateTargetingSkill();
+        }
     }
 
     private void startSkill(InputAction.CallbackContext context)
@@ -61,7 +81,22 @@ public class SkillComponent : MonoBehaviour
             return;
         }
 
+        // AP 체크
+        if (playerStat.CurrentAP < NormalSkillObject.APCost)
+        {
+            Debug.Log("Not enough AP!");
+            return;
+        }
+
         state.SetSkillMode();
+        if (NormalSkillObject.skillType == SkillType.Targeting)
+        {
+            // 타겟팅 모드 활성화
+            isTargetingMode = true;
+            isSkillReady = true; // 스킬 준비 완료 상태로 설정
+            currentSkillObject = NormalSkillObject; // 현재 스킬 객체 설정
+        }
+
 
         if (weapon != null)
         {
@@ -76,6 +111,13 @@ public class SkillComponent : MonoBehaviour
     {
         if (state.CurrentState == StateType.Skill || state.CurrentState == StateType.Reload)
         {
+            return;
+        }
+
+        // AP 체크
+        if (playerStat.CurrentAP < EXSkillObject.APCost)
+        {
+            Debug.Log("Not enough AP!");
             return;
         }
 
@@ -138,5 +180,81 @@ public class SkillComponent : MonoBehaviour
         }
 
         IsMeleeAttack = false;
+    }
+
+    private void UpdateTargetingSkill()
+    {
+        if (!isTargetingMode || NormalSkillObject.skillType != SkillType.Targeting)
+            return;
+
+        // 마우스 커서의 월드 위치를 얻기 위해 레이 생성
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, NormalSkillObject.AttackRange, TargetingLayerMask))
+        {
+            Transform hitTransform = hit.transform;
+            Collider[] hitColliders = Physics.OverlapSphere(hit.point, NormalSkillObject.AttackRange, TargetingLayerMask);
+
+            Transform closestTarget = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (Collider collider in hitColliders)
+            {
+                Transform targetTransform = collider.transform;
+                float distance = Vector3.Distance(hit.point, targetTransform.position);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestTarget = targetTransform;
+                }
+            }
+
+            if (closestTarget != null)
+            {
+                Debug.Log($"가장 가까운 타겟 발견: {closestTarget.name}");
+
+                if (Mouse.current.leftButton.wasPressedThisFrame)
+                {
+                    ApplySkillToTarget(closestTarget);
+                    isTargetingMode = false;
+                }
+            }
+        }
+    }
+
+    private void ApplySkillToTarget(Transform target) // 타겟에게 스킬을 적용하는 메서드
+    {
+        if (!isSkillReady)
+            return;
+
+        // 타겟의 StatComponent를 가져옴
+        StatComponent targetStat = target.GetComponent<StatComponent>();
+        if (targetStat != null)
+        {
+            // 스킬 데미지 적용
+            targetStat.Damage(NormalSkillObject.SkillDamage);
+
+            // AP 소모
+            playerStat.APUse(NormalSkillObject.APCost);
+        }
+
+        if (currentSkillObject == NormalSkillObject)
+        {
+            animator.SetTrigger("Skill");
+            StartCoroutine(EndSkill());
+        }
+
+        isSkillReady = false;
+    }
+
+    private void OnMouseClick(InputAction.CallbackContext context)
+    {
+        if (isTargetingMode)
+        {
+            // 타겟팅 모드에서는 이미 타겟팅 로직이 Update에서 처리되므로, 여기서는 종료만 처리
+            isTargetingMode = false;
+        }
     }
 }

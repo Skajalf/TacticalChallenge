@@ -7,7 +7,7 @@ public class StatComponent : MonoBehaviour
 
     [SerializeField] private float APRegen = 0.01f;  // TODO : Coroutine으로 수정.
 
-    private float currentHealthPoint; // 현재 HP
+    [SerializeField] private float currentHealthPoint; // 현재 HP
     private float currentActionPoint; // 현재 AP
 
     public float CurrentHP { get { return currentHealthPoint; } private set { currentHealthPoint = value; } }
