@@ -1,11 +1,14 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class StatComponent : MonoBehaviour
 {
     [SerializeField] public float maxHealthPoint = 100.0f;
     [SerializeField] public float maxActionPoint = 10.0f;
 
-    [SerializeField] private float APRegen = 0.01f;  // TODO : Coroutine으로 수정.
+    [SerializeField] private float apRegenTime = 0.01f; // Regen 주기
+    [SerializeField] private float APRegenAmount = 0.01f;  // AP 회복량
 
     [SerializeField] private float currentHealthPoint; // 현재 HP
     private float currentActionPoint; // 현재 AP
@@ -35,6 +38,12 @@ public class StatComponent : MonoBehaviour
         currentHealthPoint = Mathf.Clamp(currentHealthPoint, 0.0f, maxHealthPoint);
     }
 
+    private IEnumerator AP()
+    {
+        currentActionPoint += APRegenAmount;
+        yield return new WaitForSeconds(apRegenTime);
+    }
+
     public void APUse(float amount)
     {
         if (currentActionPoint < amount)
@@ -46,6 +55,6 @@ public class StatComponent : MonoBehaviour
 
     private void Update()
     {
-        currentActionPoint += APRegen;
+        
     }
 }

@@ -15,6 +15,7 @@ public class WeaponComponent : MonoBehaviour
     public Player Character { get; private set; } // 무기를 들고 있는 캐릭터모델 정보
 
     private bool bIsEquip = false;
+    private StateComponent playerState;
 
     private PlayerInput playerInput;
     private InputActionMap playerInputActionMap;
@@ -34,6 +35,8 @@ public class WeaponComponent : MonoBehaviour
 
         weaponTransform = transform.FindChildByName($"{gameObject.name}_Weapon");
         Character = GetComponent<Player>();
+
+        playerState = Character.gameObject.GetComponent<StateComponent>();
 
         animator = GetComponent<Animator>();
 
@@ -83,7 +86,7 @@ public class WeaponComponent : MonoBehaviour
 
     private void StartShoot(InputAction.CallbackContext context)
     {
-        if(bIsEquip)
+        if(bIsEquip && playerState.CanDoSomething())
         {
             if (weapon.weapondata.currentAmmo > 0)
                 animator.SetBool("IsAttack", true);
@@ -92,6 +95,9 @@ public class WeaponComponent : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 애니메이터에서 호출하는 메서드이다. 건들지 말 것.
+    /// </summary>
     public void Shoot()
     {
         if(bIsEquip)
@@ -128,14 +134,11 @@ public class WeaponComponent : MonoBehaviour
 
     private void Reload(InputAction.CallbackContext context)
     {
-        if (weapon != null && !weapon.gameObject.activeInHierarchy)
-        {
-            return;
-        }
-
-        if (bIsEquip)
+        if (bIsEquip && playerState.CanDoSomething() && (weapon.weapondata.currentAmmo != weapon.weapondata.Ammo))
         {
             weapon.Reload();
         }
+        else
+            return;
     }
 }
