@@ -47,6 +47,7 @@ public class SkillComponent : MonoBehaviour
             this.AddComponent<PlayerInput>();
 
         Init();
+        SkillInit();
     }
 
     private void Init() // SkillComponent Init();
@@ -64,6 +65,11 @@ public class SkillComponent : MonoBehaviour
 
         Attack = actionMap.FindAction("Attack"); // Attack 액션 가져오기
         Attack.started += OnMouseClick;
+    }
+
+    private void SkillInit()//현재 캐릭터의 스킬 데이터를 가져와야 하나?
+    {
+
     }
 
     private void Update() //타게팅 스킬의 마우스 커서의 위치를 계속 반환해주는 부분
@@ -91,10 +97,20 @@ public class SkillComponent : MonoBehaviour
         state.SetSkillMode();
         if (NormalSkillObject.skillType == SkillType.Targeting)
         {
-            // 타겟팅 모드 활성화
+            // 타겟팅 활성화
             isTargetingMode = true;
             isSkillReady = true; // 스킬 준비 완료 상태로 설정
             currentSkillObject = NormalSkillObject; // 현재 스킬 객체 설정
+        }
+
+        if(NormalSkillObject.skillType == SkillType.AreaAttack)
+        {
+            //범위공격 활성화
+        }
+
+        if(NormalSkillObject.skillType == SkillType.SelfCast)
+        {
+            //자버프 활성화
         }
 
 
@@ -187,22 +203,22 @@ public class SkillComponent : MonoBehaviour
         if (!isTargetingMode || NormalSkillObject.skillType != SkillType.Targeting)
             return;
 
-        // 마우스 커서의 월드 위치를 얻기 위해 레이 생성
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        RaycastHit hit;
+        Vector3 hitPosition;
+        Vector3 hitNormal;
 
-        if (Physics.Raycast(ray, out hit, NormalSkillObject.AttackRange, TargetingLayerMask))
+        // CameraHelpers를 사용해 마우스 커서 위치의 지점과 법선을 가져옴
+        if (CameraHelpers.GetCursorLocation(out hitPosition, out hitNormal, NormalSkillObject.AttackRange, TargetingLayerMask))
         {
-            Transform hitTransform = hit.transform;
-            Collider[] hitColliders = Physics.OverlapSphere(hit.point, NormalSkillObject.AttackRange, TargetingLayerMask);
+            Collider[] hitColliders = Physics.OverlapSphere(hitPosition, NormalSkillObject.AttackRange, TargetingLayerMask);
 
             Transform closestTarget = null;
             float closestDistance = float.MaxValue;
 
+            // 오버랩된 모든 타겟을 체크해서 가장 가까운 타겟을 선택
             foreach (Collider collider in hitColliders)
             {
                 Transform targetTransform = collider.transform;
-                float distance = Vector3.Distance(hit.point, targetTransform.position);
+                float distance = Vector3.Distance(hitPosition, targetTransform.position);
 
                 if (distance < closestDistance)
                 {
@@ -215,12 +231,24 @@ public class SkillComponent : MonoBehaviour
             {
                 Debug.Log($"가장 가까운 타겟 발견: {closestTarget.name}");
 
-                if (Mouse.current.leftButton.wasPressedThisFrame)
+                // AP가 충분한지 체크하고 스킬을 시전
+                if (playerStat.CurrentAP >= NormalSkillObject.APCost)
                 {
-                    ApplySkillToTarget(closestTarget);
-                    isTargetingMode = false;
+                    if (Mouse.current.leftButton.wasPressedThisFrame)
+                    {
+                        ApplySkillToTarget(closestTarget); // 스킬 적용
+                        isTargetingMode = false; // 타겟팅 모드 비활성화
+                    }
+                }
+                else
+                {
+                    Debug.Log("Not enough AP to cast the skill.");
                 }
             }
+        }
+        else
+        {
+            Debug.Log("타겟팅할 수 있는 적이 없습니다.");
         }
     }
 
@@ -240,6 +268,7 @@ public class SkillComponent : MonoBehaviour
             if (playerStat.CurrentAP >= currentSkillObject.APCost)
             {
                 Debug.Log("Player has enough AP");  // 로그 추가
+
                 // 스킬 데미지 적용
                 targetStat.Damage(currentSkillObject.SkillDamage);
 
