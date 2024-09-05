@@ -229,15 +229,29 @@ public class SkillComponent : MonoBehaviour
         if (!isSkillReady)
             return;
 
+        Debug.Log("ApplySkillToTarget called");  // 로그 추가
+
         // 타겟의 StatComponent를 가져옴
         StatComponent targetStat = target.GetComponent<StatComponent>();
+        
         if (targetStat != null)
         {
-            // 스킬 데미지 적용
-            targetStat.Damage(NormalSkillObject.SkillDamage);
+            // AP가 충분한지 확인
+            if (playerStat.CurrentAP >= currentSkillObject.APCost)
+            {
+                Debug.Log("Player has enough AP");  // 로그 추가
+                // 스킬 데미지 적용
+                targetStat.Damage(currentSkillObject.SkillDamage);
 
-            // AP 소모
-            playerStat.APUse(NormalSkillObject.APCost);
+                // AP 소모
+                playerStat.APUse(currentSkillObject.APCost);  // AP 차감
+                Debug.Log($"Player AP after skill: {playerStat.CurrentAP}");  // 로그 추가
+            }
+            else
+            {
+                Debug.Log("Not enough AP to use this skill.");
+                return;  // AP가 부족하면 스킬 사용하지 않음
+            }
         }
 
         if (currentSkillObject == NormalSkillObject)

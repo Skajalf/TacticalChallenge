@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56a42d6e92dec374d937420bbc8fa495, type: 3}
   m_Name: NormalSkill
   m_EditorClassIdentifier: 
-  SkillDamage: -30
+  SkillDamage: 30
   AttackRange: 10
-  SkillCoolTime: 0
-  APCost: 0
+  SkillCoolTime: 5
+  APCost: 1
   skillType: 0
   SkillRangeType: 0
-  SkillRange: 0
+  SkillRange: 1

@@ -225,10 +225,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2ab59bacf6f3fc44897618a25b7d606, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoint: 200
-  maxActionPoint: 10.09
-  APRegen: 0.01
+  maxHealthPoint: 300
+  maxActionPoint: 10
+  apRegenTime: 1
+  APRegenAmount: 0.1
   currentHealthPoint: 0
+  currentActionPoint: 0
 --- !u!136 &75313136
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8235,8 +8237,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealthPoint: 100
   maxActionPoint: 10
-  APRegen: 0.01
+  apRegenTime: 1
+  APRegenAmount: 0.1
   currentHealthPoint: 0
+  currentActionPoint: 0
 --- !u!1 &5879474117350448041
 GameObject:
   m_ObjectHideFlags: 0
