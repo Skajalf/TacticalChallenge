@@ -22,8 +22,8 @@ public class StatComponent : MonoBehaviour
 
     private void Awake()
     {
-        StartCoroutine("APCharge");
         Init();
+        StartCoroutine("APCharge");
     }
 
     private void Init()
@@ -44,8 +44,7 @@ public class StatComponent : MonoBehaviour
     
     private void APCharge()
     {
-        while (true)
-            AP();
+        AP();
     }
 
     private IEnumerator AP()
