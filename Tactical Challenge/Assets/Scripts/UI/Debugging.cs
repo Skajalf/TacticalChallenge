@@ -18,7 +18,6 @@ public class Debugging : MonoBehaviour
     private StatComponent playerStat;
     private StatComponent enemyStat;
 
-
     public void Awake()
     {
         Init();
@@ -35,7 +34,7 @@ public class Debugging : MonoBehaviour
     {
         maintext = GetComponent<Text>();
 
-        character = FindObjectsByType<Character>(0);
+        character = GameObject.FindObjectsByType<Character>(0);
         foreach (Character c in character)
         {
             if( c.name == "CH0137")
@@ -43,23 +42,20 @@ public class Debugging : MonoBehaviour
             if( c.name == "Dummy")
                 enemy = c as Enemy;
         }
-
-        enemyStat = enemy.statComponent;
-        playerStat = player.statComponent;
     }
 
     public void UpdateText()
     {
-        maintext.text = $"Debugging /----------\n{playerText} /----------\n{enemyText} ";
+        maintext.text = $"Debugging\n----------\n{playerText} /\n----------\n{enemyText}/ ";
     }
     public void UpdatePlayerText()
     {
-        playerText = $"player";
+        playerText = $"player\nHP : {player.statComponent.CurrentHP}/\nAP : {player.statComponent.CurrentAP}/";
     }
 
     public void UpdateEnemyText()
     {
-        enemyText = $"Enemy";
+        enemyText = $"Enemy\nHP : {enemy.statComponent.CurrentHP}/\nAP : {enemy.statComponent.CurrentAP}/";
     }
 
 
