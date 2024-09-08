@@ -7,7 +7,7 @@ using UnityEngine.InputSystem.XR;
 
 public class Enemy : Character
 {
-    private StatComponent statComponent;
+    public StatComponent statComponent;
 
     private void Awake()
     {

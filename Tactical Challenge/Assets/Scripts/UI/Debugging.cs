@@ -7,31 +7,60 @@ using UnityEngine.UI;
 
 public class Debugging : MonoBehaviour
 {
-    WeaponComponent component;
-    Weapon weapon;
-    GameObject obj;
-    Text text;
+    private Character[] character;
+    private Player player;
+    private Enemy enemy;
 
-    StatComponent dummy;
+    private Text maintext;
+    private string playerText;
+    private string enemyText;
+
+    private StatComponent playerStat;
+    private StatComponent enemyStat;
+
 
     public void Awake()
     {
-        obj = GetComponent<GameObject>();
-        component = GameObject.Find("CH0137").GetComponent<WeaponComponent>();
-        weapon = component.weapon;
-        text = gameObject.GetComponent<Text>();
-        
-        GetDummyInfo();
-    }
-
-    private void GetDummyInfo()
-    {
-        dummy = GameObject.Find("Dummy").GetComponent<StatComponent>();
+        Init();
     }
 
     public void Update()
     {
-        weapon = component.weapon;
-        text.text = $"{weapon.weapondata.currentAmmo}/{weapon.weapondata.Ammo} Dummy's HP:{dummy.CurrentHP}/{dummy.maxHealthPoint}";
+        UpdatePlayerText();
+        UpdateEnemyText();
+        UpdateText();
     }
+
+    public void Init()
+    {
+        maintext = GetComponent<Text>();
+
+        character = FindObjectsByType<Character>(0);
+        foreach (Character c in character)
+        {
+            if( c.name == "CH0137")
+                player = c as Player;
+            if( c.name == "Dummy")
+                enemy = c as Enemy;
+        }
+
+        enemyStat = enemy.statComponent;
+        playerStat = player.statComponent;
+    }
+
+    public void UpdateText()
+    {
+        maintext.text = $"Debugging /----------\n{playerText} /----------\n{enemyText} ";
+    }
+    public void UpdatePlayerText()
+    {
+        playerText = $"player";
+    }
+
+    public void UpdateEnemyText()
+    {
+        enemyText = $"Enemy";
+    }
+
+
 }

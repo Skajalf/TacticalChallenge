@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 
 public class StatComponent : MonoBehaviour
@@ -21,6 +22,7 @@ public class StatComponent : MonoBehaviour
 
     private void Awake()
     {
+        StartCoroutine("APCharge");
         Init();
     }
 
@@ -38,6 +40,12 @@ public class StatComponent : MonoBehaviour
 
         currentHealthPoint += (amount * -1.0f);
         currentHealthPoint = Mathf.Clamp(currentHealthPoint, 0.0f, maxHealthPoint);
+    }
+    
+    private void APCharge()
+    {
+        while (true)
+            AP();
     }
 
     private IEnumerator AP()

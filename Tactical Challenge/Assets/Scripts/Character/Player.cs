@@ -15,7 +15,7 @@ public class Player : Character
 
     private PlayerInput playerInput;
     private InputActionMap inputActions;
-    private StatComponent statComponent;
+    public StatComponent statComponent;
 
     private Projectile bullet;
 
