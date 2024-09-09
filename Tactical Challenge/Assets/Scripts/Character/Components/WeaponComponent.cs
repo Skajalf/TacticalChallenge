@@ -19,7 +19,7 @@ public class WeaponComponent : MonoBehaviour
 
     private PlayerInput playerInput;
     private InputActionMap playerInputActionMap;
-    
+
     private Animator animator;
 
     private void Awake()
@@ -61,8 +61,8 @@ public class WeaponComponent : MonoBehaviour
     private void EventInit()
     {
         InputAction attack = playerInputActionMap.FindAction("Attack"); // Shoot으로 바꿀 것.
-        attack.started += StartShoot;
-        attack.canceled += CancelShoot;
+        attack.started += StartAttack;
+        attack.canceled += CancelAttack;
 
         InputAction aim = playerInputActionMap.FindAction("Aim");
         aim.started += StartAim;
@@ -84,9 +84,9 @@ public class WeaponComponent : MonoBehaviour
         bIsEquip = true;
     }
 
-    private void StartShoot(InputAction.CallbackContext context)
+    private void StartAttack(InputAction.CallbackContext context)
     {
-        if(bIsEquip && playerState.CanDoSomething())
+        if (bIsEquip && playerState.CanDoSomething())
         {
             if (weapon.weapondata.currentAmmo > 0)
                 animator.SetBool("IsAttack", true);
@@ -95,32 +95,32 @@ public class WeaponComponent : MonoBehaviour
         }
     }
 
+    private void CancelAttack(InputAction.CallbackContext context)
+    {
+        if (bIsEquip)
+        {
+            weapon.EndDoAction();
+            animator.SetBool("IsAttack", false);
+        }
+    }
+
     /// <summary>
     /// 애니메이터에서 호출하는 메서드이다. 건들지 말 것.
     /// </summary>
     public void Shoot()
     {
-        if(bIsEquip)
-        {
-            weapon.CheckAmmoWhileShoot();
-        }
-        return;
-    }
-
-    private void CancelShoot(InputAction.CallbackContext context)
-    {
         if (bIsEquip)
         {
-            weapon.End_DoAction();
-            animator.SetBool("IsAttack", false);
+            weapon.CheckAmmo();
         }
+        return;
     }
 
     private void StartAim(InputAction.CallbackContext context)
     {
         if (bIsEquip)
         {
-            
+
         }
     }
 
@@ -137,6 +137,7 @@ public class WeaponComponent : MonoBehaviour
         if (bIsEquip && playerState.CanDoSomething() && (weapon.weapondata.currentAmmo != weapon.weapondata.Ammo))
         {
             weapon.Reload();
+            animator.SetTrigger("Reload");  // 재장전 애니메이션 트리거
         }
         else
             return;

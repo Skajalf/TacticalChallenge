@@ -1,75 +1,92 @@
-using Cinemachine;
 using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Ranged : Weapon
 {
-    [SerializeField] protected GameObject projectilePrefab; // 발사체 프리팹
-    [SerializeField] private Transform firePoint;         // 발사 위치
-
-    protected CinemachineImpulseSource impulse;
-    protected CinemachineBrain brain;
-
 
     protected override void Awake()
     {
         base.Awake();
-
-        impulse = GetComponent<CinemachineImpulseSource>();
-        brain = Camera.main.GetComponent<CinemachineBrain>();
     }
 
-    protected override void Start()
+    public override void DoAction()
     {
-        base.Start();
+        base.DoAction();
+
+        FireProjectile(); // 발사체 발사
+        Particle();       // 총구 파티클
+        CartrigeDrop();   // 탄피 배출
+        FireRecoil();     // 반동 처리
     }
 
-    protected override void Update()
+    public override void EndDoAction()
     {
-        base.Update();
+        base.EndDoAction();
     }
 
-    private void FireProjectile() // 총알을 발사함
+    private void FireProjectile()
     {
-        // 발사체를 발사 위치에서 생성
-        GameObject projectileInstance = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-        if (projectileInstance == null) // 없으면 실행이 안되도록 함.
-            return;
-
-        // 발사체가 `Projectile` 스크립트를 가지고 있는지 확인
-        Projectile projectile = projectileInstance.GetComponent<Projectile>();
-        if (projectile == null)
-                projectileInstance.AddComponent<Projectile>();
-
+        // 발사체 생성 및 초기화
+        var projectileInstance = Instantiate(weapondata.projectilePrefab, weapondata.firePoint.position, weapondata.firePoint.rotation);
+        var projectile = projectileInstance.GetComponent<Projectile>();
         projectile.owner = this;
 
-        weapondata.currentAmmo--;
+        weapondata.currentAmmo--; // 발사 후 탄약 감소
     }
 
-    private void OnProjectileHit(Collider projectileCollider, Collider hitCollider, Vector3 hitPoint)
+    public override void Reload()
     {
-        // 충돌한 오브젝트에 대한 데미지 처리
-        IDamagable damageable = hitCollider.GetComponent<IDamagable>();
-        StatComponent stat = hitCollider.GetComponent<StatComponent>();
-        float damageAmount = weapondata.Power;
+        base.Reload();
 
-        // `IDamagable.OnDamage` 호출
-
-        // 충돌 이펙트 실행
-        //PlayHitEffect(hitPoint);
+        if (weapondata.currentAmmo < weapondata.Ammo)  // 잔탄이 부족할 때만 재장전
+        {
+            StartCoroutine(ReloadCoroutine());
+        }
     }
 
-    public override void Begin_DoAction()
+    public override void CheckAmmo()
     {
-        muzzlePosition = muzzleTransform.position;
+        base.CheckAmmo();
 
-        GameObject obj = Instantiate<GameObject>(projectilePrefab, muzzlePosition, rootObject.transform.rotation);
-        Projectile projectile = obj.GetComponent<Projectile>();
-        projectile.owner = this;
+        if (weapondata.currentAmmo > 0)
+        {
+            DoAction();
+        }
+        else
+        {
+            Reload();
+        }
+    }
 
-        obj.SetActive(true);
+    private IEnumerator ReloadCoroutine()  // 재장전 코루틴
+    {
+        IsReload = true;
+        yield return new WaitForSeconds(weapondata.ReloadTime);  // 재장전 시간 대기
+        weapondata.currentAmmo = weapondata.Ammo;  // 잔탄 충전
+        IsReload = false;
+    }
+
+    private void Particle()
+    {
+        if (weapondata.Particle != null)
+        {
+            Instantiate(weapondata.Particle, weapondata.firePoint.position, weapondata.firePoint.rotation);
+        }
+    }
+
+    private void CartrigeDrop() //탄피 떨구기
+    {
+        if (weapondata.CartrigeCase != null)
+        {
+            Instantiate(weapondata.CartrigeCase, weapondata.firePoint.position, Quaternion.identity);
+        }
+    }
+
+    private void FireRecoil() // 카메라 반동을 적용하는 코드
+    {
+        if (impulse != null)
+        {
+            impulse.GenerateImpulse();
+        }
     }
 }

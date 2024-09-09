@@ -134,18 +134,18 @@ MonoBehaviour:
     Ammo: 15
     currentAmmo: 0
     ReloadTime: 2
-    Distance: 0
+    Distance: 10
     StopFrame: 0
+    projectilePrefab: {fileID: 8962590840163497300, guid: 029b1c68fdf16e6428de986f08509b3a,
+      type: 3}
+    firePoint: {fileID: 0}
     Particle: {fileID: 0}
+    CartrigeCase: {fileID: 0}
     ImpulseDirection: {x: 0, y: 0, z: 0}
     ImpulseSettings: {fileID: 0}
     HitImpactIndex: 0
     HitParticle: {fileID: 0}
     HitParticlePositionOffset: {x: 0, y: 0, z: 0}
     HitParticleScaleOffset: {x: 1, y: 1, z: 1}
-  damage: 30
-  projectilePrefab: {fileID: 8962590840163497300, guid: 029b1c68fdf16e6428de986f08509b3a,
-    type: 3}
-  firePoint: {fileID: 0}
-  WeaponHolster: Bip001_Weapon
+  weaponHolsterName: Bip001_Weapon
   muzzleTransformName: fire_01
