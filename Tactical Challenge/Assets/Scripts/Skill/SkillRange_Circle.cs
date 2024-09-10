@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SkillRange_Circle : SkillRange
 {
-
+    //스킬의 사정거리를 지정하는 원.
     public override List<Character> FindTargets(GameObject go, float range)
     {
         return FindTargets(go.transform.position, range);

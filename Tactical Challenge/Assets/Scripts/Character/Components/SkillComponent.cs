@@ -207,9 +207,9 @@ public class SkillComponent : MonoBehaviour
         Vector3 hitNormal;
 
         // CameraHelpers를 사용해 마우스 커서 위치의 지점과 법선을 가져옴
-        if (CameraHelpers.GetCursorLocation(out hitPosition, out hitNormal, NormalSkillObject.AttackRange, TargetingLayerMask))
+        if (CameraHelpers.GetCursorLocation(out hitPosition, out hitNormal, NormalSkillObject.SkillRange, TargetingLayerMask))
         {
-            Collider[] hitColliders = Physics.OverlapSphere(hitPosition, NormalSkillObject.AttackRange, TargetingLayerMask);
+            Collider[] hitColliders = Physics.OverlapSphere(hitPosition, NormalSkillObject.SkillRange, TargetingLayerMask);
 
             Transform closestTarget = null;
             float closestDistance = float.MaxValue;
