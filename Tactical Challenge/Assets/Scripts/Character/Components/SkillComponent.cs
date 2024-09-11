@@ -23,19 +23,24 @@ public class SkillComponent : MonoBehaviour
     InputAction Skill;
     InputAction EXSkill;
     InputAction MeleeAttack;
-    StateComponent state;
     private InputAction Attack;
+
+    StateComponent state;
     private StatComponent playerStat;
+    private CameraComponent cameraComponent; // 추가된 카메라 컴포넌트
+
     private bool isTargetingMode = false; // 타겟팅 모드 여부
     private bool isSkillReady = false; // 스킬 준비 완료 여부
     private SkillObject currentSkillObject; // 현재 스킬 객체
 
+    private float lastSkillUseTime = 0f; // 마지막으로 스킬을 사용한 시간을 저장
+    private float lastEXSkillUseTime = 0f; // 마지막으로 EX 스킬을 사용한 시간을 저장
+
+    private float originalZoomDistance; // 카메라의 원래 zoomRange 값을 저장
+
+
     public void Awake()
     {
-        animator = GetComponent<Animator>();
-        state = GetComponent<StateComponent>();
-        playerStat = GetComponent<StatComponent>(); // 플레이어의 StatComponent를 참조
-
         weapon = transform.FindChildByName("Bip001_Weapon")?.gameObject;
 
         if (weapon == null)
@@ -47,133 +52,222 @@ public class SkillComponent : MonoBehaviour
             this.AddComponent<PlayerInput>();
 
         Init();
-        SkillInit();
     }
 
-    private void Init() // SkillComponent Init();
+    private void Init()
     {
+        animator = GetComponent<Animator>();
+        state = GetComponent<StateComponent>();
+        playerStat = GetComponent<StatComponent>();
+        cameraComponent = GetComponent<CameraComponent>();
+
         actionMap = input.actions.FindActionMap("Player");
 
         Skill = actionMap.FindAction("Skill");
-        Skill.started += startSkill;
+        Skill.started += context => StartSkill(NormalSkillObject, ref lastSkillUseTime, NormalSkillObject.SkillCoolTime);
 
         EXSkill = actionMap.FindAction("EXSkill");
-        EXSkill.started += startEXSkill;
+        EXSkill.started += context => StartSkill(EXSkillObject, ref lastEXSkillUseTime, EXSkillObject.SkillCoolTime);
 
         MeleeAttack = actionMap.FindAction("MeleeAttack");
-        MeleeAttack.started += startMeleeAttack;
+        MeleeAttack.started += StartMeleeAttack;
 
-        Attack = actionMap.FindAction("Attack"); // Attack 액션 가져오기
+        Attack = actionMap.FindAction("Attack");
         Attack.started += OnMouseClick;
+
+        originalZoomDistance = cameraComponent.currentZoomDistance;
     }
 
-    private void SkillInit()//현재 캐릭터의 스킬 데이터를 가져와야 하나?
+    private void StartSkill(SkillObject skillObject, ref float lastUseTime, float coolTime)
     {
+        float currentTime = Time.time; // 현재 시간
 
-    }
-
-    private void Update() //타게팅 스킬의 마우스 커서의 위치를 계속 반환해주는 부분
-    {
-        if (isTargetingMode && NormalSkillObject.skillType == SkillType.Targeting)
+        // 쿨타임 확인
+        if (currentTime - lastUseTime < coolTime)
         {
-            UpdateTargetingSkill();
-        }
-    }
-
-    private void startSkill(InputAction.CallbackContext context)
-    {
-        if (state.CurrentState == StateType.Skill || state.CurrentState == StateType.Reload)
-        {
+            Debug.Log("스킬 쿨타임이 끝나지 않았습니다.");
             return;
         }
 
-        // AP 체크
-        if (playerStat.CurrentAP < NormalSkillObject.APCost)
-        {
-            Debug.Log("Not enough AP!");
+        if (!state.CanDoSomething() || !CheckStat(skillObject))
             return;
-        }
 
-        state.SetSkillMode();
-        if (NormalSkillObject.skillType == SkillType.Targeting)
-        {
-            // 타겟팅 활성화
-            isTargetingMode = true;
-            isSkillReady = true; // 스킬 준비 완료 상태로 설정
-            currentSkillObject = NormalSkillObject; // 현재 스킬 객체 설정
-        }
+        // 스킬 사용 시간 갱신
+        lastUseTime = currentTime;
 
-        if(NormalSkillObject.skillType == SkillType.AreaAttack)
-        {
-            //범위공격 활성화
-        }
+        // 스킬 객체 설정
+        currentSkillObject = skillObject;
 
-        if(NormalSkillObject.skillType == SkillType.SelfCast)
-        {
-            //자버프 활성화
-        }
-
-
-        if (weapon != null)
-        {
-            weapon.SetActive(false);
-        }
-
-        animator.SetTrigger("Skill");
-        StartCoroutine(EndSkill());
-    }
-
-    private void startEXSkill(InputAction.CallbackContext context)
-    {
-        if (state.CurrentState == StateType.Skill || state.CurrentState == StateType.Reload)
-        {
-            return;
-        }
-
-        // AP 체크
-        if (playerStat.CurrentAP < EXSkillObject.APCost)
-        {
-            Debug.Log("Not enough AP!");
-            return;
-        }
+        // 카메라 줌을 스킬에 맞게 조정
+        cameraComponent.currentZoomDistance = 4f; // 고정된 줌 값 설정
 
         state.SetSkillMode();
 
-        if (weapon != null)
+        if (skillObject.InstantCast)
         {
-            weapon.SetActive(false);
+            Fire();
+        }
+        else
+        {
+            Confirm();
+        }
+    }
+
+    // Fire 메서드에서 SkillManager의 기능을 통합
+    private void Fire()
+    {
+        Vector3 mousePosition = GetMouseWorldPosition();
+
+        switch (currentSkillObject.skillType)
+        {
+            case SkillType.Targeting:
+                TargetingSkill(mousePosition);
+                break;
+
+            case SkillType.AreaAttack:
+                AreaAttackSkill(mousePosition);
+                break;
+
+            case SkillType.SelfCast:
+                // SelfCast는 자신을 타겟으로 설정하여 처리
+                TargetingSkill(playerStat.transform.position);
+                break;
         }
 
-        animator.SetTrigger("EXSkill");
-        StartCoroutine(EndEXSkill());
+        OnSkill();
+    }
+
+    private Vector3 GetMouseWorldPosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hitInfo))
+        {
+            return hitInfo.point;
+        }
+        return Vector3.zero;
+    }
+
+    private void TargetingSkill(Vector3 targetPosition)
+    {
+        List<StatComponent> targets = currentSkillObject.GetTargets(targetPosition);
+
+        if (targets.Count > 0)
+        {
+            StatComponent closestTarget = GetClosestTarget(targets, targetPosition);
+            ApplySkillToTarget(closestTarget);
+        }
+        else
+        {
+            Debug.Log("No valid target found.");
+        }
+    }
+
+    private void AreaAttackSkill(Vector3 targetPosition)
+    {
+        List<StatComponent> targets = currentSkillObject.GetTargets(targetPosition);
+        foreach (StatComponent target in targets)
+        {
+            ApplySkillToTarget(target);
+        }
+    }
+
+    private StatComponent GetClosestTarget(List<StatComponent> targets, Vector3 position)
+    {
+        StatComponent closest = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (StatComponent target in targets)
+        {
+            float distance = Vector3.Distance(position, target.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closest = target;
+            }
+        }
+
+        return closest;
+    }
+
+    private void ApplySkillToTarget(StatComponent target)
+    {
+        if (!isSkillReady || target == null)
+            return;
+
+        if (playerStat.CurrentAP >= currentSkillObject.APCost)
+        {
+            target.Damage(currentSkillObject.SkillDamage);
+            playerStat.APUse(currentSkillObject.APCost);
+        }
+        else
+        {
+            Debug.Log("Not enough AP to use this skill.");
+        }
     }
 
     private IEnumerator EndSkill()
     {
-        yield return new WaitForSeconds(NormalSkillDelay);
-
-        if (weapon != null)
-        {
-            weapon.SetActive(true);
-        }
-
+        // 카메라 줌을 원래 값으로 복구
+        cameraComponent.currentZoomDistance = originalZoomDistance;
         state.SetIdleMode();
+
+        yield return null;
     }
 
-    private IEnumerator EndEXSkill()
+    private bool CheckStat(SkillObject skillObject)
     {
-        yield return new WaitForSeconds(ExSkillDelay);
-
-        if (weapon != null)
+        if (playerStat.CurrentAP < skillObject.APCost)
         {
-            weapon.SetActive(true);
+            Debug.Log("Not enough AP!");
+            return false;
         }
 
-        state.SetIdleMode();
+        return true;
     }
 
-    private void startMeleeAttack(InputAction.CallbackContext context)
+    private void Confirm()
     {
+        StartCoroutine(WaitForInputOrConditions());
+    }
+
+    private IEnumerator WaitForInputOrConditions()
+    {
+        // 스킬 준비가 완료된 상태일 때만 대기
+        while (isSkillReady)
+        {
+            // 마우스 좌클릭이 발생할 때 Fire 메서드 호출
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                Fire();
+                break;
+            }
+
+            // 스킬 모드가 아닐 때 종료
+            if (!state.SkillMode)
+            {
+                EndSkill();
+                break;
+            }
+
+            yield return null;
+        }
+    }
+
+    private void OnSkill()
+    {
+        if (isSkillReady)
+        {
+            StartCoroutine(EndSkill());
+        }
+
+        isSkillReady = false;
+    }
+
+    private void StartMeleeAttack(InputAction.CallbackContext context)
+    {
+        if (!state.CanDoSomething())
+            return;
+
         IsMeleeAttack = true;
 
         if (weapon != null)
@@ -186,6 +280,14 @@ public class SkillComponent : MonoBehaviour
         StartCoroutine(EndMeleeAttack());
     }
 
+    private void OnMouseClick(InputAction.CallbackContext context)
+    {
+        if (isSkillReady)
+        {
+            Fire(); // 스킬 준비가 완료되었으면 Fire 메서드를 호출
+        }
+    }
+
     private IEnumerator EndMeleeAttack()
     {
         yield return new WaitForSeconds(1.0f);
@@ -196,108 +298,5 @@ public class SkillComponent : MonoBehaviour
         }
 
         IsMeleeAttack = false;
-    }
-
-    private void UpdateTargetingSkill()
-    {
-        if (!isTargetingMode || NormalSkillObject.skillType != SkillType.Targeting)
-            return;
-
-        Vector3 hitPosition;
-        Vector3 hitNormal;
-
-        // CameraHelpers를 사용해 마우스 커서 위치의 지점과 법선을 가져옴
-        if (CameraHelpers.GetCursorLocation(out hitPosition, out hitNormal, NormalSkillObject.SkillRange, TargetingLayerMask))
-        {
-            Collider[] hitColliders = Physics.OverlapSphere(hitPosition, NormalSkillObject.SkillRange, TargetingLayerMask);
-
-            Transform closestTarget = null;
-            float closestDistance = float.MaxValue;
-
-            // 오버랩된 모든 타겟을 체크해서 가장 가까운 타겟을 선택
-            foreach (Collider collider in hitColliders)
-            {
-                Transform targetTransform = collider.transform;
-                float distance = Vector3.Distance(hitPosition, targetTransform.position);
-
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestTarget = targetTransform;
-                }
-            }
-
-            if (closestTarget != null)
-            {
-                Debug.Log($"가장 가까운 타겟 발견: {closestTarget.name}");
-
-                // AP가 충분한지 체크하고 스킬을 시전
-                if (playerStat.CurrentAP >= NormalSkillObject.APCost)
-                {
-                    if (Mouse.current.leftButton.wasPressedThisFrame)
-                    {
-                        ApplySkillToTarget(closestTarget); // 스킬 적용
-                        isTargetingMode = false; // 타겟팅 모드 비활성화
-                    }
-                }
-                else
-                {
-                    Debug.Log("Not enough AP to cast the skill.");
-                }
-            }
-        }
-        else
-        {
-            Debug.Log("타겟팅할 수 있는 적이 없습니다.");
-        }
-    }
-
-    private void ApplySkillToTarget(Transform target) // 타겟에게 스킬을 적용하는 메서드
-    {
-        if (!isSkillReady)
-            return;
-
-        Debug.Log("ApplySkillToTarget called");  // 로그 추가
-
-        // 타겟의 StatComponent를 가져옴
-        StatComponent targetStat = target.GetComponent<StatComponent>();
-        
-        if (targetStat != null)
-        {
-            // AP가 충분한지 확인
-            if (playerStat.CurrentAP >= currentSkillObject.APCost)
-            {
-                Debug.Log("Player has enough AP");  // 로그 추가
-
-                // 스킬 데미지 적용
-                targetStat.Damage(currentSkillObject.SkillDamage);
-
-                // AP 소모
-                playerStat.APUse(currentSkillObject.APCost);  // AP 차감
-                Debug.Log($"Player AP after skill: {playerStat.CurrentAP}");  // 로그 추가
-            }
-            else
-            {
-                Debug.Log("Not enough AP to use this skill.");
-                return;  // AP가 부족하면 스킬 사용하지 않음
-            }
-        }
-
-        if (currentSkillObject == NormalSkillObject)
-        {
-            animator.SetTrigger("Skill");
-            StartCoroutine(EndSkill());
-        }
-
-        isSkillReady = false;
-    }
-
-    private void OnMouseClick(InputAction.CallbackContext context)
-    {
-        if (isTargetingMode)
-        {
-            // 타겟팅 모드에서는 이미 타겟팅 로직이 Update에서 처리되므로, 여기서는 종료만 처리
-            isTargetingMode = false;
-        }
     }
 }

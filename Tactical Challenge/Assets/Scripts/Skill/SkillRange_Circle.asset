@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94f7cf8adc6d5a42ad2abbc0fb31cb6, type: 3}
   m_Name: SkillRange_Circle
   m_EditorClassIdentifier: 
+  targets: []

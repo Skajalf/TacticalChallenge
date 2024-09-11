@@ -20,7 +20,7 @@ public class CameraComponent : MonoBehaviour
     //[SerializeField] private float mouseRotationLerp = 0.25f;
 
     private Vector2 inputLook; // 현재 마우스 입력
-    private float currentZoomDistance; // 카메라와 캐릭터 거리
+    public float currentZoomDistance; // 카메라와 캐릭터 거리
     private float prevZoomDistance; // 이전 거리
 
     private CinemachineVirtualCamera cinemachineVirtualCamera;

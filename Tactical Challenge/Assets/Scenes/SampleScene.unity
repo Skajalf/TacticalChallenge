@@ -18134,6 +18134,7 @@ MonoBehaviour:
   zoomSensitivity: 0.005
   zoomLerp: 25
   mouseSensitivity: {x: 0.5, y: 0.5}
+  currentZoomDistance: 0
 --- !u!114 &5866666021718479974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18188,7 +18189,7 @@ MonoBehaviour:
   weapon: {fileID: 2560292506416122466, guid: 577d8e292769b7244baa80400bb75c78, type: 3}
   EXSkillObject: {fileID: 11400000, guid: a01ee1a2fde313e4b890f6b44074148d, type: 2}
   NormalSkillObject: {fileID: 11400000, guid: 3d4fb94671913dd48834fb01559150fa, type: 2}
-  ExSkillDelay: 2.07
+  ExSkillDelay: 2.11
   NormalSkillDelay: 4.06
   TargetingLayerMask:
     serializedVersion: 2
