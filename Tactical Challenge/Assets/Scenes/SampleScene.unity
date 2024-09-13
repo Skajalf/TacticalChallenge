@@ -18187,8 +18187,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 2560292506416122466, guid: 577d8e292769b7244baa80400bb75c78, type: 3}
-  EXSkillObject: {fileID: 11400000, guid: a01ee1a2fde313e4b890f6b44074148d, type: 2}
-  NormalSkillObject: {fileID: 11400000, guid: 3d4fb94671913dd48834fb01559150fa, type: 2}
+  EXSkillObject: {fileID: 11400000, guid: ffdc8885799edb34097d1912f33a7447, type: 2}
+  NormalSkillObject: {fileID: 11400000, guid: 33956d58b0d790e4d9748432c8dc73b1, type: 2}
   ExSkillDelay: 2.11
   NormalSkillDelay: 4.06
   TargetingLayerMask:
