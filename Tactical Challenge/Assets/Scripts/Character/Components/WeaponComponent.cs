@@ -142,4 +142,17 @@ public class WeaponComponent : MonoBehaviour
         else
             return;
     }
+
+    /// <summary>
+    /// 플레이어가 현재 들고있는 무기 정보 (Weapon)을 반환한다.
+    /// </summary>
+    /// <returns>Weapon, null</returns>
+    public Weapon GetWeaponInfo()
+    {
+        if(weapon != null)
+            return weapon;
+        return null;
+    }
+
+
 }

@@ -66,6 +66,9 @@ public abstract class Weapon : MonoBehaviour
         animator = rootObject.GetComponent<Animator>();
         impulse = GetComponent<CinemachineImpulseSource>();
         brain = Camera.main.GetComponent<CinemachineBrain>();
+
+        // 추가된 부분 fire_01을 가져옴.
+        weapondata.firePoint = rootObject.transform.FindChildByName("fire_01").GetComponent<Transform>();
     }
 
     public virtual void Equip()
@@ -116,4 +119,6 @@ public abstract class Weapon : MonoBehaviour
                 moving.Stop();
         }
     }
+
+
 }

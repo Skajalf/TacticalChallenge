@@ -11,6 +11,8 @@ public class Debugging : MonoBehaviour
     private Player player;
     private Enemy enemy;
 
+    private Weapon playerWeapon;
+
     private Text maintext;
     private string playerText;
     private string enemyText;
@@ -34,6 +36,7 @@ public class Debugging : MonoBehaviour
     {
         maintext = GetComponent<Text>();
 
+        /*
         character = GameObject.FindObjectsByType<Character>(0);
         foreach (Character c in character)
         {
@@ -42,20 +45,27 @@ public class Debugging : MonoBehaviour
             if( c.name == "Dummy")
                 enemy = c as Enemy;
         }
+        */
+
+        player = (Player)Extend_GameObjects.FindCharacterByName("CH0137");
+        enemy = (Enemy)Extend_GameObjects.FindCharacterByName("Dummy");
+
+        playerWeapon = Extend_GameObjects.FindWeaponByCharacter(player);
     }
 
     public void UpdateText()
     {
-        maintext.text = $"Debugging\n----------\n{playerText} /\n----------\n{enemyText}/ ";
+        maintext.text = $"Debugging\n----------\n{playerText}/\n----------\n{enemyText}/ ";
     }
     public void UpdatePlayerText()
     {
-        playerText = $"player\nHP : {player.statComponent.CurrentHP}/\nAP : {player.statComponent.CurrentAP}/";
+        playerText = $"player\nHP : {player.statComponent.CurrentHP}/\nAP : {player.statComponent.CurrentAP}/\n" +
+            $"Ammo :{playerWeapon.weapondata.currentAmmo} / {playerWeapon.weapondata.Ammo}";
     }
 
     public void UpdateEnemyText()
     {
-        enemyText = $"Enemy\nHP : {enemy.statComponent.CurrentHP}/\nAP : {enemy.statComponent.CurrentAP}/";
+        enemyText = $"Enemy\nHP : {enemy.statComponent.CurrentHP}/\nAP : {enemy.statComponent.CurrentAP}";
     }
 
 
