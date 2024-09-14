@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 타겟팅 범위 스킬의 구체적인 구현
 [CreateAssetMenu(menuName = "Skills/SkillRange/SkillRange_Targeting", fileName = "SkillRange_Targeting")]
 public class SkillRange_Targeting : SkillRange
 {
@@ -15,7 +16,7 @@ public class SkillRange_Targeting : SkillRange
     {
         targets.Clear(); // 타겟 리스트 초기화
 
-        // 마우스 커서 위치를 기준으로 가장 가까운 대상을 찾기
+        // 모든 StatComponent를 가져와서 위치와 거리를 비교
         StatComponent[] components = GameObject.FindObjectsOfType<StatComponent>(); // 모든 StatComponent 가져오기
 
         // 가장 가까운 타겟을 찾기 위한 변수

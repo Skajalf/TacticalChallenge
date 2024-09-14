@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,22 +29,81 @@ public class SkillObject : ScriptableObject
     [Header(" Detail Setting")]
     public bool enableTargetAllies = false; // 타겟팅 시 아군만 선택
 
-    public List<StatComponent> GetTargets(Vector3 position)
+    // GameObject를 기준으로 타겟을 찾는 경우
+    public List<StatComponent> GetTargets(GameObject caster)
     {
-        // skillRangeInstance가 null일 경우, 기본적으로 Targeting으로 설정
         if (skillRangeInstance == null)
         {
             Debug.LogWarning("SkillRangeInstance is null, defaulting to Targeting.");
             skillRangeInstance = ScriptableObject.CreateInstance<SkillRange_Targeting>();
         }
 
-        // 현재 인스턴스가 유효한지 확인
         if (skillRangeInstance == null)
         {
             Debug.LogError("SkillRangeInstance is still null after assignment.");
             return new List<StatComponent>();
         }
 
+        // GameObject를 기반으로 타겟을 찾는 FindTargets 호출
+        return skillRangeInstance.FindTargets(caster, SkillRange);
+    }
+
+    // Vector3 위치를 기준으로 타겟을 찾는 경우
+    public List<StatComponent> GetTargets(Vector3 position)
+    {
+        if (skillRangeInstance == null)
+        {
+            Debug.LogWarning("SkillRangeInstance is null, defaulting to Targeting.");
+            skillRangeInstance = ScriptableObject.CreateInstance<SkillRange_Targeting>();
+        }
+
+        if (skillRangeInstance == null)
+        {
+            Debug.LogError("SkillRangeInstance is still null after assignment.");
+            return new List<StatComponent>();
+        }
+
+        // 위치를 기반으로 타겟을 찾는 FindTargets 호출
         return skillRangeInstance.FindTargets(position, SkillRange);
+    }
+
+    // GameObject 기준으로 스킬을 실행하는 메서드
+    public void ExecuteSkill(GameObject caster)
+    {
+        List<StatComponent> targets = GetTargets(caster);
+
+        if (targets.Count > 0)
+        {
+            ApplySkill(caster, targets, SkillDamage);
+        }
+        else
+        {
+            Debug.Log("No valid targets found.");
+        }
+    }
+
+    // Vector3 위치 기준으로 스킬을 실행하는 메서드
+    public void ExecuteSkill(Vector3 targetPosition)
+    {
+        List<StatComponent> targets = GetTargets(targetPosition);
+
+        if (targets.Count > 0)
+        {
+            ApplySkill(null, targets, SkillDamage); // 여기선 캐스터 대신 null을 넘김
+        }
+        else
+        {
+            Debug.Log("No valid targets found.");
+        }
+    }
+
+    // 스킬을 적용하는 메서드 (구현 필요)
+    private void ApplySkill(GameObject caster, List<StatComponent> targets, float skillDamage)
+    {
+        foreach (StatComponent target in targets)
+        {
+            // 스킬 적용 로직 (데미지, 상태 효과 등)
+            target.Damage(skillDamage);
+        }
     }
 }
