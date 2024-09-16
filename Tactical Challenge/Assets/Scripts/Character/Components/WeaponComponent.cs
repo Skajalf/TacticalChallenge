@@ -116,6 +116,15 @@ public class WeaponComponent : MonoBehaviour
         return;
     }
 
+    public void Impulse()
+    {
+        if (bIsEquip)
+        {
+            weapon.makeImpulse();
+        }
+        return;
+    }
+
     private void StartAim(InputAction.CallbackContext context)
     {
         if (bIsEquip)

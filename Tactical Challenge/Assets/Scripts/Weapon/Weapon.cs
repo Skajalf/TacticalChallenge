@@ -69,6 +69,16 @@ public abstract class Weapon : MonoBehaviour
 
         // 추가된 부분 fire_01을 가져옴.
         weapondata.firePoint = rootObject.transform.FindChildByName("fire_01").GetComponent<Transform>();
+
+        // 디버깅: impulse가 올바르게 할당되었는지 확인합니다.
+        if (impulse == null)
+        {
+            Debug.LogWarning("CinemachineImpulseSource component is not assigned on " + gameObject.name);
+        }
+        else
+        {
+            Debug.Log("CinemachineImpulseSource component successfully assigned.");
+        }
     }
 
     public virtual void Equip()
@@ -97,6 +107,11 @@ public abstract class Weapon : MonoBehaviour
     }
 
     public virtual void CheckAmmo()
+    {
+
+    }
+
+    public virtual void makeImpulse()
     {
 
     }

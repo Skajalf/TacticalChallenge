@@ -16,7 +16,6 @@ public class Ranged : Weapon
         FireProjectile(); // 발사체 발사
         Particle();       // 총구 파티클
         CartrigeDrop();   // 탄피 배출
-        FireRecoil();     // 반동 처리
     }
 
     public override void EndDoAction()
@@ -58,6 +57,13 @@ public class Ranged : Weapon
         }
     }
 
+    public override void makeImpulse()
+    {
+        base.makeImpulse();
+        Debug.Log("makeImpulse called");
+        FireRecoil();
+    }
+
     private IEnumerator ReloadCoroutine()  // 재장전 코루틴
     {
         IsReload = true;
@@ -82,11 +88,22 @@ public class Ranged : Weapon
         }
     }
 
-    private void FireRecoil() // 카메라 반동을 적용하는 코드
+    public void FireRecoil()
     {
         if (impulse != null)
         {
-            impulse.GenerateImpulse();
+            // 방향 크기에 따라 진폭 설정
+            impulse.m_ImpulseDefinition.m_AmplitudeGain = weapondata.ImpulseDirection.magnitude;
+
+            // 임펄스 발생
+            impulse.GenerateImpulse(weapondata.ImpulseDirection);
+            Debug.Log("Impulse generated with direction: " + weapondata.ImpulseDirection);
+        }
+        else
+        {
+            Debug.LogWarning("CinemachineImpulseSource is not assigned.");
         }
     }
+
+
 }
