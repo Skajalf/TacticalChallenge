@@ -160,10 +160,8 @@ public class MovingComponent : MonoBehaviour
             animator.SetBool("IsMove", false);
         }
 
-        if (controller.isGrounded && verticalVelocity.y < 0)
-        {
-            verticalVelocity.y = 0f;
-        }
+        // 중력 적용
+        Gravity();
 
         Vector3 move = characterDirection * Time.deltaTime;
         move.y = verticalVelocity.y * Time.deltaTime;
@@ -200,13 +198,14 @@ public class MovingComponent : MonoBehaviour
 
     private void Gravity()
     {
-        if (!controller.isGrounded)
+        // controller.isGrounded가 true일 때 verticalVelocity.y가 양수(위로 올라가는 중력)일 경우만 0으로 설정
+        if (controller.isGrounded && verticalVelocity.y < 0)
+        {
+            verticalVelocity.y = -2f;  // 완전한 0보다 약간 낮은 값을 설정해 항상 지면에 닿게 만듦
+        }
+        else
         {
             verticalVelocity.y += gravity * Time.deltaTime;
-        }
-        else if (verticalVelocity.y < 0)
-        {
-            verticalVelocity.y = 0f;
         }
     }
 
