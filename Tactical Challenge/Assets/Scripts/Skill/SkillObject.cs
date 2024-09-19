@@ -70,6 +70,7 @@ public class SkillObject : ScriptableObject
     // GameObject 기준으로 스킬을 실행하는 메서드
     public void ExecuteSkill(GameObject caster)
     {
+        Debug.Log("SkillObject :: ExecuteSkill");
         List<StatComponent> targets = GetTargets(caster);
 
         if (targets.Count > 0)
@@ -100,9 +101,11 @@ public class SkillObject : ScriptableObject
     // 스킬을 적용하는 메서드 (구현 필요)
     private void ApplySkill(GameObject caster, List<StatComponent> targets, float skillDamage)
     {
+        Debug.Log("SkillObject :: ApplySkill");
         foreach (StatComponent target in targets)
         {
             // 스킬 적용 로직 (데미지, 상태 효과 등)
+            Debug.Log($"target : {target}");
             target.Damage(skillDamage);
         }
     }

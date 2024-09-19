@@ -15,12 +15,12 @@ public class StateComponent : MonoBehaviour
 
     public event Action<StateType, StateType> OnStateTypeChanged;
 
-    public bool IdleMode { get => currentState == StateType.Idle; }
-    public bool EquipMode { get => currentState == StateType.Equip; }
-    public bool SkillMode { get => currentState == StateType.Skill; }
-    public bool ReloadMode {  get => currentState == StateType.Reload; }
-    public bool DamagedMode { get => currentState == StateType.Damaged; }
-    public bool DeadMode { get => currentState == StateType.Dead; }
+    public bool isIdleMode { get => currentState == StateType.Idle; }
+    public bool isEquipMode { get => currentState == StateType.Equip; }
+    public bool isSkillMode { get => currentState == StateType.Skill; }
+    public bool isReloadMode {  get => currentState == StateType.Reload; }
+    public bool isDamagedMode { get => currentState == StateType.Damaged; }
+    public bool isDeadMode { get => currentState == StateType.Dead; }
 
     public void SetIdleMode() => ChangeType(StateType.Idle);
     public void SetEquipMode() => ChangeType(StateType.Equip);
@@ -54,4 +54,6 @@ public class StateComponent : MonoBehaviour
         return true; 
     }
 
+
+    // 스킬을 사용하기 전에 State를 먼저 StateType.Skill로 바꾸게 됨. => CanDoSomething이 이때 검사를 한다면? => False;
 }

@@ -17,7 +17,7 @@ MonoBehaviour:
   SkillDamage: -30
   SkillRange: 5
   SkillCoolTime: 3
-  APCost: 2
+  APCost: 0.1
   skillType: 0
   shapeType: 0
   skillRangeInstance: {fileID: 11400000, guid: e98e3fd448584db45b6760bc92409950, type: 2}

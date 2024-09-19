@@ -74,6 +74,7 @@ public class SkillComponent : MonoBehaviour
     {
         if (CheckStat(skillObject) && Time.time - lastUseTime >= skillObject.SkillCoolTime)
         {
+            Debug.Log($"UsingSkill 호출 : 현재 상태 {state.CurrentState}");
             lastUseTime = Time.time;
             state.SetSkillMode();
 
@@ -84,6 +85,8 @@ public class SkillComponent : MonoBehaviour
         {
             Debug.Log("스킬을 사용할 수 없습니다.");
         }
+
+        state.SetIdleMode();
     }
 
     // AP와 같은 상태 체크 (이전 조건들과 통합)
@@ -97,7 +100,7 @@ public class SkillComponent : MonoBehaviour
 
         if (!state.CanDoSomething())
         {
-            Debug.Log("현재 상태로는 스킬을 사용할 수 없습니다.");
+            Debug.Log($"현재 상태로는 스킬을 사용할 수 없습니다. 현재 상태 : {state.CurrentState}");
             return false;
         }
 

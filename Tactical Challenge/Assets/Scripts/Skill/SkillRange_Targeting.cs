@@ -14,6 +14,7 @@ public class SkillRange_Targeting : SkillRange
     // 위치와 사정거리를 받아 타겟을 찾는 메서드 구현
     public override List<StatComponent> FindTargets(Vector3 position, float range)
     {
+        Debug.Log("SkillRange_Targeting :: FindTargets");
         targets.Clear(); // 타겟 리스트 초기화
 
         // 모든 StatComponent를 가져와서 위치와 거리를 비교
@@ -28,7 +29,7 @@ public class SkillRange_Targeting : SkillRange
             Vector3 targetPosition = component.transform.position;
             float distance = Vector3.Distance(position, targetPosition);
 
-            if (distance < closestDistance)
+            if (distance < closestDistance && distance != 0)
             {
                 closestDistance = distance;
                 closestTarget = component;
