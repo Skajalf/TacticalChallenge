@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using Unity.VisualScripting;
 
-
 public class StatComponent : MonoBehaviour
 {
     [SerializeField] public float maxHealthPoint = 100.0f;

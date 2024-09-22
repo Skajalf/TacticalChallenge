@@ -1202,6 +1202,42 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1800979769}
   m_SourcePrefab: {fileID: 100100000, guid: e80fae2552200644c8385a3fe98e4e08, type: 3}
+--- !u!1 &4662245439551299764 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8705557109572338173, guid: e80fae2552200644c8385a3fe98e4e08,
+    type: 3}
+  m_PrefabInstance: {fileID: 4662245439551299763}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4662245439551299765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4662245439551299764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd266b1bf87958e4ba09608a072c538d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: {fileID: 11400000, guid: 9c025f38c116a9b47ab6d523b7d837bb, type: 2}
+  AP: {fileID: 11400000, guid: dad1073e3e121e24083924af1dc13f8e, type: 2}
+  defence: {fileID: 11400000, guid: be858a8b4afb1304d9c1d23497687c1b, type: 2}
+  criticalRate: {fileID: 11400000, guid: cb0ffa6d53239a24fad1f9e319422547, type: 2}
+  apRegenTime: 1
+  apRegenAmount: 0.1
+--- !u!114 &4662245439551299766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4662245439551299764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f49d67ad716b9a4a9abe55b0d4f341e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
