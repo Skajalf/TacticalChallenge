@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Quis_ut_Deus : WeaponBase
+public class Crack_Shot : WeaponBase
 {
     protected override void Awake()
     {
         base.Awake();
+
+        Init();
     }
 
     protected override void Init()

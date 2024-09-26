@@ -36,7 +36,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-
+        Init();
     }
 
     protected virtual void Init()
