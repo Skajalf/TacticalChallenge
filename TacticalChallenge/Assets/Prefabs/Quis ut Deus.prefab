@@ -93,7 +93,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5674429467629128257}
   - component: {fileID: 6785789243464194118}
-  m_Layer: 0
+  - component: {fileID: 8093248346779851161}
+  m_Layer: 6
   m_Name: Quis ut Deus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,3 +147,26 @@ MonoBehaviour:
   damageParticle: {fileID: 0}
   hitParticlePositionOffset: {x: 0, y: 0, z: 0}
   hitParticleScaleOffset: {x: 1, y: 1, z: 1}
+--- !u!136 &8093248346779851161
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9113377541341484448}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.05
+  m_Height: 0.8
+  m_Direction: 2
+  m_Center: {x: 0.07, y: -0.05, z: 0}

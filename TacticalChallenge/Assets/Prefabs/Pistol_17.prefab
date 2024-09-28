@@ -93,7 +93,8 @@ GameObject:
   m_Component:
   - component: {fileID: 664162244555876236}
   - component: {fileID: 8491216423952821571}
-  m_Layer: 0
+  - component: {fileID: 4782779477926561905}
+  m_Layer: 6
   m_Name: Pistol_17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,3 +147,26 @@ MonoBehaviour:
   damageParticle: {fileID: 0}
   hitParticlePositionOffset: {x: 0, y: 0, z: 0}
   hitParticleScaleOffset: {x: 1, y: 1, z: 1}
+--- !u!136 &4782779477926561905
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121246382104316561}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.02
+  m_Height: 0.2
+  m_Direction: 2
+  m_Center: {x: 0.01, y: 0, z: 0}

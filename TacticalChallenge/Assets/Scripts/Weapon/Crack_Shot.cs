@@ -59,8 +59,8 @@ public class Crack_Shot : WeaponBase
     {
         base.UnEquip();
         transform.SetParent(null);
-        transform.localPosition = Vector3.zero; // 필요에 따라 초기화
-        transform.localRotation = Quaternion.identity; // 필요에 따라 초기화
-        gameObject.SetActive(false);
+        //transform.localPosition = Vector3.zero; // 필요에 따라 초기화
+        //transform.localRotation = Quaternion.identity; // 필요에 따라 초기화
+        //gameObject.SetActive(false);
     }
 }

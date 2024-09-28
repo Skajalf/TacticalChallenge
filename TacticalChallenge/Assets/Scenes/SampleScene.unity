@@ -616,6 +616,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pistol_17
       objectReference: {fileID: 0}
+    - target: {fileID: 8121246382104316561, guid: 834a53355d86971439caa35dc9df6be8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1044,6 +1049,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9113377541341484448, guid: 1d4100dc46ed1ed42b54f1d262c67242,
         type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9113377541341484448, guid: 1d4100dc46ed1ed42b54f1d262c67242,
+        type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -1178,6 +1188,7 @@ MonoBehaviour:
   weaponPrefabs:
   - {fileID: 9113377541341484448, guid: 1d4100dc46ed1ed42b54f1d262c67242, type: 3}
   - {fileID: 8121246382104316561, guid: 834a53355d86971439caa35dc9df6be8, type: 3}
+  weaponActiveOnStart: 0100
 --- !u!143 &1800979769
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1204,6 +1215,61 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &1800979772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800979765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 827b24b66aa28dd42a47761eaa055888,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 704b26d5-3b0f-4ae0-8b1d-dfcd7d7739e2
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e2756020-a1ed-4626-a402-d3ad43cda365
+    m_ActionName: Player/Attack[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f5ca58b6-b546-4b4e-8cce-d48ee59e33e7
+    m_ActionName: Player/Aim[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 47aefd52-234d-4c06-9678-8bef48db8510
+    m_ActionName: Player/Reload[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 39bf3fe4-10c8-45b9-b3db-0eadb0730c7e
+    m_ActionName: Player/WeaponSwap[/Keyboard/1,/Keyboard/2,/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 85bd3891-bbe2-4102-9eac-5eecd62031ac
+    m_ActionName: Player/Action[/Keyboard/f]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: PC
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1829576324
 GameObject:
   m_ObjectHideFlags: 0
@@ -1372,6 +1438,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crack_Shot
       objectReference: {fileID: 0}
+    - target: {fileID: 8395557475365543367, guid: 89f29e0482ad457438a5837eac062448,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1518,6 +1589,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1800979768}
+    - targetCorrespondingSourceObject: {fileID: 8705557109572338173, guid: e80fae2552200644c8385a3fe98e4e08,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1800979772}
     - targetCorrespondingSourceObject: {fileID: 8705557109572338173, guid: e80fae2552200644c8385a3fe98e4e08,
         type: 3}
       insertIndex: -1
