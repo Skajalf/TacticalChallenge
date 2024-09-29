@@ -18,6 +18,8 @@ public class WeaponComponent : MonoBehaviour
     private PlayerInput playerInput;
     private InputActionMap playerInputActionMap;
 
+    private Animator animator;
+
     private void Awake()
     {
         Init();
@@ -28,9 +30,9 @@ public class WeaponComponent : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         playerInputActionMap = playerInput.actions.FindActionMap("Player");
 
-        //InputAction attack = playerInputActionMap.FindAction("Attack");
-        //attack.started += Attack_Start;
-        //attack.canceled += Attack_Cancel;
+        InputAction attack = playerInputActionMap.FindAction("Attack");
+        attack.started += Attack_Start;
+        attack.canceled += Attack_Cancel;
 
         InputAction weaponSwap = playerInputActionMap.FindAction("WeaponSwap");
         weaponSwap.started += weaponSwap_Start;
@@ -38,12 +40,14 @@ public class WeaponComponent : MonoBehaviour
         InputAction weaponPickUp = playerInputActionMap.FindAction("Action");
         weaponPickUp.started += weaponPickUp_Start;
 
-        //InputAction aim = playerInputActionMap.FindAction("Aim");
-        //aim.started += Aim_Start;
-        //aim.canceled += Aim_Cancel;
+        InputAction aim = playerInputActionMap.FindAction("Aim");
+        aim.started += Aim_Start;
+        aim.canceled += Aim_Cancel;
 
-        //InputAction reloadAction = playerInputActionMap.FindAction("Reload");
-        //reloadAction.started += Reload_Start;
+        InputAction reloadAction = playerInputActionMap.FindAction("Reload");
+        reloadAction.started += Reload_Start;
+
+        animator = GetComponent<Animator>();
 
         Equip();
     }
@@ -74,12 +78,12 @@ public class WeaponComponent : MonoBehaviour
 
     private void Attack_Start(InputAction.CallbackContext context)
     {
-        
+        animator.SetBool("IsAttack", true);
     }
 
     private void Attack_Cancel(InputAction.CallbackContext context)
     {
-        
+        animator.SetBool("IsAttack", false);
     }
 
     private void weaponSwap_Start(InputAction.CallbackContext context)
@@ -124,7 +128,7 @@ public class WeaponComponent : MonoBehaviour
 
     private void Reload_Start(InputAction.CallbackContext context)
     {
-        
+        animator.SetTrigger("Reload");
     }
 
     private void Equip()
@@ -177,28 +181,6 @@ public class WeaponComponent : MonoBehaviour
             weapons[currentWeaponIndex].gameObject.SetActive(true);
         }
     }
-
-    //// 무기 교체 메서드
-    //private void SwapWeapon(int newWeaponIndex)
-    //{
-    //    if (newWeaponIndex >= 0 && newWeaponIndex < weapons.Count && newWeaponIndex != currentWeaponIndex)
-    //    {
-    //        // 현재 무기 해제
-    //        weapons[currentWeaponIndex].UnEquip();
-
-    //        // 새로운 무기 인덱스로 변경
-    //        currentWeaponIndex = newWeaponIndex;
-
-    //        // 새로운 무기 장착
-    //        weapons[currentWeaponIndex].Equip();
-
-    //        // 무기 가시성 업데이트
-    //        for (int i = 0; i < weapons.Count; i++)
-    //        {
-    //            weapons[i].gameObject.SetActive(i == currentWeaponIndex);
-    //        }
-    //    }
-    //}
 
     private void EquipWeapon(WeaponBase newWeapon)
     {
