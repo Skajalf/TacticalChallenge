@@ -116,7 +116,7 @@ public class MovingComponent : MonoBehaviour
 
     #endregion
 
-    public void Movement()
+    public void Movement() // Å©¾Æ¾Ç
     {
         Transform cameraRootTransform = transform.FindChildByName("CameraRoot").transform;
 

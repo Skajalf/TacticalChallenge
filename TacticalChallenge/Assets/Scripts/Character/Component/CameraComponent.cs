@@ -111,6 +111,11 @@ public class CameraComponent : MonoBehaviour
         tpsFollowCamera.CameraDistance = Mathf.SmoothStep(tpsFollowCamera.CameraDistance, currentZoomDistance, zoomLerp * Time.deltaTime);
     }
 
+    public Vector3 GetCameraForwardDirection()
+    {
+        return cameraRotation * Vector3.forward;
+    }
+
     #region Input_Look Methods
     private void Input_Look_Performed(InputAction.CallbackContext context)
     {
