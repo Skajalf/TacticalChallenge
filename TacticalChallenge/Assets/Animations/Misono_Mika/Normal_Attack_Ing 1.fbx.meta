@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3e5ce53c072be2846a96831ebc0ac9a5
+guid: c02e4a2162d1d804d936fe5d3700e914
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -36,8 +36,8 @@ ModelImporter:
       name: CH0069_Normal_Attack_Ing
       takeName: CH0069_Normal_Attack_Ing
       internalID: -388301787082309250
-      firstFrame: 3.7
-      lastFrame: 6
+      firstFrame: 0
+      lastFrame: 32
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -56,15 +56,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.498094
-        functionName: Attack
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: bbb4b715481baba42ab2f5908a532095,
-          type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

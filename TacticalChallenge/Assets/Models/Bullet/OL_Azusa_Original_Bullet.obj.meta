@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 0a37fe9951be0554d9d9210d90cd4190
+guid: bd35ff9f2a87af04ba82c45592835aed
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: OL_Azusa_Original_Bullet_0Mat
+    second: {fileID: 2100000, guid: 6bb8671232e562248ba8128b685e8e89, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

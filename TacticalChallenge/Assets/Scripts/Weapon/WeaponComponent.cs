@@ -128,7 +128,13 @@ public class WeaponComponent : MonoBehaviour
 
     private void Reload_Start(InputAction.CallbackContext context)
     {
-        animator.SetTrigger("Reload");
+        if (/*bIsEquip && playerState.CanDoSomething() &&*/ (detectedWeapon.ammo != detectedWeapon.megazine))
+        {
+            detectedWeapon.Reload();
+            animator.SetTrigger("Reload");
+        }
+        else
+            return;
     }
 
     private void Equip()
@@ -195,5 +201,27 @@ public class WeaponComponent : MonoBehaviour
         // 새로운 무기 활성화
         newWeapon.gameObject.SetActive(true);
         Debug.Log($"{newWeapon.name} 무기를 장착했습니다.");
+    }
+
+    ///
+    /// 애니메이션 메서드
+    ///
+
+    public void Attack()
+    {
+        //if (나중에 무기 장착했는지 확인하는 메서드 집어넣기)
+        //{
+        detectedWeapon.CheckAmmo();
+        //}
+        return;
+    }
+
+    public void Impulse()
+    {
+        //if (bIsEquip)
+        //{
+            detectedWeapon.makeImpulse();
+        //}
+        return;
     }
 }

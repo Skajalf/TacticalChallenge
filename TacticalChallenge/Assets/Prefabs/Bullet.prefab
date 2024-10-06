@@ -93,8 +93,9 @@ GameObject:
   m_Component:
   - component: {fileID: 843505271349962766}
   - component: {fileID: -8288812683546281503}
+  - component: {fileID: -7047123569833201324}
   m_Layer: 0
-  m_Name: OL_Bullet_01_Warhead
+  m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,6 +129,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61cf3d70441115046abe533b20ef4ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 1000
-  DestroyTime: 10
+  speed: 15
+  range: 50
+  destroyAfterRange: 1
+  destroyTime: 10
   weapon: {fileID: 6785789243464194118, guid: 1d4100dc46ed1ed42b54f1d262c67242, type: 3}
+--- !u!54 &-7047123569833201324
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6743378836425214112}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

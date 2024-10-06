@@ -134,7 +134,8 @@ MonoBehaviour:
   ammo: 0
   reloadTime: 2
   distance: 10
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 6743378836425214112, guid: 029b1c68fdf16e6428de986f08509b3a,
+    type: 3}
   cartrigeParticle: {fileID: 0}
   weaponHolsterName: Bip001_Weapon
   bulletTransformName: fire_01
@@ -162,7 +163,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2

@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,8 +7,8 @@ public abstract class WeaponBase : MonoBehaviour
 {
     [Header(" Weapon Data Setting")]
     [SerializeField] protected float power; //무기 데미지
-    [SerializeField] protected float megazine; //탄창 (근접무기는 사용 X)
-    [SerializeField] protected float ammo; // 현재 잔탄수 (근접무기는 사용 X)
+    [SerializeField] public float megazine; //탄창 (근접무기는 사용 X)
+    [SerializeField] public float ammo; // 현재 잔탄수 (근접무기는 사용 X)
     [SerializeField] protected float reloadTime; // 재장전 시간 (근접무기는 사용 X)
     [SerializeField] protected float distance; // 사거리
 
@@ -26,6 +27,7 @@ public abstract class WeaponBase : MonoBehaviour
     [Header(" Impulse Setting")] // 카메라 쉐이크 효과 구현
     [SerializeField] protected Vector3 impulseDirection;
     [SerializeField] protected Cinemachine.NoiseSettings impulseSettings;
+    protected CinemachineImpulseSource impulse;
 
     [Header(" Impact Setting")] // 피격 대상 이펙트 구현
     [SerializeField] protected int hitImpactIndex; // 피격타입 - 권총인지, 소총인지
@@ -33,6 +35,8 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] protected GameObject damageParticle; //피격 파티클 데미지 67, 105 뜨는 그거
     [SerializeField] protected Vector3 hitParticlePositionOffset; // 피격 파티클의 위치
     [SerializeField] protected Vector3 hitParticleScaleOffset = Vector3.one; // 피격 파티클의 사이즈
+
+    protected bool IsReload {get; set;}
 
     protected virtual void Awake()
     {
@@ -50,7 +54,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     }
 
-    protected virtual void Action()
+    public virtual void Action()
     {
 
     }
@@ -61,6 +65,21 @@ public abstract class WeaponBase : MonoBehaviour
     }
 
     public virtual void UnEquip()
+    {
+
+    }
+
+    public virtual void Reload()
+    {
+
+    }
+
+    public virtual void CheckAmmo()
+    {
+
+    }
+
+    public virtual void makeImpulse()
     {
 
     }
