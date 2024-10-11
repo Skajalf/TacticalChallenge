@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 15
-  range: 10
+  range: 20
   destroyAfterRange: 1
   destroyTime: 10
   weapon: {fileID: 6785789243464194118, guid: 1d4100dc46ed1ed42b54f1d262c67242, type: 3}

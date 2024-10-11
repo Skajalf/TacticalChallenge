@@ -16,7 +16,7 @@ public class CameraComponent : MonoBehaviour
     [Header("Mouse Settings")]
     [SerializeField] private Vector2 mouseSensitivity = new Vector2(0.5f, 0.5f); // 마우스 민감도
 
-    private Vector2 limitPitchAngle = new Vector2(80, 350); // Pitch 한계
+    private Vector2 limitPitchAngle = new Vector2(45, 340); // Pitch 한계
     //[SerializeField] private float mouseRotationLerp = 0.25f;
 
     private Vector2 inputLook; // 현재 마우스 입력
