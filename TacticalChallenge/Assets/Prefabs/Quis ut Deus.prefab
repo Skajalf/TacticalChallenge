@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   power: 25
-  megazine: 25
+  megazine: 500
   ammo: 0
   reloadTime: 2
   distance: 10

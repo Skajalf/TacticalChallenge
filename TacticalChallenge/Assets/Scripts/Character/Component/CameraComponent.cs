@@ -25,8 +25,6 @@ public class CameraComponent : MonoBehaviour
 
     private CinemachineVirtualCamera cinemachineVirtualCamera;
     private Cinemachine3rdPersonFollow tpsFollowCamera;
-
-    private InputActionMap actionMap;
     private Quaternion cameraRotation; // Quaternion 값
     private Transform targetTransform; // 목표 대상 (GameObject)의 transform
 
@@ -52,7 +50,7 @@ public class CameraComponent : MonoBehaviour
         currentZoomDistance = tpsFollowCamera.CameraDistance;
 
         PlayerInput input = GetComponent<PlayerInput>();
-        actionMap = input.actions.FindActionMap("Player");
+        InputActionMap actionMap = input.actions.FindActionMap("Player");
 
         lookAction = actionMap.FindAction("Look");
         lookAction.performed += Input_Look_Performed;
@@ -98,7 +96,6 @@ public class CameraComponent : MonoBehaviour
         cameraRotation.eulerAngles = currentAngle;
     }
 
-    // 원본 코드 그대로
     private void Update_Zoom()
     {
         if (MathHelpers.IsNearlyEqual(tpsFollowCamera.CameraDistance, currentZoomDistance, 0.01f))
@@ -111,9 +108,9 @@ public class CameraComponent : MonoBehaviour
         tpsFollowCamera.CameraDistance = Mathf.SmoothStep(tpsFollowCamera.CameraDistance, currentZoomDistance, zoomLerp * Time.deltaTime);
     }
 
-    public Vector3 GetCameraForwardDirection()
+    public Quaternion GetCameraRotation()
     {
-        return cameraRotation * Vector3.forward;
+        return cameraRotation;  // CameraComponent의 회전 정보를 외부에서 참조할 수 있도록 함
     }
 
     #region Input_Look Methods

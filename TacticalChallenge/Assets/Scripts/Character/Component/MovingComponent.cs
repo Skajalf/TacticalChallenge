@@ -29,10 +29,9 @@ public class MovingComponent : MonoBehaviour
 
     private float coverTimer = 0f;
 
-    CinemachineVirtualCamera vcam;
-    Vector3 camDirection;
     private CharacterController controller;
     private Animator animator;
+    private CameraComponent cameraComponent;  // CameraComponent 참조 추가
 
     public bool bCanMove { get; private set; } = true;
     public bool bRun { get; private set; }
@@ -47,6 +46,7 @@ public class MovingComponent : MonoBehaviour
 
     public void Init()
     {
+        cameraComponent = FindObjectOfType<CameraComponent>();  // CameraComponent 찾기
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
@@ -116,10 +116,8 @@ public class MovingComponent : MonoBehaviour
 
     #endregion
 
-    public void Movement() // 크아악
+    public void Movement()
     {
-        Transform cameraRootTransform = transform.FindChildByName("CameraRoot").transform;
-
         if (!bCanMove) return;
 
         currentInputMove = Vector2.SmoothDamp(currentInputMove, inputMove, ref velocity, 1.0f / sensitivity);
@@ -128,17 +126,17 @@ public class MovingComponent : MonoBehaviour
         float speed = bRun ? runSpeed : walkSpeed;
         animator.SetBool("IsRun", bRun);
 
-        Quaternion cameraRotation = cameraRootTransform.rotation;
+        // CameraComponent에서 카메라 회전 정보를 가져옴
+        Quaternion cameraRotation = cameraComponent.GetCameraRotation();
         Quaternion characterRotation = Quaternion.Euler(0, cameraRotation.eulerAngles.y, 0);
-
 
         if (currentInputMove.magnitude > deadZone)
         {
-            Vector3 cameraForward = cameraRootTransform.forward;
+            Vector3 cameraForward = cameraRotation * Vector3.forward;
             cameraForward.y = 0;
             cameraForward.Normalize();
 
-            Vector3 cameraRight = cameraRootTransform.right;
+            Vector3 cameraRight = cameraRotation * Vector3.right;
             cameraRight.y = 0;
             cameraRight.Normalize();
 
@@ -147,7 +145,7 @@ public class MovingComponent : MonoBehaviour
 
             if (!bAlt)
             {
-                transform.rotation = characterRotation;
+                transform.rotation = Quaternion.Slerp(transform.rotation, characterRotation, 0.2f); // Smooth rotation 적용
             }
 
             animator.SetBool("IsMove", true);
