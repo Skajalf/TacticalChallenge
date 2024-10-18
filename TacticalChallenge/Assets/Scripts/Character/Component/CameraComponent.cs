@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,7 +20,7 @@ public class CameraComponent : MonoBehaviour
     private Vector2 limitPitchAngle = new Vector2(45, 340); // Pitch 한계
     //[SerializeField] private float mouseRotationLerp = 0.25f;
 
-    private Vector2 inputLook; // 현재 마우스 입력
+    public Vector2 inputLook; // 현재 마우스 입력
     public float currentZoomDistance; // 카메라와 캐릭터 거리
     private float prevZoomDistance; // 이전 거리
 
@@ -143,4 +144,15 @@ public class CameraComponent : MonoBehaviour
         currentZoomDistance = prevZoomDistance;
     }
     #endregion
+
+#if UNITY_EDITOR
+    private void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(10, 10, 300, 100));
+        var textStyle = new GUIStyle();
+        textStyle.normal.textColor = Color.green;
+        GUILayout.Label(cameraRotation.eulerAngles.ToString(), textStyle);
+        GUILayout.EndArea();
+    }
+#endif
 }

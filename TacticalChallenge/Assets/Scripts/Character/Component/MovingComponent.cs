@@ -29,6 +29,8 @@ public class MovingComponent : MonoBehaviour
 
     private float coverTimer = 0f;
 
+    private Quaternion cameraRotation;
+
     private CharacterController controller;
     private Animator animator;
     private CameraComponent cameraComponent;  // CameraComponent 참조 추가
@@ -78,6 +80,11 @@ public class MovingComponent : MonoBehaviour
         Cover();
     }
 
+    public void LateUpdate()
+    {
+        LateUpdate_Rotate();
+    }
+
     #region actionMethods
     private void performMove(InputAction.CallbackContext context)
     {
@@ -118,55 +125,116 @@ public class MovingComponent : MonoBehaviour
 
     public void Movement()
     {
-        if (!bCanMove) return;
+        if (!bCanMove) return; // 움직일 수 있는 상태가 아니면 종료
 
+        // 입력 받은 값으로 현재 이동값을 부드럽게 계산 (마우스 이동에 따른 값)
         currentInputMove = Vector2.SmoothDamp(currentInputMove, inputMove, ref velocity, 1.0f / sensitivity);
 
-        Vector3 characterDirection = Vector3.zero;
-        float speed = bRun ? runSpeed : walkSpeed;
-        animator.SetBool("IsRun", bRun);
+        Vector3 characterDirection = Vector3.zero; // 캐릭터의 이동 방향
+        float speed = bRun ? runSpeed : walkSpeed; // 달리기와 걷기 속도 설정
+        animator.SetBool("IsRun", bRun); // 애니메이션 설정
 
-        // CameraComponent에서 카메라 회전 정보를 가져옴
-        Quaternion cameraRotation = cameraComponent.GetCameraRotation();
-        Quaternion characterRotation = Quaternion.Euler(0, cameraRotation.eulerAngles.y, 0);
+        // 카메라의 회전 정보를 가져옴
+        cameraRotation = cameraComponent.GetCameraRotation();
 
-        if (currentInputMove.magnitude > deadZone)
+        if (currentInputMove.magnitude > deadZone) // deadZone 이상으로 입력값이 있으면 이동 처리
         {
-            Vector3 cameraForward = cameraRotation * Vector3.forward;
-            cameraForward.y = 0;
-            cameraForward.Normalize();
+            //// 카메라 방향을 기준으로 전후, 좌우 방향을 계산
+            //Vector3 cameraForward = cameraRotation * Vector3.forward;
+            //Vector3 cameraRight = cameraRotation * Vector3.right;
 
-            Vector3 cameraRight = cameraRotation * Vector3.right;
-            cameraRight.y = 0;
-            cameraRight.Normalize();
+            //cameraForward.y = 0; // 수평 이동만 고려
+            //cameraRight.y = 0;
 
-            characterDirection = (cameraRight * currentInputMove.x) + (cameraForward * currentInputMove.y);
-            characterDirection = characterDirection.normalized * speed;
+            //cameraForward.Normalize();
+            //cameraRight.Normalize();
 
-            if (!bAlt)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, characterRotation, 0.2f); // Smooth rotation 적용
-            }
+            //// 입력된 이동 방향에 따라 실제 이동 벡터 계산
+            //characterDirection = (cameraRight * currentInputMove.x) + (cameraForward * currentInputMove.y);
+            //characterDirection = characterDirection.normalized * speed;
+
+            //// Alt 키가 눌리지 않은 경우에만 회전 적용
+            //if (!bAlt)
+            //{
+            //    Vector3 targetDirection = characterDirection;
+            //    if (targetDirection != Vector3.zero)
+            //    {
+            //        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+            //        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.2f); // 부드러운 회전 적용
+            //    }
+            //}
 
             animator.SetBool("IsMove", true);
         }
         else
         {
-            if (!bAlt)
-            {
-                transform.rotation = characterRotation;
-            }
+            //// Alt 키가 눌리지 않은 경우 카메라 방향을 캐릭터 회전에 반영
+            //if (!bAlt)
+            //{
+            //    transform.rotation = Quaternion.Euler(0, cameraRotation.eulerAngles.y, 0);
+            //}
 
             animator.SetBool("IsMove", false);
         }
 
-        Gravity();
+        // 캐릭터의 움직임 적용
+        Vector3 move = characterDirection * Time.deltaTime; // 이동 벡터에 Time.deltaTime 곱하기
+        move.y = verticalVelocity.y * Time.deltaTime; // 중력 및 점프 값 적용
 
-        Vector3 move = characterDirection * Time.deltaTime;
-        move.y = verticalVelocity.y * Time.deltaTime;
-
-        controller.Move(move);
+        // 여기서 캐릭터가 실제로 이동할 수 있도록 Move 호출
+        controller.Move(move); // CharacterController를 통해 실제로 움직임 적용
     }
+
+
+    private void LateUpdate_Rotate()
+    {
+        if (cameraComponent == null)
+            return;
+
+        float speed = bRun ? runSpeed : walkSpeed; // 달리기와 걷기 속도 설정
+        if (currentInputMove.magnitude > deadZone) // deadZone 이상으로 입력값이 있으면 이동 처리
+        {
+            Vector3 characterDirection = Vector3.zero;
+
+            // 카메라 방향을 기준으로 전후, 좌우 방향을 계산
+            Vector3 cameraForward = cameraRotation * Vector3.forward;
+            Vector3 cameraRight = cameraRotation * Vector3.right;
+
+            cameraForward.y = 0; // 수평 이동만 고려
+            cameraRight.y = 0;
+
+            cameraForward.Normalize();
+            cameraRight.Normalize();
+
+            // 입력된 이동 방향에 따라 실제 이동 벡터 계산
+            characterDirection = (cameraRight * currentInputMove.x) + (cameraForward * currentInputMove.y);
+            characterDirection = characterDirection.normalized * speed;
+
+            // Alt 키가 눌리지 않은 경우에만 회전 적용
+            if (!bAlt)
+            {
+                Vector3 targetDirection = characterDirection;
+                if (targetDirection != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.2f); // 부드러운 회전 적용
+                }
+            }
+
+        }
+        else
+        {
+            // Alt 키가 눌리지 않은 경우 카메라 방향을 캐릭터 회전에 반영
+            if (!bAlt)
+            {
+                Quaternion cameraRotation = cameraComponent.GetCameraRotation();
+                transform.rotation = Quaternion.Euler(0, cameraRotation.eulerAngles.y, 0);
+
+            }
+        }
+
+    }
+
 
     public void Move()
     {
@@ -227,4 +295,17 @@ public class MovingComponent : MonoBehaviour
             animator.SetBool("Cover", false);
         }
     }
+
+#if UNITY_EDITOR
+    private void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(10, 120, 300, 100));
+        var textStyle = new GUIStyle();
+        textStyle.normal.textColor = Color.yellow;
+        GUILayout.Label(cameraComponent.GetCameraRotation().eulerAngles.ToString(), textStyle);
+        GUILayout.Label(transform.rotation.eulerAngles.ToString(), textStyle);
+        GUILayout.EndArea();
+    }
+
+#endif
 }
