@@ -1,33 +1,29 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraComponent : MonoBehaviour
 {
-    // 플레이어는 카메라를 기준으로 방향을 정하게 됨
     [Header("Camera Settings")]
-    [SerializeField] private bool bUseCamera = true; // 카메라 사용 여부 -> 옵션 창
+    [SerializeField] private bool bUseCamera = true;  // 카메라 사용 여부
     [SerializeField] private Vector2 zoomRange = new Vector2(1, 3);
     [SerializeField] private float zoomSensitivity = 0.1f;
     [SerializeField] private float zoomLerp = 25.0f;
 
     [Header("Mouse Settings")]
-    [SerializeField] private Vector2 mouseSensitivity = new Vector2(0.5f, 0.5f); // 마우스 민감도
+    [SerializeField] private Vector2 mouseSensitivity = new Vector2(0.5f, 0.5f);  // 마우스 민감도
 
-    private Vector2 limitPitchAngle = new Vector2(45, 340); // Pitch 한계
-    //[SerializeField] private float mouseRotationLerp = 0.25f;
-
-    public Vector2 inputLook; // 현재 마우스 입력
-    public float currentZoomDistance; // 카메라와 캐릭터 거리
-    private float prevZoomDistance; // 이전 거리
+    private Vector2 limitPitchAngle = new Vector2(-60f, 45f);
+    public Vector2 inputLook;  // 현재 마우스 입력
+    public float currentZoomDistance;  // 카메라와 캐릭터 거리
+    private float prevZoomDistance;  // 이전 거리
 
     private CinemachineVirtualCamera cinemachineVirtualCamera;
     private Cinemachine3rdPersonFollow tpsFollowCamera;
-    private Quaternion cameraRotation; // Quaternion 값
-    private Transform targetTransform; // 목표 대상 (GameObject)의 transform
+    private Quaternion cameraRotation;  // 카메라 회전 값
+    private Transform targetTransform;  // 카메라가 추적할 대상 Transform
 
     InputAction lookAction;
     InputAction zoomAction;
@@ -38,16 +34,16 @@ public class CameraComponent : MonoBehaviour
         Init();
     }
 
-    private void Init() // 최초설정과정
+    private void Init()  // 최초 설정 과정
     {
-        Cursor.visible = false; // 커서 비가시
-        Cursor.lockState = CursorLockMode.Locked; // 커서 고정
+        Cursor.visible = false;  // 커서 비가시
+        Cursor.lockState = CursorLockMode.Locked;  // 커서 고정
 
-        targetTransform = transform.FindChildByName("CameraRoot").transform; // 캐릭터의 CameraRoot Transform을 가져옴.
+        targetTransform = transform.FindChildByName("CameraRoot").transform;  // 캐릭터의 CameraRoot Transform을 가져옴
 
-        cinemachineVirtualCamera = FindAnyObjectByType<CinemachineVirtualCamera>(); // Virtual 카메라를 가져옴.
+        cinemachineVirtualCamera = FindAnyObjectByType<CinemachineVirtualCamera>();  // Virtual 카메라 가져옴
         tpsFollowCamera = cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
-        cinemachineVirtualCamera.Follow = targetTransform; // Follow 설정.
+        cinemachineVirtualCamera.Follow = targetTransform;  // 카메라의 추적 대상 설정
         currentZoomDistance = tpsFollowCamera.CameraDistance;
 
         PlayerInput input = GetComponent<PlayerInput>();
@@ -77,32 +73,42 @@ public class CameraComponent : MonoBehaviour
         Update_Zoom();
     }
 
-
     private void Update_Rotation()
     {
+        // Yaw (수평) 회전은 항상 적용
         cameraRotation *= Quaternion.AngleAxis(inputLook.x * mouseSensitivity.x, Vector3.up);
-        cameraRotation *= Quaternion.AngleAxis(-inputLook.y * mouseSensitivity.y, Vector3.right);
-        targetTransform.rotation = cameraRotation; // Camera Root의 Transform.rotation 변경
 
-        Vector3 currentAngle = cameraRotation.eulerAngles;
-        currentAngle.z = 0.0f;
+        // Pitch (수직) 회전은 제한에 도달하지 않은 경우에만 적용
+        Vector3 currentEuler = cameraRotation.eulerAngles;
+        float pitch = currentEuler.x;
 
-        float xAngle = currentAngle.x;
+        if (pitch > 180f) pitch -= 360f;  // 0~360도 범위를 -180~180도로 변환
 
-        if (xAngle < 180.0f && xAngle > limitPitchAngle.x)
-            currentAngle.x = limitPitchAngle.x;
-        else if (xAngle > 180.0f && xAngle < limitPitchAngle.y)
-            currentAngle.x = limitPitchAngle.y;
+        // 피치를 제한하는 조건 수정
+        if (inputLook.y < 0 && pitch < limitPitchAngle.y)  // 아래로 내리는 입력, 한계점 미도달
+        {
+            cameraRotation *= Quaternion.AngleAxis(-inputLook.y * mouseSensitivity.y, Vector3.right);
+        }
+        else if (inputLook.y > 0 && pitch > limitPitchAngle.x)  // 위로 올리는 입력, 한계점 미도달
+        {
+            cameraRotation *= Quaternion.AngleAxis(-inputLook.y * mouseSensitivity.y, Vector3.right);
+        }
 
-        cameraRotation.eulerAngles = currentAngle;
+        // 짐벌락 방지
+        Vector3 newEuler = cameraRotation.eulerAngles;
+        newEuler.z = 0.0f;  // Z축 회전 고정
+        cameraRotation.eulerAngles = newEuler;
+
+        // 카메라의 회전값을 목표 Transform에 반영
+        targetTransform.rotation = cameraRotation;
     }
+
 
     private void Update_Zoom()
     {
         if (MathHelpers.IsNearlyEqual(tpsFollowCamera.CameraDistance, currentZoomDistance, 0.01f))
         {
             tpsFollowCamera.CameraDistance = currentZoomDistance;
-
             return;
         }
 
@@ -111,10 +117,15 @@ public class CameraComponent : MonoBehaviour
 
     public Quaternion GetCameraRotation()
     {
-        return cameraRotation;  // CameraComponent의 회전 정보를 외부에서 참조할 수 있도록 함
+        return cameraRotation;  // CameraComponent의 회전 정보를 외부에서 참조 가능
     }
 
-    #region Input_Look Methods
+    public float GetCameraYaw()  // 카메라의 Yaw 값 (수평 회전 각도) 반환
+    {
+        return cameraRotation.eulerAngles.y;
+    }
+
+    #region Input Methods
     private void Input_Look_Performed(InputAction.CallbackContext context)
     {
         inputLook = context.ReadValue<Vector2>();
@@ -128,7 +139,6 @@ public class CameraComponent : MonoBehaviour
     private void Input_Zoom_Performed(InputAction.CallbackContext context)
     {
         float value = -context.ReadValue<float>() * zoomSensitivity;
-
         currentZoomDistance += value;
         currentZoomDistance = Mathf.Clamp(currentZoomDistance, zoomRange.x, zoomRange.y);
     }

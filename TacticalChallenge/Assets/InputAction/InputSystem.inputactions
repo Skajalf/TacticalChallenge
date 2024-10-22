@@ -42,24 +42,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Look",
-                    "type": "Button",
-                    "id": "0779b22e-0a5d-4888-98a9-d002af941707",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Zoom",
-                    "type": "Button",
-                    "id": "dabfb593-cf80-44eb-b8c0-163ceb3d4129",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Attack",
                     "type": "Button",
                     "id": "e2756020-a1ed-4626-a402-d3ad43cda365",
@@ -67,6 +49,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "6a621a86-732f-4f4a-8695-a1950f1f0ce3",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Zoom",
+                    "type": "Value",
+                    "id": "d5b3dee6-9460-4be2-9629-b9bbe48d4fb9",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Aim",
@@ -273,23 +273,51 @@
                 },
                 {
                     "name": "",
-                    "id": "a28ccde8-fa7f-4fca-92d3-174103ae1dac",
+                    "id": "3a5bf21e-c469-4411-9301-22c622f4c41d",
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "PC",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "55f1d4be-9ff0-40f7-be1a-35cc474fbd58",
-                    "path": "<Mouse>/scroll/y",
+                    "id": "3d25ceba-8403-4cee-aaea-669952291d66",
+                    "path": "<Mouse>/scroll",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "PC",
                     "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Camera",
+            "id": "95776a44-e370-4c19-a6c7-4723c3f12b22",
+            "actions": [
+                {
+                    "name": "LookAround",
+                    "type": "PassThrough",
+                    "id": "702718ab-69ca-486c-87b6-d873bec69a87",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "84e40826-6dfc-4265-8b5a-492e56ef2292",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "LookAround",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

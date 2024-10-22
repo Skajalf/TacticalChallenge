@@ -15,7 +15,7 @@ public abstract class WeaponBase : MonoBehaviour
     [Header(" Weapon Visuals")]
     [SerializeField] protected GameObject projectilePrefab; // 탄환 프리펩
     [SerializeField] protected GameObject cartrigeParticle; //탄피 프리펩
-    [SerializeField] protected string weaponHolsterName = "Bip001_Weapon"; // 총의 위치 이름
+    [SerializeField] protected string weaponHolsterName = "WeaponPivot"; // 총의 위치 이름
     [SerializeField] protected string bulletTransformName = "fire_01"; // 총알이 소환되는 위치 이름
     [SerializeField] protected string cartrigeTransformName = "fire_02"; // 탄피가 소환되는 위치 이름
     [SerializeField] protected GameObject flameParticle; // 총구 화염 이펙트
