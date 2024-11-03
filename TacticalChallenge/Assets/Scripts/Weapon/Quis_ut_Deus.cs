@@ -128,8 +128,8 @@ public class Quis_ut_Deus : WeaponBase
 
         base.Equip();
         transform.SetParent(weaponTransform, false);
-        transform.localPosition = Vector3.zero; // 로컬 위치 초기화
-        transform.localRotation = Quaternion.identity; // 로컬 회전 초기화
+        //transform.localPosition = Vector3.zero; // 로컬 위치 초기화
+        //transform.localRotation = Quaternion.identity; // 로컬 회전 초기화
         gameObject.SetActive(true);
     }
 

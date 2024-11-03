@@ -156,12 +156,32 @@ public class WeaponComponent : MonoBehaviour
 
                 if (weapon != null)
                 {
-                    weaponInstance.transform.SetParent(transform); // Set the weapon as a child of the player
+                    // FindChildByName을 사용하여 WeaponPivot을 찾기
+                    Transform weaponPivot = transform.FindChildByName("WeaponPivot");
+                    if (weaponPivot != null)
+                    {
+                        // 무기를 WeaponPivot의 자식으로 설정
+                        weaponInstance.transform.SetParent(weaponPivot, false);
+                    }
+                    else
+                    {
+                        Debug.LogError("WeaponPivot을 찾을 수 없습니다.");
+                    }
+
                     weapon.Equip(); // Call the Equip() method on the weapon
                     weapons.Add(weapon); // Add the weapon to the list of equipped weapons
 
                     // 무기를 활성화할지 비활성화할지 설정 (weaponActiveOnStart 배열을 사용)
                     weapon.gameObject.SetActive(weaponActiveOnStart[i]);
+
+                    // 첫 번째 무기 장착 후 IK 타겟 업데이트
+                    if (i == 0)
+                    {
+                        // HandIKComponent의 IK 타겟 갱신 및 리그 빌드
+                        HandIKComponent handIK = GetComponent<HandIKComponent>();
+                        handIK.UpdateWeaponIKTargets(); // 초기 무기 장착 시 IK 타겟 업데이트
+                        handIK.BuildRig(); // 리그 빌드 호출
+                    }
                 }
                 else
                 {
@@ -175,6 +195,9 @@ public class WeaponComponent : MonoBehaviour
         }
     }
 
+
+
+
     private void SwapWeapon(int newWeaponIndex)
     {
         if (newWeaponIndex >= 0 && newWeaponIndex < weapons.Count && newWeaponIndex != currentWeaponIndex)
@@ -185,6 +208,11 @@ public class WeaponComponent : MonoBehaviour
             // 새로운 무기 활성화
             currentWeaponIndex = newWeaponIndex;
             weapons[currentWeaponIndex].gameObject.SetActive(true);
+
+            // HandIKComponent의 IK 타겟 갱신 및 리그 빌드
+            HandIKComponent handIK = GetComponent<HandIKComponent>();
+            handIK.UpdateWeaponIKTargets();
+            handIK.BuildRig(); // 리그 빌드 호출
         }
     }
 
@@ -201,6 +229,20 @@ public class WeaponComponent : MonoBehaviour
         // 새로운 무기 활성화
         newWeapon.gameObject.SetActive(true);
         Debug.Log($"{newWeapon.name} 무기를 장착했습니다.");
+
+        // HandIKComponent의 IK 타겟 갱신 및 리그 빌드
+        HandIKComponent handIK = GetComponent<HandIKComponent>();
+        handIK.UpdateWeaponIKTargets();
+        handIK.BuildRig(); // 리그 빌드 호출
+    }
+
+    public WeaponBase GetActiveWeapon()
+    {
+        if (currentWeaponIndex >= 0 && currentWeaponIndex < weapons.Count)
+        {
+            return weapons[currentWeaponIndex];
+        }
+        return null;
     }
 
     ///
