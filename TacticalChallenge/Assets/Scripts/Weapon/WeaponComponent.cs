@@ -13,7 +13,7 @@ public class WeaponComponent : MonoBehaviour
 
     private List<WeaponBase> weapons = new List<WeaponBase>();
     private int currentWeaponIndex = 0; // 현재 장착된 무기 인덱스
-    private WeaponBase detectedWeapon; // 감지된 무기
+    private WeaponBase currentWeapon; // 감지된 무기
 
     private PlayerInput playerInput;
     private InputActionMap playerInputActionMap;
@@ -50,25 +50,41 @@ public class WeaponComponent : MonoBehaviour
         animator = GetComponent<Animator>();
 
         Equip();
+
+        foreach (var weapon in weapons)
+        {
+            weapon.ammo = weapon.megazine;
+        }
+
+        // 초기 장착 무기를 currentWeapon에 할당
+        if (weapons.Count > 0)
+        {
+            currentWeapon = weapons[currentWeaponIndex];
+        }
     }
 
     private void Update()
     {
         // 매 프레임마다 주변의 무기를 감지
         DetectWeaponInRange();
+
+        if (currentWeapon == null)
+        {
+            Debug.LogWarning("Update 중 currentWeapon이 null로 확인되었습니다.");
+        }
     }
 
     private void DetectWeaponInRange()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1.0f);
-        detectedWeapon = null; // 초기화
+        currentWeapon = null; // 초기화
 
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Weapon")) // "Weapon" 레이어 확인
             {
-                detectedWeapon = hitCollider.GetComponent<WeaponBase>();
-                if (detectedWeapon != null)
+                currentWeapon = hitCollider.GetComponent<WeaponBase>();
+                if (currentWeapon != null)
                 {
                     break; // 감지된 무기를 찾았으면 루프 종료
                 }
@@ -106,9 +122,9 @@ public class WeaponComponent : MonoBehaviour
     private void weaponPickUp_Start(InputAction.CallbackContext context)
     {
         // 감지된 무기가 있을 경우 교체
-        if (detectedWeapon != null)
+        if (currentWeapon != null)
         {
-            EquipWeapon(detectedWeapon);
+            EquipWeapon(currentWeapon);
         }
         else
         {
@@ -130,9 +146,9 @@ public class WeaponComponent : MonoBehaviour
 
     private void Reload_Start(InputAction.CallbackContext context)
     {
-        if (/*bIsEquip && playerState.CanDoSomething() &&*/ (detectedWeapon.ammo != detectedWeapon.megazine))
+        if (/*bIsEquip && playerState.CanDoSomething() &&*/ (currentWeapon.ammo != currentWeapon.megazine))
         {
-            detectedWeapon.Reload();
+            currentWeapon.Reload();
             animator.SetTrigger("Reload");
         }
         else
@@ -182,6 +198,7 @@ public class WeaponComponent : MonoBehaviour
                         // HandIKComponent의 IK 타겟 갱신 및 리그 빌드
                         HandIKComponent handIK = GetComponent<HandIKComponent>();
                         handIK.UpdateWeaponIKTargets(); // 초기 무기 장착 시 IK 타겟 업데이트
+                        handIK.ApplyWeaponOffsets(); // 무기 오프셋 업데이트 추가
                         handIK.BuildRig(); // 리그 빌드 호출
                     }
                 }
@@ -194,6 +211,17 @@ public class WeaponComponent : MonoBehaviour
         else
         {
             Debug.LogError("무기 프리팹이 설정되지 않았습니다.");
+        }
+
+        // weapons 리스트에 무기들이 추가된 후 currentWeapon 설정
+        if (weapons.Count > 0)
+        {
+            currentWeapon = weapons[currentWeaponIndex];
+            Debug.Log($"초기 장착 무기: {currentWeapon.name}");
+        }
+        else
+        {
+            Debug.LogWarning("weapons 리스트에 무기가 없습니다.");
         }
     }
 
@@ -209,26 +237,29 @@ public class WeaponComponent : MonoBehaviour
 
             // 새로운 무기 활성화
             currentWeaponIndex = newWeaponIndex;
-            weapons[currentWeaponIndex].gameObject.SetActive(true);
+            currentWeapon = weapons[currentWeaponIndex];
+            currentWeapon.gameObject.SetActive(true);
+
+            currentWeapon = weapons[currentWeaponIndex]; // 현재 무기 업데이트
 
             // HandIKComponent의 IK 타겟 갱신 및 리그 빌드
             HandIKComponent handIK = GetComponent<HandIKComponent>();
             handIK.UpdateWeaponIKTargets();
+            handIK.ApplyWeaponOffsets(); // 오프셋 설정 호출
             handIK.BuildRig(); // 리그 빌드 호출
         }
     }
 
     private void EquipWeapon(WeaponBase newWeapon)
     {
-        // 현재 장착된 무기를 비활성화
-        weapons[currentWeaponIndex].UnEquip(); // 현재 무기 UnEquip
+        weapons[currentWeaponIndex].UnEquip();
 
-        // 새로운 무기를 리스트에 추가하고 활성화
-        weapons[currentWeaponIndex] = newWeapon; // 새로운 무기를 현재 슬롯에 추가
-        newWeapon.transform.SetParent(transform); // 새로운 무기의 부모를 플레이어로 설정
-        newWeapon.Equip(); // 새로운 무기를 장착
+        weapons[currentWeaponIndex] = newWeapon;
+        newWeapon.transform.SetParent(transform);
+        newWeapon.Equip();
 
-        // 새로운 무기 활성화
+        currentWeapon = newWeapon; // 현재 무기 업데이트
+
         newWeapon.gameObject.SetActive(true);
         Debug.Log($"{newWeapon.name} 무기를 장착했습니다.");
 
@@ -254,18 +285,22 @@ public class WeaponComponent : MonoBehaviour
 
     public void Attack()
     {
-        //if (나중에 무기 장착했는지 확인하는 메서드 집어넣기)
-        //{
-        detectedWeapon.CheckAmmo();
-        //}
-        return;
+        // currentWeapon이 유효하면 CheckAmmo() 호출
+        if (currentWeapon != null)
+        {
+            currentWeapon.CheckAmmo();
+        }
+        else
+        {
+            Debug.LogWarning("현재 장착된 무기가 없습니다.");
+        }
     }
 
     public void Impulse()
     {
         //if (bIsEquip)
         //{
-            detectedWeapon.makeImpulse();
+            currentWeapon.makeImpulse();
         //}
         return;
     }

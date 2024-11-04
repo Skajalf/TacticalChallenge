@@ -150,9 +150,6 @@ public class HandIKComponent : MonoBehaviour
                 aimingData.offset = activeWeapon.weaponAimingOffset;
                 weaponAimingConstraint.data = aimingData;
             }
-
-            // 변경 사항 적용을 위해 리그 빌드 호출
-            rigBuilder.Build();
         }
     }
 
