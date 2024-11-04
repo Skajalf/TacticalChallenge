@@ -118,12 +118,14 @@ public class WeaponComponent : MonoBehaviour
 
     private void Aim_Start(InputAction.CallbackContext context)
     {
-        
+        HandIKComponent handIK = GetComponent<HandIKComponent>();
+        handIK.UpdateAimRigWeight(true); // 에이밍 시작 시 Weight를 1로 변경
     }
 
     private void Aim_Cancel(InputAction.CallbackContext context)
     {
-        
+        HandIKComponent handIK = GetComponent<HandIKComponent>();
+        handIK.UpdateAimRigWeight(false); // 에이밍 취소 시 Weight를 0으로 변경
     }
 
     private void Reload_Start(InputAction.CallbackContext context)
@@ -233,6 +235,7 @@ public class WeaponComponent : MonoBehaviour
         // HandIKComponent의 IK 타겟 갱신 및 리그 빌드
         HandIKComponent handIK = GetComponent<HandIKComponent>();
         handIK.UpdateWeaponIKTargets();
+        handIK.ApplyWeaponOffsets();
         handIK.BuildRig(); // 리그 빌드 호출
     }
 

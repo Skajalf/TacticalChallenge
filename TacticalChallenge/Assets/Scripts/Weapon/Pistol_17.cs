@@ -7,8 +7,6 @@ public class Pistol_17 : WeaponBase
     protected override void Awake()
     {
         base.Awake();
-
-        Init();
     }
 
     protected override void Init()
@@ -22,7 +20,7 @@ public class Pistol_17 : WeaponBase
 
         FireProjectile();
         Particle();
-        CartrigeDrop();
+        //CartrigeDrop();
     }
 
     private void FireProjectile()
@@ -130,8 +128,8 @@ public class Pistol_17 : WeaponBase
 
         base.Equip();
         transform.SetParent(weaponTransform, false);
-        transform.localPosition = Vector3.zero; // 로컬 위치 초기화
-        transform.localRotation = Quaternion.identity; // 로컬 회전 초기화
+        //transform.localPosition = Vector3.zero; // 로컬 위치 초기화
+        //transform.localRotation = Quaternion.identity; // 로컬 회전 초기화
         gameObject.SetActive(true);
     }
 

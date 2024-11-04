@@ -36,6 +36,10 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] protected Vector3 hitParticlePositionOffset; // 피격 파티클의 위치
     [SerializeField] protected Vector3 hitParticleScaleOffset = Vector3.one; // 피격 파티클의 사이즈
 
+    [Header(" Weapon Offset Setting")] // 무기 오프셋 설정
+    public Vector3 weaponPoseOffset;
+    public Vector3 weaponAimingOffset;
+
     protected bool IsReload {get; set;}
 
     protected virtual void Awake()
