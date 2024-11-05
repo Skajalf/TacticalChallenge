@@ -2,13 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Quis_ut_Deus : WeaponBase
+public class Test_Quis_ut_Deus : Test_WeaponBase
 {
-    [Header(" Weapon Hitscan Settings")]
-    [SerializeField] private float hitScanRange = 10.0f;  // 히트스캔 사거리
-    [SerializeField] private LayerMask hitLayerMask;       // 타격 대상 레이어 설정
-    [SerializeField] private float damageDelay = 0.2f;     // 데미지 적용 전 지연 시간
-
     private Coroutine damageCoroutine;  // 코루틴 핸들
 
     protected override void Awake()
@@ -21,12 +16,12 @@ public class Quis_ut_Deus : WeaponBase
         base.Init();
     }
 
-    public override void Action()
+    public override void Test_Attack()
     {
-        base.Action();
+        base.Test_Attack();
 
         FireHitScan();
-        Particle();
+        Test_Particle();
         //CartrigeDrop();
     }
 
@@ -37,7 +32,7 @@ public class Quis_ut_Deus : WeaponBase
         Vector3 origin = bulletTransform.position;
         Vector3 direction = bulletTransform.forward;
 
-        if (Physics.Raycast(origin, direction, out hit, hitScanRange, hitLayerMask))
+        if (Physics.Raycast(origin, direction, out hit, range, hitLayerMask))
         {
             Debug.Log($"{hit.collider.gameObject.name}에 잠시 동안 타격을 유지합니다.");
 
@@ -64,7 +59,7 @@ public class Quis_ut_Deus : WeaponBase
             Vector3 origin = bulletTransform.position;
             Vector3 direction = bulletTransform.forward;
 
-            if (Physics.Raycast(origin, direction, out hitCheck, hitScanRange, hitLayerMask))
+            if (Physics.Raycast(origin, direction, out hitCheck, range, hitLayerMask))
             {
                 if (hitCheck.collider != target)
                 {
@@ -96,33 +91,33 @@ public class Quis_ut_Deus : WeaponBase
         damageCoroutine = null;
     }
 
-    public override void Reload()
+    public override void Test_Reload()
     {
-        base.Reload();
+        base.Test_Reload();
 
-        if (ammo < megazine)
+        if (ammo < magazine)
         {
             StartCoroutine(ReloadCoroutine());
         }
     }
 
-    public override void CheckAmmo()
-    {
-        base.CheckAmmo();
+    //public override void CheckAmmo()
+    //{
+    //    base.CheckAmmo();
 
-        if (ammo > 0)
-        {
-            Action();
-        }
-        else
-        {
-            Reload();
-        }
-    }
+    //    if (ammo > 0)
+    //    {
+    //        Test_Attack();
+    //    }
+    //    else
+    //    {
+    //        Test_Reload();
+    //    }
+    //}
 
-    public override void makeImpulse()
+    public override void Test_Impulse()
     {
-        base.makeImpulse();
+        base.Test_Impulse();
         Debug.Log("makeImpulse called");
         FireRecoil();
     }
@@ -152,13 +147,13 @@ public class Quis_ut_Deus : WeaponBase
 
     private IEnumerator ReloadCoroutine()
     {
-        IsReload = true;
+        //IsReload = true;
         yield return new WaitForSeconds(reloadTime);
-        ammo = megazine;
-        IsReload = false;
+        ammo = magazine;
+        //IsReload = false;
     }
 
-    public override void Equip()
+    public override void Test_Equip()
     {
         if (weaponTransform == null)
         {
@@ -182,24 +177,24 @@ public class Quis_ut_Deus : WeaponBase
 
         if (cartrigePoint == null)
         {
-            cartrigePoint = weaponTransform.FindChildByName(cartrigeTransformName);
+            cartrigePoint = weaponTransform.FindChildByName(cartridgeTransformName);
             if (cartrigePoint == null)
             {
-                Debug.LogError($"탄피 발사 위치를 찾을 수 없습니다: {cartrigeTransformName}");
+                Debug.LogError($"탄피 발사 위치를 찾을 수 없습니다: {cartridgeTransformName}");
                 return;
             }
         }
 
-        base.Equip();
+        base.Test_Equip();
         transform.SetParent(weaponTransform, false);
         //transform.localPosition = Vector3.zero; // 로컬 위치 초기화
         //transform.localRotation = Quaternion.identity; // 로컬 회전 초기화
         gameObject.SetActive(true);
     }
 
-    public override void UnEquip()
+    public override void Test_UnEquip()
     {
-        base.UnEquip();
+        base.Test_UnEquip();
         transform.SetParent(null);
         //transform.localPosition = Vector3.zero; // 필요에 따라 초기화
         //transform.localRotation = Quaternion.identity; // 필요에 따라 초기화
