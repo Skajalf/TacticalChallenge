@@ -11,14 +11,16 @@ public class Test_WeaponComponent : MonoBehaviour
     [SerializeField] private GameObject[] weaponPrefabs;
     [SerializeField] private bool[] weaponActiveOnStart; // 무기 활성화 여부 배열
 
-    private List<WeaponBase> weapons = new List<WeaponBase>();
+    private List<Test_WeaponBase> weapons = new List<Test_WeaponBase>();
     private int currentWeaponIndex = 0; // 현재 장착된 무기 인덱스
-    private WeaponBase currentWeapon; // 감지된 무기
+    private Test_WeaponBase currentWeapon; // 감지된 무기
+    private Test_WeaponBase detectedWeapon; // 주변에서 탐색된 무기
 
     private PlayerInput playerInput;
     private InputActionMap playerInputActionMap;
 
     private Animator animator;
+
 
     private void Awake()
     {
@@ -53,42 +55,48 @@ public class Test_WeaponComponent : MonoBehaviour
 
         foreach (var weapon in weapons)
         {
-            weapon.ammo = weapon.megazine;
+            weapon.ammo = weapon.magazine;
         }
 
         // 초기 장착 무기를 currentWeapon에 할당
         if (weapons.Count > 0)
         {
-            currentWeapon = weapons[currentWeaponIndex];
+            currentWeapon.Test_Reload();
         }
+
+        // 코루틴 시작
+        StartCoroutine(CheckForNearbyWeapons());
     }
 
-    private void Update()
+    private IEnumerator CheckForNearbyWeapons()
     {
-        // 매 프레임마다 주변의 무기를 감지
-        DetectWeaponInRange();
-
-        if (currentWeapon == null)
+        while (true)
         {
-            Debug.LogWarning("Update 중 currentWeapon이 null로 확인되었습니다.");
+            DetectWeaponInRange();
+            yield return new WaitForSeconds(0.5f); // 0.5초마다 주기적으로 실행
         }
     }
 
     private void DetectWeaponInRange()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1.0f);
-        currentWeapon = null; // 초기화
+        detectedWeapon = null; // 초기화
 
         foreach (var hitCollider in hitColliders)
         {
-            if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Weapon")) // "Weapon" 레이어 확인
+            if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Weapon"))
             {
-                currentWeapon = hitCollider.GetComponent<WeaponBase>();
-                if (currentWeapon != null)
+                detectedWeapon = hitCollider.GetComponent<Test_WeaponBase>();
+                if (detectedWeapon != null)
                 {
                     break; // 감지된 무기를 찾았으면 루프 종료
                 }
             }
+        }
+
+        if (detectedWeapon == null)
+        {
+            Debug.Log("주변에 장착할 수 있는 무기가 없습니다.");
         }
     }
 
@@ -121,10 +129,10 @@ public class Test_WeaponComponent : MonoBehaviour
 
     private void weaponPickUp_Start(InputAction.CallbackContext context)
     {
-        // 감지된 무기가 있을 경우 교체
-        if (currentWeapon != null)
+        if (detectedWeapon != null)
         {
-            EquipWeapon(currentWeapon);
+            EquipWeapon(detectedWeapon);
+            detectedWeapon = null; // 무기를 장착하면 탐색된 무기 초기화
         }
         else
         {
@@ -134,25 +142,23 @@ public class Test_WeaponComponent : MonoBehaviour
 
     private void Aim_Start(InputAction.CallbackContext context)
     {
-        HandIKComponent handIK = GetComponent<HandIKComponent>();
+        Test_HandIKComponent handIK = GetComponent<Test_HandIKComponent>();
         handIK.UpdateAimRigWeight(true); // 에이밍 시작 시 Weight를 1로 변경
     }
 
     private void Aim_Cancel(InputAction.CallbackContext context)
     {
-        HandIKComponent handIK = GetComponent<HandIKComponent>();
+        Test_HandIKComponent handIK = GetComponent<Test_HandIKComponent>();
         handIK.UpdateAimRigWeight(false); // 에이밍 취소 시 Weight를 0으로 변경
     }
 
-    private void Reload_Start(InputAction.CallbackContext context)
+    private void Reload_Start(InputAction.CallbackContext context)//나중에 State조건 넣어야함
     {
-        if (/*bIsEquip && playerState.CanDoSomething() &&*/ (currentWeapon.ammo != currentWeapon.megazine))
+        if (currentWeapon != null && currentWeapon.ammo != currentWeapon.magazine)
         {
-            currentWeapon.Reload();
+            currentWeapon.Test_Reload();
             animator.SetTrigger("Reload");
         }
-        else
-            return;
     }
 
     private void Equip()
@@ -170,7 +176,7 @@ public class Test_WeaponComponent : MonoBehaviour
             {
                 GameObject weaponInstance = Instantiate(weaponPrefabs[i]);
                 weaponInstance.name = weaponPrefabs[i].name;
-                WeaponBase weapon = weaponInstance.GetComponent<WeaponBase>();
+                Test_WeaponBase weapon = weaponInstance.GetComponent<Test_WeaponBase>();
 
                 if (weapon != null)
                 {
@@ -186,7 +192,7 @@ public class Test_WeaponComponent : MonoBehaviour
                         Debug.LogError("WeaponPivot을 찾을 수 없습니다.");
                     }
 
-                    weapon.Equip(); // Call the Equip() method on the weapon
+                    weapon.Test_Equip(); // Call the Equip() method on the weapon
                     weapons.Add(weapon); // Add the weapon to the list of equipped weapons
 
                     // 무기를 활성화할지 비활성화할지 설정 (weaponActiveOnStart 배열을 사용)
@@ -195,11 +201,7 @@ public class Test_WeaponComponent : MonoBehaviour
                     // 첫 번째 무기 장착 후 IK 타겟 업데이트
                     if (i == 0)
                     {
-                        // HandIKComponent의 IK 타겟 갱신 및 리그 빌드
-                        HandIKComponent handIK = GetComponent<HandIKComponent>();
-                        handIK.UpdateWeaponIKTargets(); // 초기 무기 장착 시 IK 타겟 업데이트
-                        handIK.ApplyWeaponOffsets(); // 무기 오프셋 업데이트 추가
-                        handIK.BuildRig(); // 리그 빌드 호출
+                        IKSettingsUpdate();
                     }
                 }
                 else
@@ -240,37 +242,43 @@ public class Test_WeaponComponent : MonoBehaviour
             currentWeapon = weapons[currentWeaponIndex];
             currentWeapon.gameObject.SetActive(true);
 
-            currentWeapon = weapons[currentWeaponIndex]; // 현재 무기 업데이트
-
-            // HandIKComponent의 IK 타겟 갱신 및 리그 빌드
-            HandIKComponent handIK = GetComponent<HandIKComponent>();
-            handIK.UpdateWeaponIKTargets();
-            handIK.ApplyWeaponOffsets(); // 오프셋 설정 호출
-            handIK.BuildRig(); // 리그 빌드 호출
+            IKSettingsUpdate();
         }
     }
 
-    private void EquipWeapon(WeaponBase newWeapon)
+    private void EquipWeapon(Test_WeaponBase newWeapon)
     {
-        weapons[currentWeaponIndex].UnEquip();
+        int emptySlotIndex = weapons.FindIndex(w => w == null);
 
-        weapons[currentWeaponIndex] = newWeapon;
+        if (emptySlotIndex != -1)
+        {
+            weapons[emptySlotIndex] = newWeapon;
+        }
+        else
+        {
+            weapons[currentWeaponIndex].Test_UnEquip();
+            weapons[currentWeaponIndex] = newWeapon;
+        }
+
         newWeapon.transform.SetParent(transform);
-        newWeapon.Equip();
+        newWeapon.Test_Equip();
 
-        currentWeapon = newWeapon; // 현재 무기 업데이트
-
+        currentWeapon = newWeapon;
         newWeapon.gameObject.SetActive(true);
         Debug.Log($"{newWeapon.name} 무기를 장착했습니다.");
 
-        // HandIKComponent의 IK 타겟 갱신 및 리그 빌드
-        HandIKComponent handIK = GetComponent<HandIKComponent>();
-        handIK.UpdateWeaponIKTargets();
-        handIK.ApplyWeaponOffsets();
-        handIK.BuildRig(); // 리그 빌드 호출
+        IKSettingsUpdate();
     }
 
-    public WeaponBase GetActiveWeapon()
+    private void IKSettingsUpdate()
+    {
+        Test_HandIKComponent handIK = GetComponent<Test_HandIKComponent>();
+        handIK.UpdateWeaponIKTargets();
+        handIK.ApplyWeaponOffsets();
+        handIK.BuildRig();
+    }
+
+    public Test_WeaponBase GetActiveWeapon() //아마 무기 데미지 넣을때 호출할듯?
     {
         if (currentWeaponIndex >= 0 && currentWeaponIndex < weapons.Count)
         {
@@ -288,7 +296,7 @@ public class Test_WeaponComponent : MonoBehaviour
         // currentWeapon이 유효하면 CheckAmmo() 호출
         if (currentWeapon != null)
         {
-            currentWeapon.CheckAmmo();
+            currentWeapon.AmmoLeft();
         }
         else
         {
@@ -298,10 +306,6 @@ public class Test_WeaponComponent : MonoBehaviour
 
     public void Impulse()
     {
-        //if (bIsEquip)
-        //{
-            currentWeapon.makeImpulse();
-        //}
-        return;
+        
     }
 }

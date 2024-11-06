@@ -1,4 +1,5 @@
 using Cinemachine;
+using System;
 using UnityEngine;
 
 public abstract class Test_WeaponBase : MonoBehaviour
@@ -40,6 +41,8 @@ public abstract class Test_WeaponBase : MonoBehaviour
     public Vector3 weaponPoseOffset;
     public Vector3 weaponAimingOffset;
 
+    protected bool IsReload { get; set; }
+
     protected virtual void Awake()
     {
         Init();
@@ -49,6 +52,18 @@ public abstract class Test_WeaponBase : MonoBehaviour
     {
         rootObject = transform.root.gameObject;
         Debug.Assert(rootObject != null);
+    }
+
+    // 공격 메서드
+    protected virtual void Test_Attack()
+    {
+        Debug.Log($"{this.name} 공격 실행.");
+    }
+
+    // 재장전 메서드
+    public virtual void Test_Reload()
+    {
+        Debug.Log($"{this.name} 재장전 시작.");
     }
 
     // 장착 메서드
@@ -63,19 +78,7 @@ public abstract class Test_WeaponBase : MonoBehaviour
         Debug.Log($"{this.name} 장착 해제.");
     }
 
-    // 공격 메서드
-    public virtual void Test_Attack()
-    {
-        Debug.Log($"{this.name} 공격 실행.");
-    }
-
-    // 재장전 메서드
-    public virtual void Test_Reload()
-    {
-        Debug.Log($"{this.name} 재장전 시작.");
-    }
-
-    public virtual void Test_Impulse()
+    protected virtual void Test_Impulse()
     {
 
     }
@@ -88,5 +91,10 @@ public abstract class Test_WeaponBase : MonoBehaviour
     protected virtual void Test_Particle()
     {
 
+    }
+
+    public virtual void AmmoLeft()
+    {
+        
     }
 }
