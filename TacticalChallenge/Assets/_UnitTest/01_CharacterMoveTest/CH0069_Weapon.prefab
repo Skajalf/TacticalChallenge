@@ -57,7 +57,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000006322046, y: 0.0000007152558, z: -0.0000002384186,
     w: 1}
-  m_LocalPosition: {x: -0.00010015487, y: -0.021179961, z: 0.4253335}
+  m_LocalPosition: {x: -0.00010015487, y: -0.021179961, z: 1.153}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -183,7 +183,7 @@ MonoBehaviour:
   hitLayerMask:
     serializedVersion: 2
     m_Bits: 512
-  damageDelay: 0
+  damageDelay: 0.2
   projectilePrefab: {fileID: 3921380113436098294, guid: 0252234e87a8b0c49b99b0a1680f3e9f,
     type: 3}
   cartridgeParticle: {fileID: 0}

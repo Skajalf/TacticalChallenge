@@ -20,7 +20,7 @@ public class Test_WeaponComponent : MonoBehaviour
     private InputActionMap playerInputActionMap;
 
     private Animator animator;
-
+    private Test_HandIKComponent handIK;
 
     private void Awake()
     {
@@ -50,18 +50,13 @@ public class Test_WeaponComponent : MonoBehaviour
         reloadAction.started += Reload_Start;
 
         animator = GetComponent<Animator>();
+        handIK = GetComponent<Test_HandIKComponent>();
 
         Equip();
 
         foreach (var weapon in weapons)
         {
             weapon.ammo = weapon.magazine;
-        }
-
-        // 초기 장착 무기를 currentWeapon에 할당
-        if (weapons.Count > 0)
-        {
-            currentWeapon.Test_Reload();
         }
 
         // 코루틴 시작
@@ -102,6 +97,23 @@ public class Test_WeaponComponent : MonoBehaviour
 
     private void Attack_Start(InputAction.CallbackContext context)
     {
+        // 현재 애니메이션 이름을 문자열로 변환
+        string currentAnimationName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+
+        // 애니메이션 이름에 '_Attack_Ing'가 포함되어 있으면, 애니메이션을 재생하지 않음
+        if (!currentAnimationName.Contains("_Attack_Ing"))
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+            // 애니메이션이 끝나지 않았다면 (normalizedTime < 1.0f)
+            if (stateInfo.normalizedTime < 1.0f)
+            {
+                Debug.Log("애니메이션 진행 중: 중복 실행 방지");
+                return; // 애니메이션이 끝날 때까지 기다림
+            }
+        }
+
+        // 애니메이션을 실행할 수 있으면, 공격 애니메이션 시작
         animator.SetBool("IsAttack", true);
     }
 
@@ -142,24 +154,38 @@ public class Test_WeaponComponent : MonoBehaviour
 
     private void Aim_Start(InputAction.CallbackContext context)
     {
-        Test_HandIKComponent handIK = GetComponent<Test_HandIKComponent>();
         handIK.UpdateAimRigWeight(true); // 에이밍 시작 시 Weight를 1로 변경
     }
 
     private void Aim_Cancel(InputAction.CallbackContext context)
     {
-        Test_HandIKComponent handIK = GetComponent<Test_HandIKComponent>();
         handIK.UpdateAimRigWeight(false); // 에이밍 취소 시 Weight를 0으로 변경
     }
 
-    private void Reload_Start(InputAction.CallbackContext context)//나중에 State조건 넣어야함
+    private void Reload_Start(InputAction.CallbackContext context) // 나중에 State조건 넣어주기
     {
-        if (currentWeapon != null && currentWeapon.ammo != currentWeapon.magazine)
+        if (currentWeapon == null)
         {
-            currentWeapon.Test_Reload();
-            animator.SetTrigger("Reload");
+            Debug.LogWarning("현재 장착된 무기가 없습니다. 재장전할 수 없습니다.");
+            return;
         }
+
+        if (currentWeapon.ammo == currentWeapon.magazine)
+        {
+            Debug.Log("탄약이 가득 차 있어 재장전이 필요하지 않습니다.");
+            return;
+        }
+
+        if (animator == null)
+        {
+            Debug.LogError("Animator 컴포넌트가 초기화되지 않았습니다.");
+            return;
+        }
+
+        currentWeapon.Test_Reload();
+        animator.SetTrigger("Reload");
     }
+
 
     private void Equip()
     {
@@ -197,38 +223,35 @@ public class Test_WeaponComponent : MonoBehaviour
 
                     // 무기를 활성화할지 비활성화할지 설정 (weaponActiveOnStart 배열을 사용)
                     weapon.gameObject.SetActive(weaponActiveOnStart[i]);
-
-                    // 첫 번째 무기 장착 후 IK 타겟 업데이트
-                    if (i == 0)
-                    {
-                        IKSettingsUpdate();
-                    }
                 }
                 else
                 {
                     Debug.LogError($"{weaponPrefabs[i].name}에 WeaponBase가 할당되지 않았습니다.");
                 }
             }
+
+            // weapons 리스트에 무기들이 추가된 후 currentWeapon 설정
+            if (weapons.Count > 0)
+            {
+                currentWeapon = weapons[currentWeaponIndex];
+                Debug.Log($"초기 장착 무기: {currentWeapon.name}");
+                
+                // 비동기적으로 IK 설정
+                StartCoroutine(InitializeIKSettings()); // 첫 번째 무기 장착 후 IK 업데이트
+            }
+            else
+            {
+                Debug.LogWarning("weapons 리스트에 무기가 없습니다.");
+            }
+
+            // 무기들이 모두 장착된 후 IKSettingsUpdate() 호출
+            //IKSettingsUpdate();
         }
         else
         {
             Debug.LogError("무기 프리팹이 설정되지 않았습니다.");
         }
-
-        // weapons 리스트에 무기들이 추가된 후 currentWeapon 설정
-        if (weapons.Count > 0)
-        {
-            currentWeapon = weapons[currentWeaponIndex];
-            Debug.Log($"초기 장착 무기: {currentWeapon.name}");
-        }
-        else
-        {
-            Debug.LogWarning("weapons 리스트에 무기가 없습니다.");
-        }
     }
-
-
-
 
     private void SwapWeapon(int newWeaponIndex)
     {
@@ -270,12 +293,24 @@ public class Test_WeaponComponent : MonoBehaviour
         IKSettingsUpdate();
     }
 
+    private IEnumerator InitializeIKSettings()
+    {
+        yield return new WaitForEndOfFrame(); // 한 프레임 대기하여 무기 초기화 완료 대기
+        IKSettingsUpdate(); // 무기가 제대로 장착된 후 IK 설정 진행
+    }
+
     private void IKSettingsUpdate()
     {
-        Test_HandIKComponent handIK = GetComponent<Test_HandIKComponent>();
-        handIK.UpdateWeaponIKTargets();
-        handIK.ApplyWeaponOffsets();
-        handIK.BuildRig();
+        if (handIK != null)
+        {
+            handIK.UpdateWeaponIKTargets();
+            handIK.ApplyWeaponOffsets();
+            handIK.BuildRig();
+        }
+        else
+        {
+            Debug.LogWarning("Test_HandIKComponent가 없거나 초기화되지 않았습니다.");
+        }
     }
 
     public Test_WeaponBase GetActiveWeapon() //아마 무기 데미지 넣을때 호출할듯?

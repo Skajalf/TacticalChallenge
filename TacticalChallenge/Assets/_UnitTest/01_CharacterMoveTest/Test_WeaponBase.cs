@@ -42,6 +42,7 @@ public abstract class Test_WeaponBase : MonoBehaviour
     public Vector3 weaponAimingOffset;
 
     protected bool IsReload { get; set; }
+    protected Animator animator;
 
     protected virtual void Awake()
     {

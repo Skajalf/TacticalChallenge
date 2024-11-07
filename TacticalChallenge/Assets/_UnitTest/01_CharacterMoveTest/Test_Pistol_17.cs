@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Test_Quis_ut_Deus : Test_WeaponBase
+public class Test_Pistol_17 : Test_WeaponBase
 {
     protected override void Awake()
     {
@@ -30,6 +30,7 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
         if (!IsReload && ammo < magazine)
         {
             StartCoroutine(ReloadCoroutine());
+            animator.SetTrigger("Reload");
         }
         else
         {
@@ -137,7 +138,6 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
             projectile.weapon = this;
         }
     }
-
 
     private IEnumerator ReloadCoroutine()
     {
