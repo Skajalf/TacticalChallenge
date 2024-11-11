@@ -42,6 +42,8 @@ public abstract class Test_WeaponBase : MonoBehaviour
     public Vector3 weaponAimingOffset;
 
     protected bool IsReload { get; set; }
+    protected bool IsFiring { get; set; }
+    [SerializeField] protected float animationWaitTime;
     protected Animator animator;
 
     protected virtual void Awake()

@@ -68,7 +68,7 @@ public class Test_WeaponComponent : MonoBehaviour
         while (true)
         {
             DetectWeaponInRange();
-            yield return new WaitForSeconds(0.5f); // 0.5초마다 주기적으로 실행
+            yield return new WaitForSeconds(1.0f); // 0.5초마다 주기적으로 실행
         }
     }
 
@@ -183,7 +183,6 @@ public class Test_WeaponComponent : MonoBehaviour
         }
 
         currentWeapon.Test_Reload();
-        animator.SetTrigger("Reload");
     }
 
 

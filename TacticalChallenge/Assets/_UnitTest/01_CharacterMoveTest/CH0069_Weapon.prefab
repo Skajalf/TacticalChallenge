@@ -200,6 +200,7 @@ MonoBehaviour:
   hitParticleScaleOffset: {x: 1, y: 1, z: 1}
   weaponPoseOffset: {x: 0.07, y: -0.1, z: -0.23}
   weaponAimingOffset: {x: 0.1, y: 0.05, z: -0.17}
+  animationWaitTime: 0.02
 --- !u!136 &6869976906386034258
 CapsuleCollider:
   m_ObjectHideFlags: 0

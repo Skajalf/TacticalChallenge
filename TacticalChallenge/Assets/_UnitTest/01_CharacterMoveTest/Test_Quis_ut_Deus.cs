@@ -8,6 +8,7 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
     protected override void Awake()
     {
         base.Awake();
+        IsFiring = false;
     }
 
     protected override void Init()
@@ -17,18 +18,30 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
 
     protected override void Test_Attack()
     {
-        base.Test_Attack();
+        // 발사 중이라면 중복 발사 방지
+        if (IsFiring || IsReload || ammo <= 0)
+        {
+            Debug.Log("발사 중이거나 탄약이 부족하거나 재장전 중입니다.");
+            return;
+        }
 
-        Fire();
+        base.Test_Attack();
+        StartCoroutine(FireCoroutine());  // 코루틴 호출
     }
 
     public override void Test_Reload()
     {
         base.Test_Reload();
 
-        // 재장전 중이 아니고, 탄약이 부족할 때만 재장전을 시도
+        if (animator == null)
+        {
+            Debug.LogError("Animator가 설정되지 않았습니다. Animator 컴포넌트가 올바르게 연결되어 있는지 확인하세요.");
+            return;
+        }
+
         if (!IsReload && ammo < magazine)
         {
+            animator.SetTrigger("Reload");
             StartCoroutine(ReloadCoroutine());
         }
         else
@@ -36,6 +49,7 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
             Debug.Log("재장전이 필요하지 않습니다.");
         }
     }
+
 
     public override void Test_Equip()
     {
@@ -97,13 +111,13 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
     {
         base.AmmoLeft();
 
-        if (ammo > 0)
+        if (ammo > 0 && !IsReload)
         {
-            Test_Attack();
+            Test_Attack(); // 탄약이 남아있을 경우 발사 시도
         }
         else
         {
-            Test_Reload();
+            Test_Reload(); // 탄약이 부족할 경우 재장전 시도
         }
     }
 
@@ -138,6 +152,17 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
         }
     }
 
+    private IEnumerator FireCoroutine()
+    {
+        IsFiring = true;  // 발사 시작
+        Fire();           // 발사 실행
+
+        // 애니메이션 재생 시간만큼 대기
+        yield return new WaitForSeconds(animationWaitTime);
+
+        // 발사가 완료되었으므로 발사 중 상태 초기화
+        IsFiring = false;
+    }
 
     private IEnumerator ReloadCoroutine()
     {
