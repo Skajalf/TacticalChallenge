@@ -2,7 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(StatComponent))]
 public class Player : Character
 {
+
+    public void Awake()
+    {
+        base.Init();
+        Init();
+    }
+
+    public void Update()
+    {
+        APRegenTest();
+    }
+
+    
+    private void APRegenTest()
+    {
+        stat.GetStat(stat.APstat).SetAdjustValue(stat.APstat, 0.1f);
+    }
 
 }

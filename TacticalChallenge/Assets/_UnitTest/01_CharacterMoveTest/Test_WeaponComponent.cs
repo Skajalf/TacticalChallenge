@@ -72,9 +72,15 @@ public class Test_WeaponComponent : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, 1.25f);
+    }
+
     private void DetectWeaponInRange()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1.0f);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1.25f);
+        
         detectedWeapon = null; // ÃÊ±âÈ­
 
         foreach (var hitCollider in hitColliders)
@@ -270,6 +276,7 @@ public class Test_WeaponComponent : MonoBehaviour
 
     private void EquipWeapon(Test_WeaponBase newWeapon)
     {
+        Transform prevWeapon = weapons[currentWeaponIndex].transform;
         int emptySlotIndex = weapons.FindIndex(w => w == null);
 
         if (emptySlotIndex != -1)
@@ -278,11 +285,14 @@ public class Test_WeaponComponent : MonoBehaviour
         }
         else
         {
+            
             weapons[currentWeaponIndex].Test_UnEquip();
             weapons[currentWeaponIndex] = newWeapon;
         }
 
-        newWeapon.transform.SetParent(transform);
+        newWeapon.transform.SetParent(transform.FindChildByName("WeaponPivot"));
+        newWeapon.transform.position = prevWeapon.position;
+        newWeapon.transform.rotation = new Quaternion(0, 0, 0, 0);
         newWeapon.Test_Equip();
 
         currentWeapon = newWeapon;

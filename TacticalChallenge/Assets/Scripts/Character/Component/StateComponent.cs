@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class StateComponent : MonoBehaviour
 {
+    private enum StateLayer
+    {
+        Animation, Buff, 
+    }
+
     private enum State
     {
         Idle, Skill, Shoot, Reload, Buff, NoBuff
     }
 
-    private State[] state;
+    private Dictionary<StateLayer, State> state;
     
     public void Init()
     {
-        state = new State[2];
-        state[0] = State.Idle;
-        state[1] = State.NoBuff;
+        state.Add(StateLayer.Animation, State.Idle);
+        state.Add(StateLayer.Buff, State.NoBuff);
     }
 
 

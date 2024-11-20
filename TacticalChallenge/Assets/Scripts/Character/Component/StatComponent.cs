@@ -11,6 +11,10 @@ using UnityEngine;
 
 public class StatComponent : MonoBehaviour
 {
+    // stat component의 요구사항
+    // 1. 이 Object가 갖고 있는 Stat을 배열로 가지고 있을 것.
+    // 2. Stat을 조작하는 인터페이스를 제공할 것.
+
     [Header("Field")]
     [SerializeField] private Stat HP;
     [SerializeField] private Stat AP;
@@ -21,7 +25,6 @@ public class StatComponent : MonoBehaviour
     [Header("Option")]
     [SerializeField] private float apRegenTime;
     [SerializeField] private float apRegenAmount;
-
 
     private Stat[] stats;
 
@@ -42,6 +45,7 @@ public class StatComponent : MonoBehaviour
     {
         return stats.FirstOrDefault(x => x.ID == stat.ID);
     }
+
 
     private void OnDestroy()
     {
