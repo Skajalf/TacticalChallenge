@@ -270,6 +270,8 @@ public class Test_WeaponComponent : MonoBehaviour
             currentWeapon = weapons[currentWeaponIndex];
             currentWeapon.gameObject.SetActive(true);
 
+            animator.runtimeAnimatorController = currentWeapon.animatorOverrideController.runtimeAnimatorController;
+
             IKSettingsUpdate();
         }
     }
@@ -296,7 +298,17 @@ public class Test_WeaponComponent : MonoBehaviour
         newWeapon.Test_Equip();
 
         currentWeapon = newWeapon;
+        currentWeaponIndex = weapons.IndexOf(newWeapon); // 새 무기의 슬롯 인덱스를 저장
+
+        // 새 무기의 애니메이션 설정
+        if (newWeapon.animatorOverrideController != null)
+        {
+            animator.runtimeAnimatorController = newWeapon.animatorOverrideController.runtimeAnimatorController;
+        }
+
+        // 무기 활성화
         newWeapon.gameObject.SetActive(true);
+
         Debug.Log($"{newWeapon.name} 무기를 장착했습니다.");
 
         IKSettingsUpdate();

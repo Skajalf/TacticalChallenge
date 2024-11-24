@@ -92,7 +92,7 @@ Transform:
   m_GameObject: {fileID: 891276052250357245}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.026, z: 0.292}
+  m_LocalPosition: {x: 0, y: -0.039, z: -0.012}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -198,8 +198,8 @@ MonoBehaviour:
   damageParticle: {fileID: 0}
   hitParticlePositionOffset: {x: 0, y: 0, z: 0}
   hitParticleScaleOffset: {x: 1, y: 1, z: 1}
-  weaponPoseOffset: {x: 0.07, y: -0.1, z: -0.23}
-  weaponAimingOffset: {x: 0.1, y: 0.05, z: -0.17}
+  weaponPoseOffset: {x: 0.13, y: -0.13, z: 0.11}
+  weaponAimingOffset: {x: 0.07, y: 0.02, z: 0.17}
   animationWaitTime: 0.02
 --- !u!136 &6869976906386034258
 CapsuleCollider:
