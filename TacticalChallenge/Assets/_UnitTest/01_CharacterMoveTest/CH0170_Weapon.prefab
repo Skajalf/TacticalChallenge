@@ -299,8 +299,9 @@ MonoBehaviour:
   reloadTime: 3
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   damageDelay: 0.2
+  animatorOverrideController: {fileID: 0}
   projectilePrefab: {fileID: 3921380113436098294, guid: 0252234e87a8b0c49b99b0a1680f3e9f,
     type: 3}
   cartridgeParticle: {fileID: 0}
@@ -317,6 +318,7 @@ MonoBehaviour:
   hitParticleScaleOffset: {x: 1, y: 1, z: 1}
   weaponPoseOffset: {x: 0.1, y: 0.14, z: 0.01}
   weaponAimingOffset: {x: 0.07, y: 0.21, z: 0.06}
+  animationWaitTime: 0
 --- !u!136 &509753284668996876
 CapsuleCollider:
   m_ObjectHideFlags: 0

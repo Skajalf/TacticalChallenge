@@ -240,7 +240,7 @@ public class Test_WeaponComponent : MonoBehaviour
             {
                 currentWeapon = weapons[currentWeaponIndex];
                 Debug.Log($"초기 장착 무기: {currentWeapon.name}");
-                
+
                 // 비동기적으로 IK 설정
                 StartCoroutine(InitializeIKSettings()); // 첫 번째 무기 장착 후 IK 업데이트
             }
@@ -270,7 +270,8 @@ public class Test_WeaponComponent : MonoBehaviour
             currentWeapon = weapons[currentWeaponIndex];
             currentWeapon.gameObject.SetActive(true);
 
-            animator.runtimeAnimatorController = currentWeapon.animatorOverrideController.runtimeAnimatorController;
+            // 애니메이션 오버라이드 컨트롤러 적용
+            ApplyAOCForWeapon(currentWeapon);
 
             IKSettingsUpdate();
         }
@@ -300,14 +301,11 @@ public class Test_WeaponComponent : MonoBehaviour
         currentWeapon = newWeapon;
         currentWeaponIndex = weapons.IndexOf(newWeapon); // 새 무기의 슬롯 인덱스를 저장
 
-        // 새 무기의 애니메이션 설정
-        if (newWeapon.animatorOverrideController != null)
-        {
-            animator.runtimeAnimatorController = newWeapon.animatorOverrideController.runtimeAnimatorController;
-        }
-
         // 무기 활성화
         newWeapon.gameObject.SetActive(true);
+
+        // 애니메이션 오버라이드 컨트롤러 적용
+        ApplyAOCForWeapon(currentWeapon);
 
         Debug.Log($"{newWeapon.name} 무기를 장착했습니다.");
 
@@ -341,6 +339,34 @@ public class Test_WeaponComponent : MonoBehaviour
             return weapons[currentWeaponIndex];
         }
         return null;
+    }
+
+    private void ApplyAOCForWeapon(Test_WeaponBase weapon)
+    {
+        if (weapon == null || animator == null) return;
+
+        // 현재 캐릭터 이름과 무기 이름 가져오기
+        string characterName = gameObject.name; // 캐릭터 이름
+
+        // 무기 이름에서 "_Weapon" 부분 제거
+        string weaponName = weapon.name.Replace("_Weapon", "");
+
+        // AOC 이름 형식: {캐릭터이름}_Swap_{무기이름}
+        string aocName = $"{characterName}_Swap_{weaponName}";
+
+        // 리소스에서 AOC를 로드
+        AnimatorOverrideController aoc = Resources.Load<AnimatorOverrideController>(aocName);
+
+        if (aoc != null)
+        {
+            animator.runtimeAnimatorController = aoc;
+
+            // **즉시 상태 초기화**
+            animator.Rebind();
+            animator.Update(0);
+
+            Debug.Log($"AOC 적용: {aocName}");
+        }
     }
 
     ///

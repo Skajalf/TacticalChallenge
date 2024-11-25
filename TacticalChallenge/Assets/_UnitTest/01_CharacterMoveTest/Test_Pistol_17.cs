@@ -17,20 +17,31 @@ public class Test_Pistol_17 : Test_WeaponBase
 
     protected override void Test_Attack()
     {
-        base.Test_Attack();
+        // 발사 중이라면 중복 발사 방지
+        if (IsFiring || IsReload || ammo <= 0)
+        {
+            Debug.Log("발사 중이거나 탄약이 부족하거나 재장전 중입니다.");
+            return;
+        }
 
-        Fire();
+        base.Test_Attack();
+        StartCoroutine(FireCoroutine());  // 코루틴 호출
     }
 
     public override void Test_Reload()
     {
         base.Test_Reload();
 
-        // 재장전 중이 아니고, 탄약이 부족할 때만 재장전을 시도
+        if (animator == null)
+        {
+            Debug.LogError("Animator가 설정되지 않았습니다. Animator 컴포넌트가 올바르게 연결되어 있는지 확인하세요.");
+            return;
+        }
+
         if (!IsReload && ammo < magazine)
         {
-            StartCoroutine(ReloadCoroutine());
             animator.SetTrigger("Reload");
+            StartCoroutine(ReloadCoroutine());
         }
         else
         {
@@ -98,7 +109,7 @@ public class Test_Pistol_17 : Test_WeaponBase
     {
         base.AmmoLeft();
 
-        if (ammo > 0)
+        if (ammo > 0 && !IsReload)
         {
             Test_Attack();
         }
@@ -137,6 +148,18 @@ public class Test_Pistol_17 : Test_WeaponBase
             // 무기 정보 전달
             projectile.weapon = this;
         }
+    }
+
+    private IEnumerator FireCoroutine()
+    {
+        IsFiring = true;  // 발사 시작
+        Fire();           // 발사 실행
+
+        // 애니메이션 재생 시간만큼 대기
+        yield return new WaitForSeconds(animationWaitTime);
+
+        // 발사가 완료되었으므로 발사 중 상태 초기화
+        IsFiring = false;
     }
 
     private IEnumerator ReloadCoroutine()

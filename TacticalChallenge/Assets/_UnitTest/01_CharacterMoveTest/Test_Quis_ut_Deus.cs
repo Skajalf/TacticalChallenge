@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Test_Quis_ut_Deus : Test_WeaponBase
 {
-    [SerializeField] private AnimatorOverrideController var_Swap_CH0069;
-
     protected override void Awake()
     {
         base.Awake();
@@ -16,7 +14,6 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
     protected override void Init()
     {
         base.Init();
-        SetOverrideController(var_Swap_CH0069);
     }
 
     protected override void Test_Attack()

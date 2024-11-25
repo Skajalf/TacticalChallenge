@@ -12,7 +12,6 @@ public abstract class Test_WeaponBase : MonoBehaviour
     [SerializeField] protected float reloadTime;           // 재장전 시간
     [SerializeField] protected LayerMask hitLayerMask;         // 타격 대상 레이어 설정
     [SerializeField] protected float damageDelay;       // 데미지 적용 전 지연 시간
-    [SerializeField] public AnimatorOverrideController animatorOverrideController; // 오버라이드 애니메이션
 
     [Header("Weapon Visuals")]
     [SerializeField] protected GameObject projectilePrefab;   // 탄환 프리팹
@@ -56,14 +55,6 @@ public abstract class Test_WeaponBase : MonoBehaviour
     {
         rootObject = transform.root.gameObject;
         Debug.Assert(rootObject != null);
-    }
-
-    public void SetOverrideController(AnimatorOverrideController newOverrideController)
-    {
-        if (animator != null && newOverrideController != null)
-        {
-            animator.runtimeAnimatorController = newOverrideController; // 애니메이터에 오버라이드 컨트롤러 적용
-        }
     }
 
     // 공격 메서드
