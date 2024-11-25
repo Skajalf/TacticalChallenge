@@ -22,6 +22,10 @@ public class Test_WeaponComponent : MonoBehaviour
     private Animator animator;
     private Test_HandIKComponent handIK;
 
+    // 최초 AnimatorController 저장 변수
+    private RuntimeAnimatorController initialAnimatorController;
+    private string initialWeaponName; // 최초 무기 이름 저장
+
     private void Awake()
     {
         Init();
@@ -51,6 +55,10 @@ public class Test_WeaponComponent : MonoBehaviour
 
         animator = GetComponent<Animator>();
         handIK = GetComponent<Test_HandIKComponent>();
+
+        // ** 최초 AnimatorController 저장 **
+        initialAnimatorController = animator.runtimeAnimatorController;
+
 
         Equip();
 
@@ -228,6 +236,12 @@ public class Test_WeaponComponent : MonoBehaviour
 
                     // 무기를 활성화할지 비활성화할지 설정 (weaponActiveOnStart 배열을 사용)
                     weapon.gameObject.SetActive(weaponActiveOnStart[i]);
+
+                    // 최초 무기 이름 저장
+                    if (i == currentWeaponIndex)
+                    {
+                        initialWeaponName = weapon.name; // 초기 무기 이름 저장
+                    }
                 }
                 else
                 {
@@ -270,8 +284,15 @@ public class Test_WeaponComponent : MonoBehaviour
             currentWeapon = weapons[currentWeaponIndex];
             currentWeapon.gameObject.SetActive(true);
 
-            // 애니메이션 오버라이드 컨트롤러 적용
-            ApplyAOCForWeapon(currentWeapon);
+            // ** 초기 무기라면 초기 AnimatorController 복원 **
+            if (currentWeapon.name == initialWeaponName)
+            {
+                RestoreInitialAnimatorController();
+            }
+            else
+            {
+                ApplyAOCForWeapon(currentWeapon);
+            }
 
             IKSettingsUpdate();
         }
@@ -304,8 +325,15 @@ public class Test_WeaponComponent : MonoBehaviour
         // 무기 활성화
         newWeapon.gameObject.SetActive(true);
 
-        // 애니메이션 오버라이드 컨트롤러 적용
-        ApplyAOCForWeapon(currentWeapon);
+        // ** 초기 무기라면 초기 AnimatorController 복원 **
+        if (newWeapon.name == initialWeaponName)
+        {
+            RestoreInitialAnimatorController();
+        }
+        else
+        {
+            ApplyAOCForWeapon(currentWeapon);
+        }
 
         Debug.Log($"{newWeapon.name} 무기를 장착했습니다.");
 
@@ -366,6 +394,24 @@ public class Test_WeaponComponent : MonoBehaviour
             animator.Update(0);
 
             Debug.Log($"AOC 적용: {aocName}");
+        }
+    }
+
+    private void RestoreInitialAnimatorController()
+    {
+        if (initialAnimatorController != null)
+        {
+            animator.runtimeAnimatorController = initialAnimatorController;
+
+            // **즉시 상태 초기화**
+            animator.Rebind();
+            animator.Update(0);
+
+            Debug.Log($"초기 AnimatorController로 복원: {initialAnimatorController.name}");
+        }
+        else
+        {
+            Debug.LogWarning("초기 AnimatorController가 저장되지 않았습니다.");
         }
     }
 
