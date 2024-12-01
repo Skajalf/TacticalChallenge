@@ -18,6 +18,8 @@ public class Test_WeaponComponent : MonoBehaviour
 
     private PlayerInput playerInput;
     private InputActionMap playerInputActionMap;
+    
+    private bool isCancelAble = false;
 
     private Animator animator;
     private Test_HandIKComponent handIK;
@@ -111,23 +113,27 @@ public class Test_WeaponComponent : MonoBehaviour
 
     private void Attack_Start(InputAction.CallbackContext context)
     {
-        // 현재 애니메이션 이름을 문자열로 변환
+        if (isCancelAble) // CancelAble 상태라면 애니메이션을 초기화하고 다시 재생
+        {
+            Debug.Log("CancelAble 상태: 애니메이션 초기화 후 재생");
+            animator.Play("Attack", 0, 0); // "Attack" 클립을 0프레임부터 다시 재생
+            isCancelAble = false; // 초기화 후 CancelAble 상태를 false로 변경
+            return;
+        }
+
         string currentAnimationName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
 
-        // 애니메이션 이름에 '_Attack_Ing'가 포함되어 있으면, 애니메이션을 재생하지 않음
         if (!currentAnimationName.Contains("_Attack_Ing"))
         {
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-            // 애니메이션이 끝나지 않았다면 (normalizedTime < 1.0f)
             if (stateInfo.normalizedTime < 1.0f)
             {
                 Debug.Log("애니메이션 진행 중: 중복 실행 방지");
-                return; // 애니메이션이 끝날 때까지 기다림
+                return;
             }
         }
 
-        // 애니메이션을 실행할 수 있으면, 공격 애니메이션 시작
         animator.SetBool("IsAttack", true);
     }
 
@@ -430,6 +436,12 @@ public class Test_WeaponComponent : MonoBehaviour
         {
             Debug.LogWarning("현재 장착된 무기가 없습니다.");
         }
+    }
+
+    public void CancelAble()
+    {
+        isCancelAble = true;
+        Debug.Log("CancelAble 상태");
     }
 
     public void Impulse()
