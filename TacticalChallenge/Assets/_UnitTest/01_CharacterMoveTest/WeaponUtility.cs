@@ -13,7 +13,8 @@ public static class WeaponUtility
         // 레이캐스트로 타격 확인
         if (Physics.Raycast(startPoint, fireDirection, out hit, range, hitLayerMask))
         {
-            Debug.Log($"{hit.collider.name}에 명중했습니다. 데미지 적용까지 {damageDelay}초 지연.");
+            // 타격된 객체의 이름 출력
+            Debug.Log($"명중한 객체 이름: {hit.collider.name}");
 
             // MonoBehaviour를 가진 caller가 코루틴 실행
             caller.StartCoroutine(ApplyDamageWithDelay(hit, damageDelay, power));
@@ -24,22 +25,19 @@ public static class WeaponUtility
         }
     }
 
-    // ApplyDamageWithDelay: 지연된 데미지 적용을 위한 코루틴
     private static IEnumerator ApplyDamageWithDelay(RaycastHit hit, float delay, float power)
     {
-        // 지연 시간 대기
         yield return new WaitForSeconds(delay);
 
-        //// 타격 대상이 IDamageable을 구현했는지 확인
-        //var target = hit.collider.GetComponent<IDamageable>();
-        //if (target != null)
-        //{
-        //    target.TakeDamage(power);
-        //    Debug.Log($"데미지 {power} 적용 완료.");
-        //}
-        //else
-        //{
-        //    Debug.LogWarning("데미지를 적용할 수 없는 대상입니다.");
-        //}
+        var target = hit.collider.GetComponent<IDamageable>();
+        if (target != null)
+        {
+            target.TakeDamage(power);
+            Debug.Log($"데미지 {power} 적용 완료.");
+        }
+        else
+        {
+            Debug.LogWarning("데미지를 적용할 수 없는 대상입니다.");
+        }
     }
 }

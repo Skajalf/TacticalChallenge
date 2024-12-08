@@ -187,4 +187,19 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
 
         IsReload = false;
     }
+
+    private void OnDrawGizmos()
+    {
+        if (bulletTransform == null) return; // 총알 발사 위치가 설정되지 않았다면 그리지 않음
+
+        // 발사 방향 계산
+        Vector3 fireDirection = bulletTransform.forward;
+        Vector3 startPoint = bulletTransform.position;
+
+        // Gizmo 색상 설정 (빨간색)
+        Gizmos.color = Color.red;
+
+        // 총구 위치에서 발사 방향으로 range만큼 라인 그리기
+        Gizmos.DrawRay(startPoint, fireDirection * range);
+    }
 }

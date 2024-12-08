@@ -176,13 +176,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   power: 0
-  range: 0
+  range: 10
   magazine: 20
   ammo: 0
   reloadTime: 2
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1
   damageDelay: 0.2
   projectilePrefab: {fileID: 3921380113436098294, guid: 0252234e87a8b0c49b99b0a1680f3e9f,
     type: 3}
