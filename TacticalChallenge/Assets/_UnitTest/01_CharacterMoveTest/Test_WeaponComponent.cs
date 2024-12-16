@@ -66,7 +66,7 @@ public class Test_WeaponComponent : MonoBehaviour
 
         foreach (var weapon in weapons)
         {
-            weapon.ammo = weapon.magazine;
+            weapon.ammo = weapon.megazine;
         }
 
         // 코루틴 시작
@@ -190,7 +190,7 @@ public class Test_WeaponComponent : MonoBehaviour
             return;
         }
 
-        if (currentWeapon.ammo == currentWeapon.magazine)
+        if (currentWeapon.ammo == currentWeapon.megazine)
         {
             Debug.Log("탄약이 가득 차 있어 재장전이 필요하지 않습니다.");
             return;

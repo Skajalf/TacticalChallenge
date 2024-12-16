@@ -5,13 +5,22 @@ using UnityEngine;
 public abstract class Test_WeaponBase : MonoBehaviour
 {
     [Header("Weapon Data Setting")]
-    [SerializeField] protected float power;                // 무기 데미지
-    [SerializeField] protected float range;                  // 사거리
-    [SerializeField] public float magazine;                // 탄창 크기
-    [SerializeField] public float ammo;                    // 현재 잔탄 수
-    [SerializeField] protected float reloadTime;           // 재장전 시간
-    [SerializeField] protected LayerMask hitLayerMask;         // 타격 대상 레이어 설정
-    [SerializeField] protected float damageDelay;       // 데미지 적용 전 지연 시간
+    [SerializeField] protected string weaponName;    // 무기 이름
+    [SerializeField] protected float power;          // 무기 데미지
+    [SerializeField] protected float armorPiercing; // 방어 관통
+    [SerializeField] protected float specialPiercing; // 특수 관통
+    [SerializeField] protected float critRate;       // 치명타 확률
+    [SerializeField] protected float critScale;      // 치명타 배율
+    [SerializeField] protected float lifeSteal;      // 생명력 흡수
+    [SerializeField] protected float speed;          // 추가 이동속도
+    [SerializeField] public float megazine;       // 탄창 크기
+    [SerializeField] public float ammo;           // 현재 탄수
+    [SerializeField] protected float reloadTime;     // 재장전 시간
+    [SerializeField] protected float damageDelay;    // 탄착 시간
+    [SerializeField] protected float range;          // 사거리
+    [SerializeField] protected LayerMask hitLayerMask; // 피격 가능 대상 (폭발 같은 경우라던지)
+
+    [SerializeField] protected WeaponStatData weaponStats;
 
     [Header("Weapon Visuals")]
     [SerializeField] protected GameObject projectilePrefab;   // 탄환 프리팹
@@ -55,6 +64,20 @@ public abstract class Test_WeaponBase : MonoBehaviour
     {
         rootObject = transform.root.gameObject;
         Debug.Assert(rootObject != null);
+
+        weaponName = weaponStats.WeaponName;
+        power = weaponStats.Power;
+        armorPiercing = weaponStats.ArmorPiercing;
+        specialPiercing = weaponStats.SpecialPiercing;
+        critRate = weaponStats.CritRate;
+        critScale = weaponStats.CritScale;
+        lifeSteal = weaponStats.LifeSteal;
+        speed = weaponStats.Speed;
+        megazine = weaponStats.Megazine;
+        reloadTime = weaponStats.ReloadTime;
+        damageDelay = weaponStats.DamageDelay;
+        range = weaponStats.Range;
+        hitLayerMask = weaponStats.HitLayerMask;
     }
 
     // 공격 메서드

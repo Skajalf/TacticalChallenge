@@ -44,7 +44,7 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
         }
         
 
-        if (!IsReload && ammo < magazine)
+        if (!IsReload && ammo < megazine)
         {
             animator.SetTrigger("Reload");
             StartCoroutine(ReloadCoroutine());
@@ -180,7 +180,7 @@ public class Test_Quis_ut_Deus : Test_WeaponBase
         // 재장전 시간 대기
         yield return new WaitForSeconds(reloadTime);
 
-        ammo = magazine; // 탄약을 가득 채움
+        ammo = megazine; // 탄약을 가득 채움
 
         // 재장전 완료 후 사운드/효과 처리 (선택 사항)
         Debug.Log("재장전 완료!");

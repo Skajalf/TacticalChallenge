@@ -175,15 +175,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86a82d4d0ee78b54ba981291d3df88b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponName: 
   power: 0
-  range: 10
-  magazine: 20
+  armorPiercing: 0
+  specialPiercing: 0
+  critRate: 0
+  critScale: 0
+  lifeSteal: 0
+  speed: 0
+  megazine: 0
   ammo: 0
   reloadTime: 2
+  damageDelay: 0.2
+  range: 10
   hitLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  damageDelay: 0.2
+  weaponStats: {fileID: 11400000, guid: 4c9b85456a03e6d4299617fbe131058d, type: 2}
   projectilePrefab: {fileID: 3921380113436098294, guid: 0252234e87a8b0c49b99b0a1680f3e9f,
     type: 3}
   cartridgeParticle: {fileID: 0}
