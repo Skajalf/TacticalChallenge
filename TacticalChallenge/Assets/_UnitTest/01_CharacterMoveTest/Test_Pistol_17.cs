@@ -18,7 +18,7 @@ public class Test_Pistol_17 : Test_WeaponBase
     protected override void Test_Attack()
     {
         // 발사 중이라면 중복 발사 방지
-        if (IsFiring || IsReload || ammo <= 0)
+        if (IsFiring || IsReload || ammo.Value <= 0)
         {
             Debug.Log("발사 중이거나 탄약이 부족하거나 재장전 중입니다.");
             return;
@@ -38,7 +38,7 @@ public class Test_Pistol_17 : Test_WeaponBase
             return;
         }
 
-        if (!IsReload && ammo < megazine)
+        if (!IsReload && ammo.Value < megazine.Value)
         {
             animator.SetTrigger("Reload");
             StartCoroutine(ReloadCoroutine());
@@ -109,7 +109,7 @@ public class Test_Pistol_17 : Test_WeaponBase
     {
         base.AmmoLeft();
 
-        if (ammo > 0 && !IsReload)
+        if (ammo.Value > 0 && !IsReload)
         {
             Test_Attack();
         }
@@ -121,9 +121,9 @@ public class Test_Pistol_17 : Test_WeaponBase
 
     private void Fire()
     {
-        ammo--;
+        ammo.DefaultValue--;
 
-        WeaponUtility.Fire(transform, bulletTransform, range, damageDelay, power, hitLayerMask, this);
+        WeaponUtility.Fire(transform, bulletTransform, range.Value, damageDelay.Value, power.Value, hitLayerMask, this);
 
         // 투사체 발사 처리
         FireProjectile();
@@ -171,7 +171,7 @@ public class Test_Pistol_17 : Test_WeaponBase
         Test_Particle();
 
         // 재장전 시간 대기
-        yield return new WaitForSeconds(reloadTime);
+        yield return new WaitForSeconds(reloadTime.Value);
 
         ammo = megazine; // 탄약을 가득 채움
 

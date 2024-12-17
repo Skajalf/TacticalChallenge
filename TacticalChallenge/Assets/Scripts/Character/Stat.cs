@@ -30,6 +30,7 @@ public class Stat : ScriptableObject
         get => minValue;
         set => minValue = value;
     }
+    // 기본값 (캐릭터에 붙어있는 값) -> 얘를 주로 쓰면 됨.
     public float DefaultValue
     {
         get => defaultValue;
@@ -51,6 +52,7 @@ public class Stat : ScriptableObject
     public event ValueChangedHandler onValueMax;
     public event ValueChangedHandler onValueMin;
 
+    public virtual object Clone() => Instantiate(this);
     private void TryInvokeValueChangedEvent(float currentValue, float prevValue)
     {
         if (!Mathf.Approximately(currentValue, prevValue))

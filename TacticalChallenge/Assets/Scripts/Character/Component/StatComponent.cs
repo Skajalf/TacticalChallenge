@@ -16,35 +16,27 @@ public class StatComponent : MonoBehaviour
     // 2. Stat을 조작하는 인터페이스를 제공할 것.
 
     [Header("Field")]
-    [SerializeField] private Stat HP;
-    [SerializeField] private Stat AP;
-    
-    [SerializeField] private Stat defence; 
-    [SerializeField] private Stat criticalRate; 
-
-    [Header("Option")]
-    [SerializeField] private float apRegenTime;
-    [SerializeField] private float apRegenAmount;
+    [SerializeField] private StatOverride[] statOverrides;
 
     private Stat[] stats;
 
     public Character Owner { get; private set; }
-    public Stat HPstat { get; private set; }
-    public Stat APstat { get; private set; }
 
     public void Init()
     {
-        Owner = gameObject.GetComponent<Player>();
+        Owner = gameObject.GetComponent<Character>();
 
-        HPstat = HP ? GetStat(HP) : null;
-        APstat = AP ? GetStat(AP) : null;
-
+        stats = statOverrides.Select(x => x.CreateStat()).ToArray();
+        
     }
 
-    public Stat GetStat(Stat stat)
-    {
-        return stats.FirstOrDefault(x => x.ID == stat.ID);
-    }
+    public Stat GetStat(Stat stat) => stats.FirstOrDefault(x => x.ID == stat.ID);
+    public Stat GetStat(string ID) => stats.FirstOrDefault(x => x.ID == ID);
+    public float GetValue(Stat stat) => GetStat(stat).Value;
+    public bool HasStat(Stat stat) => stats.Any(x => x.ID == stat.ID);
+
+
+    
 
 
     private void OnDestroy()

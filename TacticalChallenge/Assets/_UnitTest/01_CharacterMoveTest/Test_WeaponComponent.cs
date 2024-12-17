@@ -28,6 +28,8 @@ public class Test_WeaponComponent : MonoBehaviour
     private RuntimeAnimatorController initialAnimatorController;
     private string initialWeaponName; // 최초 무기 이름 저장
 
+    private StatComponent statComponent;
+
     private void Awake()
     {
         Init();
@@ -37,6 +39,7 @@ public class Test_WeaponComponent : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
         playerInputActionMap = playerInput.actions.FindActionMap("Player");
+        statComponent = GetComponent<StatComponent>();
 
         InputAction attack = playerInputActionMap.FindAction("Attack");
         attack.started += Attack_Start;
@@ -447,5 +450,15 @@ public class Test_WeaponComponent : MonoBehaviour
     public void Impulse()
     {
         
+    }
+
+    /// <summary>
+    /// 무기 스탯을 플레이어 stat에 적용하는 부분
+    /// </summary>
+    /// <param name="weapon"></param>
+    public void ApplyStats(Test_WeaponBase weapon)
+    {
+
+        statComponent.HasStat(weapon.ammo);
     }
 }
