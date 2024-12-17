@@ -1,19 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Quis_ut_Deus : WeaponBase
 {
-    [Header(" Weapon Hitscan Settings")]
-    [SerializeField] private float hitScanRange = 10.0f;  // 히트스캔 사거리
-    [SerializeField] private LayerMask hitLayerMask;       // 타격 대상 레이어 설정
-    [SerializeField] private float damageDelay = 0.2f;     // 데미지 적용 전 지연 시간
-
-    private Coroutine damageCoroutine;  // 코루틴 핸들
-
     protected override void Awake()
     {
         base.Awake();
+        IsFiring = false;
     }
 
     protected override void Init()
@@ -21,142 +16,45 @@ public class Quis_ut_Deus : WeaponBase
         base.Init();
     }
 
-    public override void Action()
+    protected override void Attack()
     {
-        base.Action();
-
-        FireHitScan();
-        Particle();
-        //CartrigeDrop();
-    }
-
-    private void FireHitScan()
-    {
-        // 히트스캔 레이캐스트 실행 후 적이 있다면 코루틴으로 데미지 처리
-        RaycastHit hit;
-        Vector3 origin = bulletTransform.position;
-        Vector3 direction = bulletTransform.forward;
-
-        if (Physics.Raycast(origin, direction, out hit, hitScanRange, hitLayerMask))
+        // 발사 중이라면 중복 발사 방지
+        if (IsFiring || IsReload || ammo.Value <= 0)
         {
-            Debug.Log($"{hit.collider.gameObject.name}에 잠시 동안 타격을 유지합니다.");
-
-            // 이미 데미지 코루틴이 실행 중이라면 중지
-            if (damageCoroutine != null)
-            {
-                StopCoroutine(damageCoroutine);
-            }
-
-            // 일정 시간 동안 타격이 유지되면 데미지 적용
-            damageCoroutine = StartCoroutine(DamageCoroutine(hit.collider));
-        }
-    }
-
-    private IEnumerator DamageCoroutine(Collider target)
-    {
-        float elapsedTime = 0f;
-        bool targetHit = true;
-
-        // 지정된 시간 동안 지속적으로 적이 레이캐스트 내에 있는지 확인
-        while (elapsedTime < damageDelay)
-        {
-            RaycastHit hitCheck;
-            Vector3 origin = bulletTransform.position;
-            Vector3 direction = bulletTransform.forward;
-
-            if (Physics.Raycast(origin, direction, out hitCheck, hitScanRange, hitLayerMask))
-            {
-                if (hitCheck.collider != target)
-                {
-                    targetHit = false;
-                    break;
-                }
-            }
-            else
-            {
-                targetHit = false;
-                break;
-            }
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            Debug.Log("발사 중이거나 탄약이 부족하거나 재장전 중입니다.");
+            return;
         }
 
-        // 지연 시간 동안 대상이 레이캐스트 내에 있었다면 데미지 적용
-        if (targetHit)
-        {
-            //IDamageable damageable = target.GetComponent<IDamageable>();
-            //if (damageable != null)
-            //{
-            //    damageable.TakeDamage(damage);
-            //    Debug.Log($"{target.gameObject.name}에 {damage}의 데미지를 입혔습니다.");
-            //}
-        }
-
-        damageCoroutine = null;
+        base.Attack();
+        StartCoroutine(FireCoroutine());  // 코루틴 호출
     }
 
     public override void Reload()
     {
         base.Reload();
 
-        if (ammo < megazine)
+        animator = FindAnyObjectByType<WeaponComponent>().GetComponent<Animator>();
+        // TODO :: 루트 오브젝트의 루트 (CHxxxx_Weapon의 루트는 Weapon_pivot, Weapon_pivot의 루트인
+        // CHxxxx의 애니메이터를 찾아오는 코드를 init() 부분에 추가해야 한다.) 를 찾는 방법을 찾기.
+
+        if (animator == null)
         {
+            Debug.LogError("Animator가 설정되지 않았습니다. Animator 컴포넌트가 올바르게 연결되어 있는지 확인하세요.");
+            return;
+        }
+        
+
+        if (!IsReload && ammo.Value < megazine.Value)
+        {
+            animator.SetTrigger("Reload");
             StartCoroutine(ReloadCoroutine());
         }
-    }
-
-    public override void CheckAmmo()
-    {
-        base.CheckAmmo();
-
-        if (ammo > 0)
-        {
-            Action();
-        }
         else
         {
-            Reload();
+            Debug.Log("재장전이 필요하지 않습니다.");
         }
     }
 
-    public override void makeImpulse()
-    {
-        base.makeImpulse();
-        Debug.Log("makeImpulse called");
-        FireRecoil();
-    }
-
-    private void CartrigeDrop()
-    {
-        if (cartrigePoint != null)
-        {
-            Instantiate(cartrigePoint, bulletTransform.position, Quaternion.identity);
-        }
-    }
-
-    public void FireRecoil()
-    {
-        if (impulse != null)
-        {
-            impulse.m_ImpulseDefinition.m_AmplitudeGain = impulseDirection.magnitude;
-
-            impulse.GenerateImpulse(impulseDirection);
-            Debug.Log("Impulse generated with direction: " + impulseDirection);
-        }
-        else
-        {
-            Debug.LogWarning("CinemachineImpulseSource is not assigned.");
-        }
-    }
-
-    private IEnumerator ReloadCoroutine()
-    {
-        IsReload = true;
-        yield return new WaitForSeconds(reloadTime);
-        ammo = megazine;
-        IsReload = false;
-    }
 
     public override void Equip()
     {
@@ -182,27 +80,126 @@ public class Quis_ut_Deus : WeaponBase
 
         if (cartrigePoint == null)
         {
-            cartrigePoint = weaponTransform.FindChildByName(cartrigeTransformName);
+            cartrigePoint = weaponTransform.FindChildByName(cartridgeTransformName);
             if (cartrigePoint == null)
             {
-                Debug.LogError($"탄피 발사 위치를 찾을 수 없습니다: {cartrigeTransformName}");
+                Debug.LogError($"탄피 발사 위치를 찾을 수 없습니다: {cartridgeTransformName}");
                 return;
             }
         }
 
         base.Equip();
         transform.SetParent(weaponTransform, false);
-        //transform.localPosition = Vector3.zero; // 로컬 위치 초기화
-        //transform.localRotation = Quaternion.identity; // 로컬 회전 초기화
         gameObject.SetActive(true);
+
     }
 
     public override void UnEquip()
     {
         base.UnEquip();
         transform.SetParent(null);
-        //transform.localPosition = Vector3.zero; // 필요에 따라 초기화
-        //transform.localRotation = Quaternion.identity; // 필요에 따라 초기화
         //gameObject.SetActive(false);
+    }
+
+    protected override void Impulse()
+    {
+        base.Impulse();
+    }
+
+    protected override void Sound()
+    {
+        base.Sound();
+
+    }
+
+    public override void AmmoLeft()
+    {
+        base.AmmoLeft();
+
+        if (ammo.Value > 0 && !IsReload)
+        {
+            Attack(); // 탄약이 남아있을 경우 발사 시도
+        }
+        else
+        {
+            Reload(); // 탄약이 부족할 경우 재장전 시도
+        }
+    }
+
+    private void Fire()
+    {
+        ammo.DefaultValue--;
+
+        WeaponUtility.Fire(transform, bulletTransform, range.Value, damageDelay.Value, power.Value, hitLayerMask, this);
+
+        // 투사체 발사 처리
+        FireProjectile();
+    }
+
+    private void FireProjectile()
+    {
+        if (projectilePrefab == null || bulletTransform == null)
+        {
+            Debug.LogWarning("투사체 프리팹 또는 발사 위치가 설정되지 않았습니다.");
+            return;
+        }
+
+        // 투사체 인스턴스 생성
+        var projectileInstance = Instantiate(projectilePrefab, bulletTransform.position, bulletTransform.rotation);
+
+        // 생성된 투사체에서 Test_Projectile 스크립트를 가져옴
+        var projectile = projectileInstance.GetComponent<Projectile>();
+
+        if (projectile != null)
+        {
+            // 무기 정보 전달
+            projectile.weapon = this;
+        }
+    }
+
+    private IEnumerator FireCoroutine()
+    {
+        IsFiring = true;  // 발사 시작
+        Fire();           // 발사 실행
+
+        // 애니메이션 재생 시간만큼 대기
+        yield return new WaitForSeconds(animationWaitTime);
+
+        // 발사가 완료되었으므로 발사 중 상태 초기화
+        IsFiring = false;
+    }
+
+    private IEnumerator ReloadCoroutine()
+    {
+        IsReload = true;
+
+        // 재장전 사운드나 파티클 이펙트 호출 (추가 효과)
+        Sound();
+        Particle();
+
+        // 재장전 시간 대기
+        yield return new WaitForSeconds(reloadTime.Value);
+
+        ammo = megazine; // 탄약을 가득 채움
+
+        // 재장전 완료 후 사운드/효과 처리 (선택 사항)
+        Debug.Log("재장전 완료!");
+
+        IsReload = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (bulletTransform == null) return; // 총알 발사 위치가 설정되지 않았다면 그리지 않음
+
+        // 발사 방향 계산
+        Vector3 fireDirection = bulletTransform.forward;
+        Vector3 startPoint = bulletTransform.position;
+
+        // Gizmo 색상 설정 (빨간색)
+        Gizmos.color = Color.red;
+
+        // 총구 위치에서 발사 방향으로 range만큼 라인 그리기
+        Gizmos.DrawRay(startPoint, fireDirection * range.Value);
     }
 }
