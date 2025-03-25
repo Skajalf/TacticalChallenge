@@ -27,4 +27,6 @@ public class StatOverride
             
         return newStat;
     }
+
+    public string GetID() => stat.ID;
 }

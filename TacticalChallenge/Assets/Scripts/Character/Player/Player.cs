@@ -20,7 +20,7 @@ public class Player : Character
     
     private void APRegenTest()
     {
-        stat.GetStat("AP").DefaultValue += 0.1f;
+        statComponent.GetStat("AP").DefaultValue += 0.1f;
     }
 
 }

@@ -1261,8 +1261,85 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4422970455150582114, guid: 3c60d2ec30fdec943a2cb339d40c7cbe,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1572669855}
   m_SourcePrefab: {fileID: 100100000, guid: 3c60d2ec30fdec943a2cb339d40c7cbe, type: 3}
+--- !u!1 &1572669854 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4422970455150582114, guid: 3c60d2ec30fdec943a2cb339d40c7cbe,
+    type: 3}
+  m_PrefabInstance: {fileID: 1572669853}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1572669855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572669854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afe027c7986bcf74a9cc7d7aadd8154b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  codeName: CH_0069
+  displayName: Quis ut Deus
+  hitLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
+  statOverrides:
+  - stat: {fileID: 11400000, guid: 502f79ca1d0040e44af85fb610dc1d77, type: 2}
+    isUseOverride: 1
+    MakeMaxValueEqual: 1
+    overrideDefaultValue: 25
+  - stat: {fileID: 11400000, guid: 15fcae842bbf4044e84ae6a0c06d747a, type: 2}
+    isUseOverride: 1
+    MakeMaxValueEqual: 0
+    overrideDefaultValue: 5
+  - stat: {fileID: 11400000, guid: 67c4594e8220b5a4fbcaf3a35b4ba9ed, type: 2}
+    isUseOverride: 1
+    MakeMaxValueEqual: 0
+    overrideDefaultValue: 0.05
+  - stat: {fileID: 11400000, guid: efabf6f6a79eeeb4abb955dbd507cb87, type: 2}
+    isUseOverride: 1
+    MakeMaxValueEqual: 0
+    overrideDefaultValue: 1.25
+  - stat: {fileID: 11400000, guid: f51b2ec6bc4cb5d4082833d7e261b196, type: 2}
+    isUseOverride: 1
+    MakeMaxValueEqual: 0
+    overrideDefaultValue: 20
+  - stat: {fileID: 11400000, guid: 34db4efcea0f9f841a08bff41ff72004, type: 2}
+    isUseOverride: 1
+    MakeMaxValueEqual: 1
+    overrideDefaultValue: 25
+  - stat: {fileID: 11400000, guid: 97a5513416a00f44db73e2ef8451f8ca, type: 2}
+    isUseOverride: 1
+    MakeMaxValueEqual: 1
+    overrideDefaultValue: 10
+  - stat: {fileID: 11400000, guid: bb231f6cb4ab54a42b3080f23157723a, type: 2}
+    isUseOverride: 1
+    MakeMaxValueEqual: 0
+    overrideDefaultValue: 2
+  - stat: {fileID: 11400000, guid: 8c45a23e3453ea5439cc05eacded94fd, type: 2}
+    isUseOverride: 1
+    MakeMaxValueEqual: 0
+    overrideDefaultValue: 5
+  projectilePrefab: {fileID: 3921380113436098294, guid: 0252234e87a8b0c49b99b0a1680f3e9f,
+    type: 3}
+  cartridgeParticle: {fileID: 0}
+  flameParticle: {fileID: 0}
+  impulseDirection: {x: 0, y: 0, z: 0}
+  impulseSettings: {fileID: 0}
+  hitImpactIndex: 0
+  hitParticle: {fileID: 0}
+  damageParticle: {fileID: 0}
+  hitParticlePositionOffset: {x: 0, y: 0, z: 0}
+  hitParticleScaleOffset: {x: 1, y: 1, z: 1}
+  weaponPoseOffset: {x: 0.13, y: -0.13, z: 0.11}
+  weaponAimingOffset: {x: 0.07, y: 0.02, z: 0.17}
 --- !u!1 &1650716932
 GameObject:
   m_ObjectHideFlags: 0

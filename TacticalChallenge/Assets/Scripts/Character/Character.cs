@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -8,7 +9,7 @@ public abstract class Character : MonoBehaviour
 {
     protected Animator animator;
     protected StateComponent state;
-    protected StatComponent stat;
+    protected StatComponent statComponent;
 
     // protected AudioSource audioSource;
 
@@ -16,6 +17,10 @@ public abstract class Character : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         state = GetComponent<StateComponent>();
-        stat = GetComponent<StatComponent>();
+        statComponent = GetComponent<StatComponent>();
     }
+
+    public StatComponent GetStatComponent() { return statComponent; }
+    
+
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.Utilities;
 
 [RequireComponent(typeof(Player))]
 [RequireComponent(typeof(StateComponent))]
@@ -20,6 +21,8 @@ public class StatComponent : MonoBehaviour
 
     private Stat[] stats;
 
+    public ReadOnlyArray<Stat> Stats => stats;
+
     public Character Owner { get; private set; }
 
     public void Init()
@@ -34,9 +37,6 @@ public class StatComponent : MonoBehaviour
     public Stat GetStat(string ID) => stats.FirstOrDefault(x => x.ID == ID);
     public float GetValue(Stat stat) => GetStat(stat).Value;
     public bool HasStat(Stat stat) => stats.Any(x => x.ID == stat.ID);
-
-
-    
 
 
     private void OnDestroy()

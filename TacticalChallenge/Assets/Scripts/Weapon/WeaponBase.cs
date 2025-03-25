@@ -50,9 +50,13 @@ public abstract class WeaponBase : MonoBehaviour
     public Vector3 weaponPoseOffset;
     public Vector3 weaponAimingOffset;
 
+    //private Stat[] stats;
+
+
     protected bool IsReload { get; set; }
     protected bool IsFiring { get; set; }
     [SerializeField] protected float animationWaitTime;
+
     protected Animator animator;
 
     protected virtual void Awake()
@@ -64,6 +68,11 @@ public abstract class WeaponBase : MonoBehaviour
     {
         rootObject = transform.root.gameObject;
         Debug.Assert(rootObject != null);
+
+        //foreach(var x in character.stats)
+        //{
+        //    x.stats.adjustValue += stats.firstOrDefault(a => a.codename == x.codename)?.value;
+        //}
 
         weaponName = weaponStats.WeaponName;
         power.DefaultValue = weaponStats.Power;
