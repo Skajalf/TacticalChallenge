@@ -1208,6 +1208,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CH0069_Weapon
       objectReference: {fileID: 0}
+    - target: {fileID: 5777341533546609069, guid: 3c60d2ec30fdec943a2cb339d40c7cbe,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f4239b8f0e973df498ea11218e71bf3e, type: 2}
     - target: {fileID: 6337835865260959109, guid: 3c60d2ec30fdec943a2cb339d40c7cbe,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4692,7 +4697,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -8880103643248341067, guid: d3a769d1e020f2b4d82a2247068c5341, type: 3}
+  - {fileID: 2100000, guid: 2d265c8a437a3b043b886b2bbcabe4b8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6262,11 +6267,11 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 1346476866731003399, guid: d3a769d1e020f2b4d82a2247068c5341, type: 3}
-  - {fileID: 721051670023218161, guid: d3a769d1e020f2b4d82a2247068c5341, type: 3}
-  - {fileID: 1939883953048437631, guid: d3a769d1e020f2b4d82a2247068c5341, type: 3}
-  - {fileID: -9087575105148286865, guid: d3a769d1e020f2b4d82a2247068c5341, type: 3}
-  - {fileID: -2805095449444228951, guid: d3a769d1e020f2b4d82a2247068c5341, type: 3}
+  - {fileID: 2100000, guid: 2d265c8a437a3b043b886b2bbcabe4b8, type: 2}
+  - {fileID: 2100000, guid: d5c770ad4762d534d812164d9b09898a, type: 2}
+  - {fileID: 2100000, guid: ae2e2cf73ccfd4c449946317398c0409, type: 2}
+  - {fileID: 2100000, guid: c5a03340153a13c4caeda7efabdf52b5, type: 2}
+  - {fileID: 2100000, guid: 6b2993bbcdb23ae4094f0e16b5159307, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

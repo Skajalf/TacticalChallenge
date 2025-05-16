@@ -126,7 +126,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -7980253907605134980, guid: d3a769d1e020f2b4d82a2247068c5341, type: 3}
+  - {fileID: 2100000, guid: f4239b8f0e973df498ea11218e71bf3e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -176,18 +176,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: 
-  power: 0
-  armorPiercing: 0
-  specialPiercing: 0
-  critRate: 0
-  critScale: 0
-  lifeSteal: 0
-  speed: 0
-  megazine: 0
-  ammo: 0
-  reloadTime: 2
-  damageDelay: 0.2
-  range: 10
+  power: {fileID: 0}
+  armorPiercing: {fileID: 0}
+  specialPiercing: {fileID: 0}
+  critRate: {fileID: 0}
+  critScale: {fileID: 0}
+  lifeSteal: {fileID: 0}
+  speed: {fileID: 0}
+  megazine: {fileID: 0}
+  ammo: {fileID: 0}
+  reloadTime: {fileID: 0}
+  damageDelay: {fileID: 0}
+  range: {fileID: 0}
   hitLayerMask:
     serializedVersion: 2
     m_Bits: 1
