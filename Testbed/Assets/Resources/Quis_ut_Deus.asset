@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d0be56245f05c468fa09ac8eac46d8, type: 3}
+  m_Name: Quis_ut_Deus
+  m_EditorClassIdentifier: 
+  weaponName: Quis_ut_Deus
+  power: 20
+  armorPiercing: 5
+  specialPiercing: 0
+  critRate: 25
+  critScale: 125
+  lifeSteal: 0
+  speed: 0
+  megazine: 25
+  reloadTime: 2
+  damageDelay: 0.02
+  range: 10
+  hitLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  projectilePrefab: {fileID: 0}
+  cartridgeParticle: {fileID: 0}
+  weaponHolsterName: WeaponPivot
+  bulletTransformName: fire_01
+  cartridgeTransformName: fire_02
+  flameParticle: {fileID: 0}
