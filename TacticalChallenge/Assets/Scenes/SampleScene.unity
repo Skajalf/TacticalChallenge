@@ -174,10 +174,10 @@ MonoBehaviour:
   ShoulderOffset: {x: 0.5, y: -0.4, z: 0}
   VerticalArmLength: 0.4
   CameraSide: 1
-  CameraDistance: 2
+  CameraDistance: 3
   CameraCollisionFilter:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   IgnoreTag: 
   CameraRadius: 0.2
   DampingIntoCollision: 0
@@ -3331,11 +3331,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bUseCamera: 1
-  zoomRange: {x: 1, y: 3}
+  zoomRange: {x: 1.5, y: 3}
   zoomSensitivity: 0.1
-  zoomLerp: 25
-  mouseSensitivity: {x: 0.5, y: 0.5}
-  limitPitchAngle: {x: -45, y: 45}
+  zoomLerp: 40
+  mouseSensitivity: {x: 0.1, y: 0.1}
+  limitPitchAngle: {x: -45, y: 75}
   inputLook: {x: 0, y: 0}
   currentZoomDistance: 0
 --- !u!1 &2101349384935935370
@@ -7466,7 +7466,7 @@ Transform:
   m_GameObject: {fileID: 6810391588072256021}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.07008624, y: 0.2711314, z: -0.09231199}
+  m_LocalPosition: {x: -0.11, y: 0.2711314, z: -0.09231199}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -1,8 +1,10 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class CameraComponent : MonoBehaviour
 {
@@ -16,7 +18,25 @@ public class CameraComponent : MonoBehaviour
     [SerializeField] private Vector2 mouseSensitivity = new Vector2(0.1f, 0.1f);  // 마우스 민감도 x는 좌우, y는 수직
 
     [Header("Camera Pitch Limits")]
-    [SerializeField] private Vector2 limitPitchAngle = new Vector2(-10f, 75f);
+    [SerializeField] private Vector2 limitPitchAngle = new Vector2(-45f, 75f);
+
+    [Header("Obstruction Settings")]
+    [SerializeField] private LayerMask obstructionLayer;      // 검사할 레이어
+    [SerializeField] private Material transparentMaterial;    // Fade 모드로 세팅된 머티리얼
+    [SerializeField] private float minAlpha = 0.1f;
+    [SerializeField] private float fadeDuration = 0.3f;   // 알파 1→0 까지 걸리는 시간
+    [SerializeField] private float holdDuration = 1.5f;   // 완전 투명 후 대기 시간
+
+    private enum FadeState { FadingOut, Hold, FadingIn }
+    private class ObstructionInfo
+    {
+        public Renderer rend;
+        public Material[] originalMats;
+        public Material fadeMat;
+        public FadeState state;
+        public float timer;
+    }
+    private Dictionary<Renderer, ObstructionInfo> obstructions = new Dictionary<Renderer, ObstructionInfo>();
 
     [HideInInspector] public Vector2 inputLook;  // 현재 마우스 입력
     [HideInInspector] public float currentZoomDistance;  // 카메라와 캐릭터 거리
@@ -65,10 +85,14 @@ public class CameraComponent : MonoBehaviour
         aimAction.canceled += Input_Aim_Canceled;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        if (bUseCamera)
-            UpdateCamera();
+        if (!bUseCamera)
+            return;
+
+        UpdateCamera();
+        HandleObstructions();
+        UpdateObstructions();
     }
 
     private void UpdateCamera()
@@ -127,6 +151,112 @@ public class CameraComponent : MonoBehaviour
     public float GetCameraYaw()  // 카메라의 Yaw 값 (수평 회전 각도) 반환
     {
         return cameraRotation.eulerAngles.y;
+    }
+
+    private void HandleObstructions()
+    {
+        // 1) 카메라→타겟 RaycastAll
+        Vector3 camPos = cinemachineVirtualCamera.transform.position;
+        Vector3 dir = (targetTransform.position - camPos).normalized;
+        float dist = Vector3.Distance(camPos, targetTransform.position);
+        var hits = Physics.RaycastAll(camPos, dir, dist, obstructionLayer)
+                          .Select(h => h.collider.GetComponent<Renderer>())
+                          .Where(r => r != null).Distinct();
+
+        // 2) 새로 감지된 오브젝트 추가
+        foreach (var rend in hits)
+        {
+            if (obstructions.ContainsKey(rend)) continue;
+            var info = new ObstructionInfo
+            {
+                rend = rend,
+                originalMats = rend.sharedMaterials,
+                fadeMat = new Material(transparentMaterial),
+                state = FadeState.FadingOut,
+                timer = 0f
+            };
+            obstructions[rend] = info;
+            // 전부 fadeMat으로 교체
+            rend.materials = Enumerable.Repeat(info.fadeMat, info.originalMats.Length).ToArray();
+        }
+
+        // 3) Raycast에서 빠진 건 Hold→FadingIn
+        foreach (var kv in obstructions)
+        {
+            var info = kv.Value;
+            if (!hits.Contains(info.rend) && info.state == FadeState.Hold)
+            {
+                info.state = FadeState.FadingIn;
+                info.timer = 0f;
+            }
+            else if (!hits.Contains(info.rend) && info.state == FadeState.FadingOut)
+            {
+                // 아직 완전 투명 안 됐으면 바로 복귀
+                info.state = FadeState.FadingIn;
+                info.timer = fadeDuration * (info.timer / fadeDuration);
+            }
+        }
+    }
+
+    private void UpdateObstructions()
+    {
+        float dt = Time.deltaTime;
+        foreach (var kv in obstructions.ToList())
+        {
+            var info = kv.Value;
+            switch (info.state)
+            {
+                case FadeState.FadingOut:
+                    info.timer += dt;
+                    float tOut = Mathf.Clamp01(info.timer / fadeDuration);
+                    SetAlpha(info.fadeMat, Mathf.Lerp(1f, minAlpha, tOut));
+                    if (tOut >= 1f)
+                    {
+                        info.state = FadeState.Hold;
+                        info.timer = 0f;
+                    }
+                    break;
+
+                case FadeState.Hold:
+                    // 여전히 가린다면 timer 리셋, 아니면 카운트업
+                    if (Physics.Raycast(
+                        cinemachineVirtualCamera.transform.position,
+                        (info.rend.bounds.center - cinemachineVirtualCamera.transform.position).normalized,
+                        out var hit, Mathf.Infinity, obstructionLayer)
+                        && hit.collider.GetComponent<Renderer>() == info.rend)
+                    {
+                        info.timer = 0f;
+                    }
+                    else info.timer += dt;
+
+                    if (info.timer >= holdDuration)
+                    {
+                        info.state = FadeState.FadingIn;
+                        info.timer = 0f;
+                    }
+                    break;
+
+                case FadeState.FadingIn:
+                    info.timer += dt;
+                    float tIn = Mathf.Clamp01(info.timer / fadeDuration);
+                    SetAlpha(info.fadeMat, Mathf.Lerp(minAlpha, 1f, tIn));
+                    if (tIn >= 1f)
+                    {
+                        // 원복
+                        info.rend.materials = info.originalMats;
+                        obstructions.Remove(info.rend);
+                    }
+                    break;
+            }
+        }
+    }
+
+    // 헬퍼: 머티리얼 알파만 설정
+    private void SetAlpha(Material mat, float a)
+    {
+        var c = mat.color;
+        c.a = a;
+        mat.color = c;
     }
 
     #region Input Methods

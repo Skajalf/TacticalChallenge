@@ -10,31 +10,31 @@ public class MovingComponent : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float walkSpeed = 2.0f;
     [SerializeField] private float runSpeed = 3.0f;
-    [SerializeField] private float jumpForce = 1.2f;
+    [SerializeField] private float jumpForce = 4f;
     [SerializeField] private float gravity = -9.81f;
 
     [Header("Tech Settings")]
     [SerializeField] private float sensitivity = 100.0f;
     [SerializeField] private float deadZone = 0.01f;
+    [SerializeField] private float rotationSmooth = 20f;
+
+    [Header("Cover Settings")]
+    [SerializeField] private LayerMask coverLayer;
+    [SerializeField] private float coverRadius = 0.5f;
+    [SerializeField] private float coverDetectionTime = 0.5f;
+
+    [Header("Ground Settings")]
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Vector3 groundCheckOffset = new Vector3(0, 0.05f, 0);
+    [SerializeField] private Vector3 groundCheckSize = new Vector3(0.5f, 0.1f, 0.5f);
 
     private Vector2 velocity;
     private Vector2 inputMove;
     private Vector2 currentInputMove;
     private Vector3 verticalVelocity = Vector3.zero;
-
-    [Header("Cover Settings")]
-    [SerializeField] private float coverRadius = 0.5f;
-    [SerializeField] private LayerMask coverLayer;
-    [SerializeField] private float coverDetectionTime = 0.5f;
-
-    [Header("Ground Settings")]
-    [SerializeField] private Vector3 groundCheckOffset = new Vector3(0, 0.05f, 0);
-    [SerializeField] private Vector3 groundCheckSize = new Vector3(0.5f, 0.1f, 0.5f);
-    [SerializeField] private LayerMask groundLayer;
+    private Quaternion cameraRotation;
 
     private float coverTimer = 0f;
-
-    private Quaternion cameraRotation;
 
     private Rigidbody rigidbodyController;
     private Animator animator;
@@ -87,14 +87,20 @@ public class MovingComponent : MonoBehaviour
     public void Update()
     {
         CheckGrounded();
+        
         Cover();
+        Gravity();
     }
 
     public void FixedUpdate()
     {
-        Gravity();
         Movement();
         Jump();
+    }
+
+    public void LateUpdate()
+    {
+        Rotation();
     }
 
     #region actionMethods
@@ -143,12 +149,8 @@ public class MovingComponent : MonoBehaviour
         currentInputMove = Vector2.SmoothDamp(currentInputMove, inputMove, ref velocity, 1.0f / sensitivity);
 
         // 2) 카메라 기준 방향
-        Vector3 cameraForward = cameraRootTransform.forward;
-        cameraForward.y = 0;
-        cameraForward.Normalize();
-        Vector3 cameraRight = cameraRootTransform.right;
-        cameraRight.y = 0;
-        cameraRight.Normalize();
+        Vector3 cameraForward = cameraRootTransform.forward; cameraForward.y = 0; cameraForward.Normalize();
+        Vector3 cameraRight = cameraRootTransform.right; cameraRight.y = 0; cameraRight.Normalize();
 
         // 3) 수평 이동 벡터 계산
         Vector3 characterDirection = Vector3.zero;
@@ -157,19 +159,28 @@ public class MovingComponent : MonoBehaviour
         {
             characterDirection = (cameraRight * currentInputMove.x + cameraForward * currentInputMove.y).normalized * speed;
             animator.SetBool("IsMove", true);
-            if (!bAlt)
-                transform.rotation = Quaternion.Euler(0, cameraRootTransform.eulerAngles.y, 0);
         }
         else
         {
             animator.SetBool("IsMove", false);
-            if (!bAlt)
-                transform.rotation = Quaternion.Euler(0, cameraRootTransform.eulerAngles.y, 0);
         }
         animator.SetBool("IsRun", bRun);
 
+        // 4) 실제 이동
         Vector3 move = characterDirection * Time.fixedDeltaTime + verticalVelocity * Time.fixedDeltaTime;
         rigidbodyController.MovePosition(rigidbodyController.position + move);
+    }
+
+    public void Rotation()
+    {
+        if (!bCanMove || bAlt) return;
+
+        // 1) 목표 회전(카메라 Yaw)
+        float targetYaw = cameraRootTransform.eulerAngles.y;
+        Quaternion targetRot = Quaternion.Euler(0f, targetYaw, 0f);
+
+        // 2) 부드럽게 보간해서 회전
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSmooth);
     }
 
     public void Move()
@@ -182,7 +193,6 @@ public class MovingComponent : MonoBehaviour
         bCanMove = false;
     }
 
-    //TODO:점프 관련 메서드 수정해야함 현재 점프 했다가 안내려오는 현상 있음.
     public void Jump()
     {
         if (bCover)

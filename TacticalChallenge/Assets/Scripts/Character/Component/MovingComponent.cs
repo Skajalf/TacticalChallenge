@@ -1,4 +1,4 @@
-using Cinemachine;
+ï»¿using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,8 +34,8 @@ public class MovingComponent : MonoBehaviour
 
     private CharacterController controller;
     private Animator animator;
-    private CameraComponent cameraComponent;  // CameraComponent ÂüÁ¶ Ãß°¡
-    public RigBuilder rigBuilder;  // RigBuilder¸¦ ÂüÁ¶
+    private CameraComponent cameraComponent;  // CameraComponent ì°¸ì¡° ì¶”ê°€
+    public RigBuilder rigBuilder;  // RigBuilderë¥¼ ì°¸ì¡°
 
 
 public bool bCanMove { get; private set; } = true;
@@ -51,7 +51,7 @@ public bool bCanMove { get; private set; } = true;
 
     public void Init()
     {
-        cameraComponent = FindObjectOfType<CameraComponent>();  // CameraComponent Ã£±â
+        cameraComponent = FindObjectOfType<CameraComponent>();  // CameraComponent ì°¾ê¸°
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 

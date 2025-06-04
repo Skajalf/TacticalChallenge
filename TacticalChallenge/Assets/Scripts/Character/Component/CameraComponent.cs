@@ -8,18 +8,18 @@ public class CameraComponent : MonoBehaviour
 {
     [Header("Camera Settings")]
     [SerializeField] private bool bUseCamera = true;  // 카메라 사용 여부
-    [SerializeField] private Vector2 zoomRange = new Vector2(1, 3);
+    [SerializeField] private Vector2 zoomRange = new Vector2(1.5f, 3.0f);
     [SerializeField] private float zoomSensitivity = 0.1f;
-    [SerializeField] private float zoomLerp = 25.0f;
+    [SerializeField] private float zoomLerp = 40.0f;
 
     [Header("Mouse Settings")]
-    [SerializeField] private Vector2 mouseSensitivity = new Vector2(0.5f, 0.5f);  // 마우스 민감도
+    [SerializeField] private Vector2 mouseSensitivity = new Vector2(0.1f, 0.1f);  // 마우스 민감도 x는 좌우, y는 수직
 
     [Header("Camera Pitch Limits")]
-    [SerializeField] private Vector2 limitPitchAngle = new Vector2(-45f, 45f);
+    [SerializeField] private Vector2 limitPitchAngle = new Vector2(-45f, 75f);
 
-    public Vector2 inputLook;  // 현재 마우스 입력
-    public float currentZoomDistance;  // 카메라와 캐릭터 거리
+    [HideInInspector] public Vector2 inputLook;  // 현재 마우스 입력
+    [HideInInspector] public float currentZoomDistance;  // 카메라와 캐릭터 거리
     private float prevZoomDistance;  // 이전 거리
 
     private CinemachineVirtualCamera cinemachineVirtualCamera;
@@ -46,7 +46,9 @@ public class CameraComponent : MonoBehaviour
         cinemachineVirtualCamera = FindAnyObjectByType<CinemachineVirtualCamera>();  // Virtual 카메라 가져옴
         tpsFollowCamera = cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         cinemachineVirtualCamera.Follow = targetTransform;  // 카메라의 추적 대상 설정
-        currentZoomDistance = tpsFollowCamera.CameraDistance;
+
+        tpsFollowCamera.CameraDistance = zoomRange.y;
+        currentZoomDistance = zoomRange.y;
 
         PlayerInput input = GetComponent<PlayerInput>();
         InputActionMap actionMap = input.actions.FindActionMap("Player");
