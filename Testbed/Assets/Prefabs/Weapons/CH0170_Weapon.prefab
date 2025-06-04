@@ -292,16 +292,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ebda6a142e9c20418afd8f266824f7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  power: 0
-  range: 0
-  magazine: 30
-  ammo: 0
-  reloadTime: 3
+  weaponName: 
+  power: {fileID: 0}
+  armorPiercing: {fileID: 0}
+  specialPiercing: {fileID: 0}
+  critRate: {fileID: 0}
+  critScale: {fileID: 0}
+  lifeSteal: {fileID: 0}
+  speed: {fileID: 0}
+  megazine: {fileID: 0}
+  ammo: {fileID: 0}
+  reloadTime: {fileID: 0}
+  damageDelay: {fileID: 0}
+  range: {fileID: 0}
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 512
-  damageDelay: 0.2
-  animatorOverrideController: {fileID: 0}
+    m_Bits: 0
+  weaponStats: {fileID: 0}
   projectilePrefab: {fileID: 3921380113436098294, guid: 0252234e87a8b0c49b99b0a1680f3e9f,
     type: 3}
   cartridgeParticle: {fileID: 0}
