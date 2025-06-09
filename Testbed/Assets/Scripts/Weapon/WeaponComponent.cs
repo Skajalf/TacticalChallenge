@@ -8,28 +8,22 @@ public class WeaponComponent : MonoBehaviour
 {
     [Header("Weapon Setup")]
     [SerializeField] private Transform weaponPivot;
-    [SerializeField] private GameObject[] weaponPrefabs;
-    [SerializeField] private bool[] weaponActiveOnStart; // 무기 활성화 여부 배열
+    [SerializeField] private GameObject weaponPrefab;
 
-    private List<WeaponBase> weapons = new List<WeaponBase>();
-    private int currentWeaponIndex = 0; // 현재 장착된 무기 인덱스
-    private WeaponBase currentWeapon; // 감지된 무기
-    private WeaponBase detectedWeapon; // 주변에서 탐색된 무기
+    private WeaponBase currentWeapon;
+    private List<WeaponBase> detectedWeapons = new List<WeaponBase>();
 
     private PlayerInput playerInput;
     private InputActionMap playerInputActionMap;
-    
-    private bool isCancelAble = false;
 
     private Animator animator;
-
     private FullBodyBipedIK fbbIK;
-
-    // 최초 AnimatorController 저장 변수
-    private RuntimeAnimatorController initialAnimatorController;
-    private string initialWeaponName; // 최초 무기 이름 저장
-
     private StatComponent statComponent;
+
+    private RuntimeAnimatorController initialAnimatorController;
+    private string initialWeaponName;
+
+    private bool isCancelAble;
 
     private void Awake()
     {
@@ -39,15 +33,20 @@ public class WeaponComponent : MonoBehaviour
     private void Init()
     {
         playerInput = GetComponent<PlayerInput>();
-        playerInputActionMap = playerInput.actions.FindActionMap("Player");
+        animator = GetComponent<Animator>();
+        fbbIK = GetComponent<FullBodyBipedIK>();
         statComponent = GetComponent<StatComponent>();
+        
+        if (fbbIK == null)
+            Debug.LogError("FullBodyBipedIK 컴포넌트를 찾을 수 없습니다.");
+        
+        if (weaponPivot == null)
+            Debug.LogError("WeaponPivot(Transform)을 인스펙터에서 할당하세요!");
 
+        playerInputActionMap = playerInput.actions.FindActionMap("Player");
         InputAction attack = playerInputActionMap.FindAction("Attack");
         attack.started += Attack_Start;
         attack.canceled += Attack_Cancel;
-
-        InputAction weaponSwap = playerInputActionMap.FindAction("WeaponSwap");
-        weaponSwap.started += weaponSwap_Start;
 
         InputAction weaponPickUp = playerInputActionMap.FindAction("Action");
         weaponPickUp.started += weaponPickUp_Start;
@@ -59,64 +58,15 @@ public class WeaponComponent : MonoBehaviour
         InputAction reloadAction = playerInputActionMap.FindAction("Reload");
         reloadAction.started += Reload_Start;
 
-        animator = GetComponent<Animator>();
-
-        fbbIK = GetComponent<FullBodyBipedIK>();
-        if (fbbIK == null) Debug.LogError("FullBodyBipedIK 컴포넌트를 찾을 수 없습니다.");
-
-        if (weaponPivot == null) Debug.LogError("WeaponPivot(Transform)을 인스펙터에서 할당하세요!");
-
-        // ** 최초 AnimatorController 저장 **
         initialAnimatorController = animator.runtimeAnimatorController;
 
-
-        Equip();
-
-        foreach (var weapon in weapons)
+        if(weaponPrefab != null)
         {
-            weapon.ammo = weapon.megazine;
+            Equip(weaponPrefab);
+            initialWeaponName = currentWeapon.name;
+            Debug.Log($"초기 장착 무기 : {initialWeaponName}");
         }
-
-        // 코루틴 시작
-        StartCoroutine(CheckForNearbyWeapons());
-    }
-
-    private IEnumerator CheckForNearbyWeapons()
-    {
-        while (true)
-        {
-            DetectWeaponInRange();
-            yield return new WaitForSeconds(1.0f); // 0.5초마다 주기적으로 실행
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, 1.25f);
-    }
-
-    private void DetectWeaponInRange()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1.25f);
         
-        detectedWeapon = null; // 초기화
-
-        foreach (var hitCollider in hitColliders)
-        {
-            if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Weapon"))
-            {
-                detectedWeapon = hitCollider.GetComponent<WeaponBase>();
-                if (detectedWeapon != null)
-                {
-                    break; // 감지된 무기를 찾았으면 루프 종료
-                }
-            }
-        }
-
-        if (detectedWeapon == null)
-        {
-            Debug.Log("주변에 장착할 수 있는 무기가 없습니다.");
-        }
     }
 
     private void Attack_Start(InputAction.CallbackContext context)
@@ -148,32 +98,6 @@ public class WeaponComponent : MonoBehaviour
     private void Attack_Cancel(InputAction.CallbackContext context)
     {
         animator.SetBool("IsAttack", false);
-    }
-
-    private void weaponSwap_Start(InputAction.CallbackContext context)
-    {
-        // 눌린 키가 숫자 키(1~9 등)인지 확인
-        int weaponIndex;
-        if (int.TryParse(context.control.name, out weaponIndex))
-        {
-            // 무기 인덱스로 사용하기 위해 1을 빼줌 (1번 키 -> 0번 무기, 2번 키 -> 1번 무기, ...)
-            weaponIndex -= 1;
-
-            // 유효한 무기 인덱스인지 확인
-            if (weaponIndex >= 0 && weaponIndex < weapons.Count)
-            {
-                SwapWeapon(weaponIndex);
-            }
-        }
-    }
-
-    private void weaponPickUp_Start(InputAction.CallbackContext context)
-    {
-        if (detectedWeapon == null) return;
-
-        EquipWeapon(detectedWeapon);
-        MapWeaponToIK(detectedWeapon);
-        detectedWeapon = null;
     }
 
     private void Aim_Start(InputAction.CallbackContext context)
@@ -209,106 +133,116 @@ public class WeaponComponent : MonoBehaviour
         currentWeapon.Reload();
     }
 
-
-    private void Equip()
+    public void Equip(GameObject weaponObject, bool instantiate = true)
     {
-        if (weaponPrefabs == null || weaponPrefabs.Length == 0) return;
-        if (weaponActiveOnStart.Length != weaponPrefabs.Length)
+        // 1) 기존 무기 해제
+        UnEquip();
+
+        GameObject instance = weaponObject;
+
+        if (instantiate)
         {
-            Debug.LogError("weaponActiveOnStart 크기 불일치");
+            // 프리팹일 땐 새로 인스턴스화
+            instance = Instantiate(weaponObject, weaponPivot, false);
+            instance.name = weaponObject.name;
+        }
+        else
+        {
+            // 이미 씬에 존재하는 오브젝트
+            instance.transform.SetParent(weaponPivot, false);
+
+            Rigidbody rb;
+            if (instance.TryGetComponent<Rigidbody>(out rb))
+                rb.isKinematic = true;
+
+            Collider col;
+            if (instance.TryGetComponent<Collider>(out col))
+                col.enabled = false;
+        }
+
+        // WeaponBase 초기화
+        WeaponBase wb = instance.GetComponent<WeaponBase>();
+        if (wb == null)
+        {
+            Debug.LogError("장착 대상에 WeaponBase 컴포넌트가 없습니다!");
+            Destroy(instance);
             return;
         }
 
-        for (int i = 0; i < weaponPrefabs.Length; i++)
+        wb.Equip();
+        currentWeapon = wb;
+
+        // AnimatorController 세팅
+        if (wb.name == initialWeaponName)
+            RestoreInitialAnimatorController();
+        else
+            ApplyAOCForWeapon(wb);
+
+        // IK 매핑
+        MapWeaponToIK(wb);
+
+        Debug.Log("장착된 무기: " + wb.name);
+    }
+
+    // 나중에 땅바닥에 드랍하는 형태로 변경 필요
+    private void UnEquip()
+    {
+        if (currentWeapon != null)
         {
-            var inst = Instantiate(weaponPrefabs[i], weaponPivot, false);
-            inst.name = weaponPrefabs[i].name;
-            var wb = inst.GetComponent<WeaponBase>();
-            if (wb == null) { Destroy(inst); continue; }
+            // 1) Hierarchy에서 분리
+            Transform weaponTransform = currentWeapon.transform;
+            weaponTransform.SetParent(null);
 
-            wb.Equip();
-            weapons.Add(wb);
-            inst.SetActive(weaponActiveOnStart[i]);
-
-            if (i == currentWeaponIndex)
+            // 2) Rigidbody 활성화 (물리 시뮬레이션 적용)
+            Rigidbody rbComponent;
+            if (weaponTransform.TryGetComponent<Rigidbody>(out rbComponent))
             {
-                initialWeaponName = wb.name;
-                MapWeaponToIK(wb);
+                rbComponent.isKinematic = false;
             }
-        }
+            else
+            {
+                // Rigidbody가 없다면 새로 추가할 수도 있습니다.
+                rbComponent = weaponTransform.gameObject.AddComponent<Rigidbody>();
+            }
 
-        if (weapons.Count > 0)
-        {
-            currentWeapon = weapons[currentWeaponIndex];
-            Debug.Log($"초기 장착 무기: {currentWeapon.name}");
+            // 3) Collider 활성화
+            Collider colComponent;
+            if (weaponTransform.TryGetComponent<Collider>(out colComponent))
+            {
+                colComponent.enabled = true;
+            }
+            else
+            {
+                // 필요하다면 적절한 Collider 타입을 추가
+                weaponTransform.gameObject.AddComponent<BoxCollider>();
+            }
+
+            // 4) 약간의 임펄스(선택)
+            //rbComponent.AddForce(transform.forward * 2f + Vector3.up * 1f, ForceMode.Impulse);
+
+            // 5) currentWeapon 레퍼런스 해제
+            currentWeapon = null;
         }
     }
 
-    private void SwapWeapon(int newIndex)
+    private void weaponPickUp_Start(InputAction.CallbackContext context)
     {
-        if (newIndex == currentWeaponIndex) return;
-
-        weapons[currentWeaponIndex].gameObject.SetActive(false);
-        currentWeaponIndex = newIndex;
-        currentWeapon = weapons[newIndex];
-        currentWeapon.gameObject.SetActive(true);
-
-        // 애니메이터 컨트롤러 복원 또는 AOC 적용
-        if (currentWeapon.name == initialWeaponName)
-            RestoreInitialAnimatorController();
-        else
-            ApplyAOCForWeapon(currentWeapon);
-
-        MapWeaponToIK(currentWeapon);
-    }
-
-    private void EquipWeapon(WeaponBase newWeapon)
-    {
-        Transform prevWeapon = weapons[currentWeaponIndex].transform;
-        int emptySlotIndex = weapons.FindIndex(w => w == null);
-
-        if (emptySlotIndex != -1)
+        // 감지된(줍기 가능한) 가장 가까운 무기 하나 꺼내기
+        WeaponBase toPickup = GetDetectedWeapon();
+        if (toPickup != null)
         {
-            weapons[emptySlotIndex] = newWeapon;
+            // 이미 씬에 있는 오브젝트이므로 instantiate=false
+            Equip(toPickup.gameObject, false);
+
+            // 감지 리스트에서 제거
+            ClearDetectedWeapon(toPickup);
+
+            Debug.Log("무기 픽업: " + toPickup.name);
         }
         else
         {
-            
-            weapons[currentWeaponIndex].UnEquip();
-            weapons[currentWeaponIndex] = newWeapon;
+            Debug.Log("주변에 장착할 수 있는 무기가 없습니다.");
         }
-
-        newWeapon.transform.SetParent(transform.FindChildByName("WeaponPivot"));
-        newWeapon.transform.position = prevWeapon.position;
-        newWeapon.transform.rotation = new Quaternion(0, 0, 0, 0);
-        newWeapon.Equip();
-
-        currentWeapon = newWeapon;
-        currentWeaponIndex = weapons.IndexOf(newWeapon); // 새 무기의 슬롯 인덱스를 저장
-
-        // 무기 활성화
-        newWeapon.gameObject.SetActive(true);
-
-        // ** 초기 무기라면 초기 AnimatorController 복원 **
-        if (newWeapon.name == initialWeaponName)
-        {
-            RestoreInitialAnimatorController();
-        }
-        else
-        {
-            ApplyAOCForWeapon(currentWeapon);
-        }
-
-        Debug.Log($"{newWeapon.name} 무기를 장착했습니다.");
-    }
-
-    public WeaponBase GetActiveWeapon() //아마 무기 데미지 넣을때 호출할듯?
-    {
-        if (currentWeaponIndex >= 0 && currentWeaponIndex < weapons.Count)
-        {
-            return weapons[currentWeaponIndex];
-        }
-        return null;
     }
 
     private void ApplyAOCForWeapon(WeaponBase weapon)
@@ -380,6 +314,44 @@ public class WeaponComponent : MonoBehaviour
         // IK 즉시 갱신
         solver.Initiate(fbbIK.transform);
         solver.Update();
+    }
+
+    public WeaponBase GetDetectedWeapon()
+    {
+        if (detectedWeapons.Count == 0)
+            return null;
+
+        WeaponBase nearest = null;
+        float bestDistSqr = float.MaxValue;
+        Vector3 pivotPos = weaponPivot.position;
+
+        foreach (WeaponBase wb in detectedWeapons)
+        {
+            if (wb == null) continue;
+            float distSqr = (wb.transform.position - pivotPos).sqrMagnitude;
+            if (distSqr < bestDistSqr)
+            {
+                bestDistSqr = distSqr;
+                nearest = wb;
+            }
+        }
+
+        return nearest;
+    }
+
+    public void SetDetectedWeapon(WeaponBase wb)
+    {
+        if (!detectedWeapons.Contains(wb))
+        {
+            detectedWeapons.Add(wb);
+            Debug.Log($"Detected weapon added: {wb.name}");
+        }
+    }
+
+    public void ClearDetectedWeapon(WeaponBase wb)
+    {
+        if (detectedWeapons.Remove(wb))
+            Debug.Log($"Detected weapon removed: {wb.name}");
     }
 
     ///
