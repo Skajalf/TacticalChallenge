@@ -1,0 +1,404 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Generic_Mixer
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: CH0069_Mesh
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 L Thigh
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf/Bip001
+      L Foot
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf/Bip001
+      L Foot/Bip001 L Toe0
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf/Bip001
+      L Foot/bone_foot_ribbon_ll
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001 L Calf/Bip001
+      L Foot/bone_foot_ribbon_lr
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 R Thigh
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf/Bip001
+      R Foot
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf/Bip001
+      R Foot/Bip001 R Toe0
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf/Bip001
+      R Foot/bone_foot_ribbon_rl
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001 R Calf/Bip001
+      R Foot/bone_foot_ribbon_rr
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/Bip001 L UpperArm
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/Bip001 L UpperArm/Bip001 L Forearm
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001 L Finger0
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001 L Finger0/Bip001
+      L Finger01
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001 L Finger1
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001 L Finger1/Bip001
+      L Finger11
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001 L Finger2
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001 L Finger2/Bip001
+      L Finger21
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001_B_L Wrist
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/bone_cape_bl
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/bone_cape_l_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      L Clavicle/bone_cape_l_01/bone_cape_l_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 bone_eye_D_L
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 bone_eye_D_L/Bip001 bone_eye_D_L_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 bone_eye_D_L/Bip001 bone_eye_D_L_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 bone_eye_D_R
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 bone_eye_D_R/Bip001 bone_eye_D_R_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 bone_eye_D_R/Bip001 bone_eye_D_R_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 eye_L
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 eye_L/Bip001 eye_L_1
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 eye_L/Bip001 eye_L_2
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 eye_R
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 eye_R/Bip001 eye_R_1
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 eye_R/Bip001 eye_R_2
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 Xtra_eyeblowL1
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 Xtra_eyeblowL2
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 Xtra_eyeblowR1
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 Xtra_eyeblowR2
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 Xtra_eyeL
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/Bip001 Xtra_eyeR
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_b_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_b_01/bone_hair_b_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_b_01/bone_hair_b_02/bone_hair_b_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_b_01/bone_hair_b_02/bone_hair_b_03/bone_hair_b_04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_bl_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_bl_01/bone_hair_bl_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_bl_01/bone_hair_bl_02/bone_hair_bl_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_bl_01/bone_hair_bl_02/bone_hair_bl_03/bone_hair_bl_04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_br_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_br_01/bone_hair_br_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_br_01/bone_hair_br_02/bone_hair_br_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_br_01/bone_hair_br_02/bone_hair_br_03/bone_hair_br_04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_dango
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_dango_lace
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_f_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_f_01/bone_hair_f_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_ml_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_ml_01/bone_hair_ml_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_ml_01/bone_hair_ml_02/bone_hair_ml_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_mr_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_mr_01/bone_hair_mr_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_hair_mr_01/bone_hair_mr_02/bone_hair_mr_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      Neck/Bip001 Head/bone_Mouth
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/Bip001 R UpperArm
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/Bip001 R UpperArm/Bip001 R Forearm
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001 R Finger0
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001 R Finger0/Bip001
+      R Finger01
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001 R Finger1
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001 R Finger1/Bip001
+      R Finger11
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001 R Finger2
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001 R Finger2/Bip001
+      R Finger21
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001_B_R Wrist
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/bone_cape_br
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/bone_cape_r_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001
+      R Clavicle/bone_cape_r_01/bone_cape_r_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/bone_cape_b
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/bone_cape_fl
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/bone_cape_fr
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/bone_ribbon_l
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/bone_ribbon_r
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/bone_wing_l_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/bone_wing_l_01/bone_wing_l_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/bone_wing_l_01/bone_wing_l_02/bone_wing_l_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/bone_wing_l_01/bone_wing_l_02/bone_wing_l_03/bone_wing_l_04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/bone_wing_l_01/bone_wing_l_02/bone_wing_l_05
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/bone_wing_r_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/bone_wing_r_01/bone_wing_r_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/bone_wing_r_01/bone_wing_r_02/bone_wing_r_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/bone_wing_r_01/bone_wing_r_02/bone_wing_r_03/bone_wing_r_04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/bone_wing_r_01/bone_wing_r_02/bone_wing_r_05
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB00
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB00/bone_skirtB01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB00/bone_skirtB01/bone_skirtB02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB00/bone_skirtB01/bone_skirtB02/bone_skirtB03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB00/bone_skirtB01/bone_skirtB02/bone_skirtB03/bone_skirtB04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_L_00
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_L_00/bone_skirtB_L_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_L_00/bone_skirtB_L_01/bone_skirtB_L_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_L_00/bone_skirtB_L_01/bone_skirtB_L_02/bone_skirtB_L_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_L_00/bone_skirtB_L_01/bone_skirtB_L_02/bone_skirtB_L_03/bone_skirtB_L_04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_R_00
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_R_00/bone_skirtB_R_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_R_00/bone_skirtB_R_01/bone_skirtB_R_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_R_00/bone_skirtB_R_01/bone_skirtB_R_02/bone_skirtB_R_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_R_00/bone_skirtB_R_01/bone_skirtB_R_02/bone_skirtB_R_03/bone_skirtB_R_04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF00
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF00/bone_skirtF01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF00/bone_skirtF01/bone_skirtF02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF00/bone_skirtF01/bone_skirtF02/bone_skirtF03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF00/bone_skirtF01/bone_skirtF02/bone_skirtF03/bone_skirtF04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_L_00
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_L_00/bone_skirtF_L_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_L_00/bone_skirtF_L_01/bone_skirtF_L_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_L_00/bone_skirtF_L_01/bone_skirtF_L_02/bone_skirtF_L_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_L_00/bone_skirtF_L_01/bone_skirtF_L_02/bone_skirtF_L_03/bone_skirtF_L_04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_R_00
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_R_00/bone_skirtF_R_01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_R_00/bone_skirtF_R_01/bone_skirtF_R_02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_R_00/bone_skirtF_R_01/bone_skirtF_R_02/bone_skirtF_R_03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_R_00/bone_skirtF_R_01/bone_skirtF_R_02/bone_skirtF_R_03/bone_skirtF_R_04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtL00
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtL00/bone_skirtL01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtL00/bone_skirtL01/bone_skirtL02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtL00/bone_skirtL01/bone_skirtL02/bone_skirtL03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtL00/bone_skirtL01/bone_skirtL02/bone_skirtL03/bone_skirtL04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtR00
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtR00/bone_skirtR01
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtR00/bone_skirtR01/bone_skirtR02
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtR00/bone_skirtR01/bone_skirtR02/bone_skirtR03
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtR00/bone_skirtR01/bone_skirtR02/bone_skirtR03/bone_skirtR04
+    m_Weight: 1
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001_Weapon
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001_Weapon/bone_buttstock
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001_Weapon/bone_magazine
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001_Weapon/bone_magazine_02
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001_Weapon/bone_weapon_spring
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001_Weapon/fire_01
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/bone_root/Bip001/Bip001_Weapon/fire_02
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/CH0069_Body
+    m_Weight: 0
+  - m_Path: CH0069_Mesh/CH0069_Weapon
+    m_Weight: 0
