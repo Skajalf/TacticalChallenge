@@ -8,7 +8,7 @@ public class CameraComponent : MonoBehaviour
 {
     [Header("Camera Settings")]
     [SerializeField] private bool bUseCamera = true;  // 카메라 사용 여부
-    [SerializeField] private Vector2 zoomRange = new Vector2(1.5f, 3.0f);
+    [SerializeField] private Vector2 zoomRange = new Vector2(3.0f, 5.0f);
     [SerializeField] private float zoomSensitivity = 0.1f;
     [SerializeField] private float zoomLerp = 40.0f;
 
@@ -18,9 +18,14 @@ public class CameraComponent : MonoBehaviour
     [Header("Camera Pitch Limits")]
     [SerializeField] private Vector2 limitPitchAngle = new Vector2(-45f, 75f);
 
+    [Header("Collision Settings")]
+    [SerializeField] private LayerMask collisionMask;
+    [SerializeField] private float collisionRadius = 0.3f;
+
     [HideInInspector] public Vector2 inputLook;  // 현재 마우스 입력
     [HideInInspector] public float currentZoomDistance;  // 카메라와 캐릭터 거리
     private float prevZoomDistance;  // 이전 거리
+    private float collisionZoomDistance;
 
     private CinemachineVirtualCamera cinemachineVirtualCamera;
     private Cinemachine3rdPersonFollow tpsFollowCamera;
@@ -49,6 +54,7 @@ public class CameraComponent : MonoBehaviour
 
         tpsFollowCamera.CameraDistance = zoomRange.y;
         currentZoomDistance = zoomRange.y;
+        collisionZoomDistance = currentZoomDistance;
 
         PlayerInput input = GetComponent<PlayerInput>();
         InputActionMap actionMap = input.actions.FindActionMap("Player");
@@ -67,8 +73,10 @@ public class CameraComponent : MonoBehaviour
 
     private void Update()
     {
-        if (bUseCamera)
-            UpdateCamera();
+        if (!bUseCamera) return;
+        
+        UpdateCamera();
+        ClampZoomDistance();
     }
 
     private void UpdateCamera()
@@ -110,13 +118,32 @@ public class CameraComponent : MonoBehaviour
 
     private void Update_Zoom()
     {
-        if (MathHelpers.IsNearlyEqual(tpsFollowCamera.CameraDistance, currentZoomDistance, 0.01f))
+        if (MathHelpers.IsNearlyEqual(tpsFollowCamera.CameraDistance, collisionZoomDistance, 0.01f))
         {
-            tpsFollowCamera.CameraDistance = currentZoomDistance;
+            tpsFollowCamera.CameraDistance = collisionZoomDistance;
             return;
         }
 
-        tpsFollowCamera.CameraDistance = Mathf.SmoothStep(tpsFollowCamera.CameraDistance, currentZoomDistance, zoomLerp * Time.deltaTime);
+        tpsFollowCamera.CameraDistance = Mathf.Lerp(tpsFollowCamera.CameraDistance, collisionZoomDistance, zoomLerp * Time.deltaTime);
+    }
+
+    private void ClampZoomDistance()
+    {
+        collisionZoomDistance = currentZoomDistance;
+
+        Vector3 dir = (cinemachineVirtualCamera.transform.position - targetTransform.position).normalized;
+
+        if (Physics.SphereCast(
+                targetTransform.position,
+                collisionRadius,
+                dir,
+                out RaycastHit hit,
+                currentZoomDistance,
+                collisionMask))
+        {
+            float minAllowed = Mathf.Max(hit.distance - collisionRadius, zoomRange.x);
+            collisionZoomDistance = minAllowed;
+        }
     }
 
     public Quaternion GetCameraRotation()

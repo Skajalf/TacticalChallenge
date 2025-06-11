@@ -174,7 +174,7 @@ MonoBehaviour:
   ShoulderOffset: {x: 0.5, y: -0.4, z: 0}
   VerticalArmLength: 0.4
   CameraSide: 1
-  CameraDistance: 5
+  CameraDistance: 7
   CameraCollisionFilter:
     serializedVersion: 2
     m_Bits: 256
@@ -234,11 +234,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bUseCamera: 1
-  zoomRange: {x: 3, y: 5}
+  zoomRange: {x: 2, y: 7}
   zoomSensitivity: 0.1
-  zoomLerp: 40
+  zoomLerp: 30
   mouseSensitivity: {x: 0.1, y: 0.1}
   limitPitchAngle: {x: -45, y: 75}
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 256
+  collisionRadius: 0.3
   inputLook: {x: 0, y: 0}
   currentZoomDistance: 0
 --- !u!1 &92465026
