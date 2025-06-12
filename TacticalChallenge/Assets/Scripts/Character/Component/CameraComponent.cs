@@ -74,7 +74,7 @@ public class CameraComponent : MonoBehaviour
     private void Update()
     {
         if (!bUseCamera) return;
-        
+
         UpdateCamera();
         ClampZoomDistance();
     }
