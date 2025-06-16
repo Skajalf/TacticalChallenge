@@ -36,10 +36,10 @@ public class WeaponComponent : MonoBehaviour
         animator = GetComponent<Animator>();
         fbbIK = GetComponent<FullBodyBipedIK>();
         statComponent = GetComponent<StatComponent>();
-        
+
         if (fbbIK == null)
             Debug.LogError("FullBodyBipedIK 컴포넌트를 찾을 수 없습니다.");
-        
+
         if (weaponPivot == null)
             Debug.LogError("WeaponPivot(Transform)을 인스펙터에서 할당하세요!");
 
@@ -60,13 +60,13 @@ public class WeaponComponent : MonoBehaviour
 
         initialAnimatorController = animator.runtimeAnimatorController;
 
-        if(weaponPrefab != null)
+        if (weaponPrefab != null)
         {
             Equip(weaponPrefab);
             initialWeaponName = currentWeapon.name;
             Debug.Log($"초기 장착 무기 : {initialWeaponName}");
         }
-        
+
     }
 
     private void Attack_Start(InputAction.CallbackContext context)
@@ -102,12 +102,12 @@ public class WeaponComponent : MonoBehaviour
 
     private void Aim_Start(InputAction.CallbackContext context)
     {
-        
+
     }
 
     private void Aim_Cancel(InputAction.CallbackContext context)
     {
-        
+
     }
 
     private void Reload_Start(InputAction.CallbackContext context) // 나중에 State조건 넣어주기
@@ -379,7 +379,7 @@ public class WeaponComponent : MonoBehaviour
 
     public void Impulse()
     {
-        
+
     }
 
     /// <summary>

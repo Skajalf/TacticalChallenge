@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5422232906199706702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8448195906452502215}
+  - component: {fileID: 3110815342592789221}
+  - component: {fileID: 289456297461968945}
+  - component: {fileID: 8743365816876323343}
+  - component: {fileID: 9097693922288193130}
+  m_Layer: 6
+  m_Name: Mika_Weapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8448195906452502215
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5422232906199706702}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0.022625089, y: 2, z: -2}
+  m_LocalScale: {x: 0.895977, y: 0.89597726, z: 0.89597726}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!33 &3110815342592789221
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5422232906199706702}
+  m_Mesh: {fileID: 1926805980692837897, guid: ebf13b948362b944f8529cc1f91004da, type: 3}
+--- !u!23 &289456297461968945
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5422232906199706702}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: f7791ab0435586b4680df4b00e8220fd, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8743365816876323343
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5422232906199706702}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2231464, y: 0.23449402, z: 0.8278133}
+  m_Center: {x: 0.00073179224, y: 0.00018587716, z: 0.008674729}
+--- !u!114 &9097693922288193130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5422232906199706702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86a82d4d0ee78b54ba981291d3df88b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: Quis_ut_Deus
+  power: {fileID: 0}
+  armorPiercing: {fileID: 0}
+  specialPiercing: {fileID: 0}
+  critRate: {fileID: 0}
+  critScale: {fileID: 0}
+  lifeSteal: {fileID: 0}
+  speed: {fileID: 0}
+  megazine: {fileID: 0}
+  ammo: {fileID: 0}
+  reloadTime: {fileID: 0}
+  damageDelay: {fileID: 0}
+  range: {fileID: 0}
+  hitLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  weaponStats: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  cartridgeParticle: {fileID: 0}
+  weaponHolsterName: WeaponPivot
+  bulletTransformName: fire_01
+  cartridgeTransformName: fire_02
+  flameParticle: {fileID: 0}
+  impulseDirection: {x: 0, y: 0, z: 0}
+  impulseSettings: {fileID: 0}
+  hitImpactIndex: 0
+  hitParticle: {fileID: 0}
+  damageParticle: {fileID: 0}
+  hitParticlePositionOffset: {x: 0, y: 0, z: 0}
+  hitParticleScaleOffset: {x: 1, y: 1, z: 1}
+  weaponPoseOffset: {x: 0, y: 0, z: 0}
+  weaponAimingOffset: {x: 0, y: 0, z: 0}
+  animationWaitTime: 0
