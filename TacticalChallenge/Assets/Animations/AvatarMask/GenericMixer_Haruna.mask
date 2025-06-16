@@ -1,0 +1,367 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GenericMixer_Haruna
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Haruna_Original_Halo
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 L Thigh
+    m_Weight: 0
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001
+      L Calf
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001
+      L Calf/Bip001 L Foot
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 L Thigh/Bip001
+      L Calf/Bip001 L Foot/Bip001 L Toe0
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 R Thigh
+    m_Weight: 0
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001
+      R Calf
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001
+      R Calf/Bip001 R Foot
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 R Thigh/Bip001
+      R Calf/Bip001 R Foot/Bip001 R Toe0
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle
+    m_Weight: 0
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle/Bip001 L UpperArm
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle/Bip001 L UpperArm/Bip001 L Forearm
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001
+      L Finger0
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001
+      L Finger0/Bip001 L Finger01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001
+      L Finger1
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001
+      L Finger1/Bip001 L Finger11
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001
+      L Finger2
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/Bip001 L Hand/Bip001
+      L Finger2/Bip001 L Finger21
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 L Clavicle/Bip001 L UpperArm/Bip001 L Forearm/bone L ForeArm
+      Twist
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 bone_eye_D_L
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 bone_eye_D_L/Bip001 bone_eye_D_L_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 bone_eye_D_L/Bip001 bone_eye_D_L_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 bone_eye_D_R
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 bone_eye_D_R/Bip001 bone_eye_D_R_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 bone_eye_D_R/Bip001 bone_eye_D_R_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 eye_L
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 eye_L/Bip001 eye_L_1
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 eye_L/Bip001 eye_L_2
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 eye_R
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 eye_R/Bip001 eye_R_1
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 eye_R/Bip001 eye_R_2
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 Xtra_eyeblowL1
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 Xtra_eyeblowL2
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 Xtra_eyeblowR1
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 Xtra_eyeblowR2
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 Xtra_eyeL
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Bip001 Xtra_eyeR
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_01/bone_hair_B_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_01/bone_hair_B_02/bone_hair_B_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_01/bone_hair_B_02/bone_hair_B_03/bone_hair_B_04
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_L_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_L_01/bone_hair_B_L_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_L_01/bone_hair_B_L_02/bone_hair_B_L_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_L_01/bone_hair_B_L_02/bone_hair_B_L_03/bone_hair_B_L_04
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_R_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_R_01/bone_hair_B_R_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_R_01/bone_hair_B_R_02/bone_hair_B_R_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_B_R_01/bone_hair_B_R_02/bone_hair_B_R_03/bone_hair_B_R_04
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_F_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_F_01/bone_hair_F_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_L_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_L_01/bone_hair_L_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_L_01/bone_hair_L_02/bone_hair_L_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_R_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_R_01/bone_hair_R_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/bone_hair_R_01/bone_hair_R_02/bone_hair_R_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Cap_Root
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 Neck/Bip001 Head/Cap_Root/Cap_bone
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle
+    m_Weight: 0
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle/Bip001 R UpperArm
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001
+      R Finger0
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001
+      R Finger0/Bip001 R Finger01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001
+      R Finger1
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001
+      R Finger1/Bip001 R Finger11
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001
+      R Finger2
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/Bip001
+      R Finger2/Bip001 R Finger21
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/bone R ForeArm
+      Twist
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacket_C_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacket_C_01/bone_jacket_C_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacket_C_01/bone_jacket_C_02/bone_jacket_C_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacket_L_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacket_L_01/bone_jacket_L_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacket_L_01/bone_jacket_L_02/bone_jacket_L_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacket_R_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacket_R_01/bone_jacket_R_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacket_R_01/bone_jacket_R_02/bone_jacket_R_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacketArm_L_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacketArm_L_01/bone_jacketArm_L_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacketArm_L_01/bone_jacketArm_L_02/bone_jacketArm_L_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacketArm_R_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacketArm_R_01/bone_jacketArm_R_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacketArm_R_01/bone_jacketArm_R_02/bone_jacketArm_R_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacketWing_L_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacketWing_L_01/bone_jacketWing_L_02
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Spine/Bip001
+      Spine1/jacket_Root/bone_jacketWing_L_01/bone_jacketWing_L_02/bone_jacketWing_L_03
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Tail
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Tail/Bip001
+      Tail1
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/Bip001 Tail/Bip001
+      Tail1/Bip001 Tail2
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB00
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB00/bone_skirtB01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_L_00
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_L_00/bone_skirtB_L_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_R_00
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtB_R_00/bone_skirtB_R_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF00
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF00/bone_skirtF01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_L_00
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_L_00/bone_skirtF_L_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_R_00
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001 Pelvis/bone_skirtF_R_00/bone_skirtF_R_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001_Weapon
+    m_Weight: 0
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001_Weapon/bone_buttstock
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001_Weapon/bone_magazine
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001_Weapon/fire_01
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/bone_root/Bip001/Bip001_Weapon/fire_002
+    m_Weight: 1
+  - m_Path: Haruna_Original_Mesh/Fishshapedbun_bone
+    m_Weight: 0
+  - m_Path: Haruna_Original_Mesh/Haruna_Original_Body
+    m_Weight: 0
+  - m_Path: Haruna_Original_Mesh/Haruna_Original_Fishshapedbun_Weapon
+    m_Weight: 0
+  - m_Path: Haruna_Original_Mesh/Haruna_Original_Orangebox
+    m_Weight: 0
+  - m_Path: Haruna_Original_Mesh/Haruna_Original_Weapon
+    m_Weight: 0
+  - m_Path: Haruna_Original_Mesh/Orangebox_bone
+    m_Weight: 0

@@ -10,6 +10,7 @@ public class WeaponComponent : MonoBehaviour
     [SerializeField] private Transform weaponPivot;
     [SerializeField] private GameObject weaponPrefab;
 
+    private PivotManager pivotManager;
     private WeaponBase currentWeapon;
     private List<WeaponBase> detectedWeapons = new List<WeaponBase>();
 
@@ -36,6 +37,10 @@ public class WeaponComponent : MonoBehaviour
         animator = GetComponent<Animator>();
         fbbIK = GetComponent<FullBodyBipedIK>();
         statComponent = GetComponent<StatComponent>();
+
+        pivotManager = FindObjectOfType<PivotManager>();
+        if (pivotManager == null)
+            Debug.LogError("씬에 PivotManager가 없습니다!");
 
         if (fbbIK == null)
             Debug.LogError("FullBodyBipedIK 컴포넌트를 찾을 수 없습니다.");
@@ -138,8 +143,8 @@ public class WeaponComponent : MonoBehaviour
         // 1) 기존 무기 해제
         UnEquip();
 
-        GameObject instance = weaponObject;
-
+        // 2) Prefab 또는 씬 오브젝트를 instance에 할당
+        GameObject instance;
         if (instantiate)
         {
             // 프리팹일 땐 새로 인스턴스화
@@ -149,18 +154,19 @@ public class WeaponComponent : MonoBehaviour
         else
         {
             // 이미 씬에 존재하는 오브젝트
+            instance = weaponObject;
             instance.transform.SetParent(weaponPivot, false);
 
-            Rigidbody rb;
-            if (instance.TryGetComponent<Rigidbody>(out rb))
+            Rigidbody rb = instance.GetComponent<Rigidbody>();
+            if (rb != null)
                 rb.isKinematic = true;
 
-            Collider col;
-            if (instance.TryGetComponent<Collider>(out col))
+            Collider col = instance.GetComponent<Collider>();
+            if (col != null)
                 col.enabled = false;
         }
 
-        // WeaponBase 초기화
+        // 3) WeaponBase 컴포넌트 가져오기
         WeaponBase wb = instance.GetComponent<WeaponBase>();
         if (wb == null)
         {
@@ -169,19 +175,50 @@ public class WeaponComponent : MonoBehaviour
             return;
         }
 
+        // 4) 캐릭터명과 무기명으로 Pivot 데이터 조회
+        string characterName = gameObject.name;  // e.g. "Azusa"
+        string weaponName = wb.name;          // e.g. "Azusa_Weapon"
+
+        PivotJsonEntry entry;
+        bool found = pivotManager.TryGetEntry(characterName, weaponName, out entry);
+        if (!found)
+        {
+            Debug.LogError($"[{characterName},{weaponName}] Pivot 데이터 미등록");
+            return;
+        }
+
+        // 5) JSON에서 읽은 pos/rot/scale 적용
+        instance.transform.localPosition = entry.pos;
+        instance.transform.localEulerAngles = entry.rot;
+        instance.transform.localScale = entry.scale;
+
+        // 6) WeaponBase 초기화 및 후속 처리
         wb.Equip();
         currentWeapon = wb;
 
         // AnimatorController 세팅
         if (wb.name == initialWeaponName)
+        {
             RestoreInitialAnimatorController();
+        }
         else
+        {
             ApplyAOCForWeapon(wb);
+        }
 
         // IK 매핑
         MapWeaponToIK(wb);
 
         Debug.Log("장착된 무기: " + wb.name);
+    }
+
+
+    private GameObject AttachExisting(GameObject obj, Transform parent)
+    {
+        obj.transform.SetParent(parent, false);
+        if (obj.TryGetComponent<Rigidbody>(out var rb)) rb.isKinematic = true;
+        if (obj.TryGetComponent<Collider>(out var col)) col.enabled = false;
+        return obj;
     }
 
     // 나중에 땅바닥에 드랍하는 형태로 변경 필요

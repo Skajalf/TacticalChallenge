@@ -6,7 +6,7 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Azusa_Haruna
+  m_Name: Azusa_Swap_Haruna
   m_Controller: {fileID: 9100000, guid: 5e9934485643adc498e8bc3d9398e8b1, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 3507219716947465111, guid: 8e26a2f3b82eab149975ae8c48fc2977,
