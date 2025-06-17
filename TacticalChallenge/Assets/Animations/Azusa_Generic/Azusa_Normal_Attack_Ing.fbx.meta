@@ -17,9 +17,7 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: <Root Transform>
     rigImportErrors: 
-    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
-      copied configuration does not match position in animation file:\n\t'Bip001
-      Spine' : position error = 10.605127 mm\n"
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
