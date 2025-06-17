@@ -1,8 +1,7 @@
-ï»¿using Cinemachine;
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
 using static UnityEngine.EventSystems.StandaloneInputModule;
 
@@ -11,37 +10,42 @@ public class MovingComponent : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float walkSpeed = 2.0f;
     [SerializeField] private float runSpeed = 3.0f;
-    [SerializeField] private float jumpForce = 1.2f;
+    [SerializeField] private float jumpForce = 4f;
     [SerializeField] private float gravity = -9.81f;
 
     [Header("Tech Settings")]
     [SerializeField] private float sensitivity = 100.0f;
     [SerializeField] private float deadZone = 0.01f;
+    [SerializeField] private float rotationSmooth = 20f;
+
+    [Header("Cover Settings")]
+    [SerializeField] private LayerMask coverLayer;
+    [SerializeField] private float coverRadius = 0.5f;
+    [SerializeField] private float coverDetectionTime = 0.5f;
+
+    [Header("Ground Settings")]
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Vector3 groundCheckOffset = new Vector3(0, 0.05f, 0);
+    [SerializeField] private Vector3 groundCheckSize = new Vector3(0.5f, 0.1f, 0.5f);
 
     private Vector2 velocity;
     private Vector2 inputMove;
     private Vector2 currentInputMove;
     private Vector3 verticalVelocity = Vector3.zero;
-
-    [Header("Cover Settings")]
-    [SerializeField] private float coverRadius = 0.5f;
-    [SerializeField] private LayerMask coverLayer;
-    [SerializeField] private float coverDetectionTime = 0.5f;
+    private Quaternion cameraRotation;
 
     private float coverTimer = 0f;
 
-    private Quaternion cameraRotation;
-
-    private CharacterController controller;
+    private Rigidbody rigidbodyController;
     private Animator animator;
-    private CameraComponent cameraComponent;  // CameraComponent ì°¸ì¡° ì¶”ê°€
-    public RigBuilder rigBuilder;  // RigBuilderë¥¼ ì°¸ì¡°
+    private CameraComponent cameraComponent;  // CameraComponent ÂüÁ¶ Ãß°¡
+    private Transform cameraRootTransform;
 
-
-public bool bCanMove { get; private set; } = true;
+    public bool bCanMove { get; private set; } = true;
     public bool bRun { get; private set; }
     public bool bAlt { get; private set; }
     public bool bJump { get; private set; }
+    public bool bGrounded { get; private set; }
     public bool bCover { get; private set; }
 
     public void Awake()
@@ -51,9 +55,14 @@ public bool bCanMove { get; private set; } = true;
 
     public void Init()
     {
-        cameraComponent = FindObjectOfType<CameraComponent>();  // CameraComponent ì°¾ê¸°
-        controller = GetComponent<CharacterController>();
+        cameraComponent = FindObjectOfType<CameraComponent>();  // CameraComponent Ã£±â
+        
+        rigidbodyController = GetComponent<Rigidbody>();
+        rigidbodyController.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
         animator = GetComponent<Animator>();
+
+        cameraRootTransform = transform.FindChildByName("CameraRoot").transform;
 
         PlayerInput input = GetComponent<PlayerInput>();
 
@@ -77,10 +86,21 @@ public bool bCanMove { get; private set; } = true;
 
     public void Update()
     {
+        CheckGrounded();
+        
+        Cover();
+        Gravity();
+    }
+
+    public void FixedUpdate()
+    {
         Movement();
         Jump();
-        Gravity();
-        Cover();
+    }
+
+    public void LateUpdate()
+    {
+        Rotation();
     }
 
     #region actionMethods
@@ -123,58 +143,45 @@ public bool bCanMove { get; private set; } = true;
 
     public void Movement()
     {
-        Transform cameraRootTransform = transform.FindChildByName("CameraRoot").transform;
-
         if (!bCanMove) return;
 
+        // 1) ÀÔ·Â ºÎµå·´°Ô
         currentInputMove = Vector2.SmoothDamp(currentInputMove, inputMove, ref velocity, 1.0f / sensitivity);
 
+        // 2) Ä«¸Þ¶ó ±âÁØ ¹æÇâ
+        Vector3 cameraForward = cameraRootTransform.forward; cameraForward.y = 0; cameraForward.Normalize();
+        Vector3 cameraRight = cameraRootTransform.right; cameraRight.y = 0; cameraRight.Normalize();
+
+        // 3) ¼öÆò ÀÌµ¿ º¤ÅÍ °è»ê
         Vector3 characterDirection = Vector3.zero;
         float speed = bRun ? runSpeed : walkSpeed;
-        animator.SetBool("IsRun", bRun);
-
-        Quaternion cameraRotation = cameraRootTransform.rotation;
-        Quaternion characterRotation = Quaternion.Euler(0, cameraRotation.eulerAngles.y, 0);
-
-
         if (currentInputMove.magnitude > deadZone)
         {
-            Vector3 cameraForward = cameraRootTransform.forward;
-            cameraForward.y = 0;
-            cameraForward.Normalize();
-
-            Vector3 cameraRight = cameraRootTransform.right;
-            cameraRight.y = 0;
-            cameraRight.Normalize();
-
-            characterDirection = (cameraRight * currentInputMove.x) + (cameraForward * currentInputMove.y);
-            characterDirection = characterDirection.normalized * speed;
-
-            if (!bAlt)
-            {
-                transform.rotation = characterRotation;
-            }
-
+            characterDirection = (cameraRight * currentInputMove.x + cameraForward * currentInputMove.y).normalized * speed;
             animator.SetBool("IsMove", true);
         }
         else
         {
-            if (!bAlt)
-            {
-                transform.rotation = characterRotation;
-            }
-
             animator.SetBool("IsMove", false);
         }
+        animator.SetBool("IsRun", bRun);
 
-        Gravity();
-
-        Vector3 move = characterDirection * Time.deltaTime;
-        move.y = verticalVelocity.y * Time.deltaTime;
-
-        controller.Move(move);
+        // 4) ½ÇÁ¦ ÀÌµ¿
+        Vector3 move = characterDirection * Time.fixedDeltaTime + verticalVelocity * Time.fixedDeltaTime;
+        rigidbodyController.MovePosition(rigidbodyController.position + move);
     }
 
+    public void Rotation()
+    {
+        if (!bCanMove || bAlt) return;
+
+        // 1) ¸ñÇ¥ È¸Àü(Ä«¸Þ¶ó Yaw)
+        float targetYaw = cameraRootTransform.eulerAngles.y;
+        Quaternion targetRot = Quaternion.Euler(0f, targetYaw, 0f);
+
+        // 2) ºÎµå·´°Ô º¸°£ÇØ¼­ È¸Àü
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSmooth);
+    }
 
     public void Move()
     {
@@ -194,17 +201,18 @@ public bool bCanMove { get; private set; } = true;
             animator.SetBool("Cover", false);
         }
 
-        if (bJump && controller.isGrounded)
+        if (bJump && bGrounded)
         {
-            verticalVelocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
+            verticalVelocity.y = jumpForce;
             animator.SetTrigger("IsJump");
-            bJump = false;
         }
+
+        bJump = false;
     }
 
     public void Gravity()
     {
-        if (controller.isGrounded && verticalVelocity.y < 0)
+        if (bGrounded && verticalVelocity.y < 0f)
         {
             verticalVelocity.y = -2f;
         }
@@ -212,6 +220,19 @@ public bool bCanMove { get; private set; } = true;
         {
             verticalVelocity.y += gravity * Time.deltaTime;
         }
+    }
+
+    private void CheckGrounded()
+    {
+        Vector3 center = transform.position + groundCheckOffset;
+        Vector3 halfExtents = groundCheckSize * 0.5f;
+        bGrounded = Physics.CheckBox(
+            center,
+            halfExtents,
+            Quaternion.identity,
+            groundLayer,
+            QueryTriggerInteraction.Ignore
+        );
     }
 
     private void Cover()
@@ -237,6 +258,17 @@ public bool bCanMove { get; private set; } = true;
     }
 
 #if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        // Draw ground check box
+        Gizmos.color = Color.green;
+        Vector3 center = transform.position + groundCheckOffset;
+        Gizmos.DrawWireCube(center, groundCheckSize);
+        // Draw cover radius
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, coverRadius);
+    }
+
     private void OnGUI()
     {
         GUILayout.BeginArea(new Rect(10, 120, 300, 100));

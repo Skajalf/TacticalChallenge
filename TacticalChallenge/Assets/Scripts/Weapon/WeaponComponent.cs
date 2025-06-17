@@ -1,34 +1,30 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Playables;
-using UnityEngine.TextCore.Text;
-using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
+using RootMotion.FinalIK;
 
 public class WeaponComponent : MonoBehaviour
 {
-    [SerializeField] private GameObject[] weaponPrefabs;
-    [SerializeField] private bool[] weaponActiveOnStart; // ¹«±â È°¼ºÈ­ ¿©ºÎ ¹è¿­
+    [Header("Weapon Setup")]
+    [SerializeField] private Transform weaponPivot;
+    [SerializeField] private GameObject weaponPrefab;
 
-    private List<WeaponBase> weapons = new List<WeaponBase>();
-    private int currentWeaponIndex = 0; // ÇöÀç ÀåÂøµÈ ¹«±â ÀÎµ¦½º
-    private WeaponBase currentWeapon; // °¨ÁöµÈ ¹«±â
-    private WeaponBase detectedWeapon; // ÁÖº¯¿¡¼­ Å½»öµÈ ¹«±â
+    private PivotManager pivotManager;
+    private WeaponBase currentWeapon;
+    private List<WeaponBase> detectedWeapons = new List<WeaponBase>();
 
     private PlayerInput playerInput;
     private InputActionMap playerInputActionMap;
-    
-    private bool isCancelAble = false;
 
     private Animator animator;
-    private HandIKComponent handIK;
-
-    // ÃÖÃÊ AnimatorController ÀúÀå º¯¼ö
-    private RuntimeAnimatorController initialAnimatorController;
-    private string initialWeaponName; // ÃÖÃÊ ¹«±â ÀÌ¸§ ÀúÀå
-
+    private FullBodyBipedIK fbbIK;
     private StatComponent statComponent;
+
+    private RuntimeAnimatorController initialAnimatorController;
+    private string initialWeaponName;
+
+    private bool isCancelAble;
 
     private void Awake()
     {
@@ -38,15 +34,24 @@ public class WeaponComponent : MonoBehaviour
     private void Init()
     {
         playerInput = GetComponent<PlayerInput>();
-        playerInputActionMap = playerInput.actions.FindActionMap("Player");
+        animator = GetComponent<Animator>();
+        fbbIK = GetComponent<FullBodyBipedIK>();
         statComponent = GetComponent<StatComponent>();
 
+        pivotManager = FindObjectOfType<PivotManager>();
+        if (pivotManager == null)
+            Debug.LogError("ì”¬ì— PivotManagerê°€ ì—†ìŠµë‹ˆë‹¤!");
+
+        if (fbbIK == null)
+            Debug.LogError("FullBodyBipedIK ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+
+        if (weaponPivot == null)
+            Debug.LogError("WeaponPivot(Transform)ì„ ì¸ìŠ¤í™í„°ì—ì„œ í• ë‹¹í•˜ì„¸ìš”!");
+
+        playerInputActionMap = playerInput.actions.FindActionMap("Player");
         InputAction attack = playerInputActionMap.FindAction("Attack");
         attack.started += Attack_Start;
         attack.canceled += Attack_Cancel;
-
-        InputAction weaponSwap = playerInputActionMap.FindAction("WeaponSwap");
-        weaponSwap.started += weaponSwap_Start;
 
         InputAction weaponPickUp = playerInputActionMap.FindAction("Action");
         weaponPickUp.started += weaponPickUp_Start;
@@ -58,69 +63,24 @@ public class WeaponComponent : MonoBehaviour
         InputAction reloadAction = playerInputActionMap.FindAction("Reload");
         reloadAction.started += Reload_Start;
 
-        animator = GetComponent<Animator>();
-        handIK = GetComponent<HandIKComponent>();
-
-        // ** ÃÖÃÊ AnimatorController ÀúÀå **
         initialAnimatorController = animator.runtimeAnimatorController;
 
-
-        Equip();
-
-        foreach (var weapon in weapons)
+        if (weaponPrefab != null)
         {
-            weapon.ammo = weapon.megazine;
+            Equip(weaponPrefab);
+            initialWeaponName = currentWeapon.name;
+            Debug.Log($"ì´ˆê¸° ì¥ì°© ë¬´ê¸° : {initialWeaponName}");
         }
 
-        // ÄÚ·çÆ¾ ½ÃÀÛ
-        StartCoroutine(CheckForNearbyWeapons());
-    }
-
-    private IEnumerator CheckForNearbyWeapons()
-    {
-        while (true)
-        {
-            DetectWeaponInRange();
-            yield return new WaitForSeconds(1.0f); // 0.5ÃÊ¸¶´Ù ÁÖ±âÀûÀ¸·Î ½ÇÇà
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, 1.25f);
-    }
-
-    private void DetectWeaponInRange()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1.25f);
-        
-        detectedWeapon = null; // ÃÊ±âÈ­
-
-        foreach (var hitCollider in hitColliders)
-        {
-            if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Weapon"))
-            {
-                detectedWeapon = hitCollider.GetComponent<WeaponBase>();
-                if (detectedWeapon != null)
-                {
-                    break; // °¨ÁöµÈ ¹«±â¸¦ Ã£¾ÒÀ¸¸é ·çÇÁ Á¾·á
-                }
-            }
-        }
-
-        if (detectedWeapon == null)
-        {
-            Debug.Log("ÁÖº¯¿¡ ÀåÂøÇÒ ¼ö ÀÖ´Â ¹«±â°¡ ¾ø½À´Ï´Ù.");
-        }
     }
 
     private void Attack_Start(InputAction.CallbackContext context)
     {
-        if (isCancelAble) // CancelAble »óÅÂ¶ó¸é ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ÃÊ±âÈ­ÇÏ°í ´Ù½Ã Àç»ı
+        if (isCancelAble) // CancelAble ìƒíƒœë¼ë©´ ì• ë‹ˆë©”ì´ì…˜ì„ ì´ˆê¸°í™”í•˜ê³  ë‹¤ì‹œ ì¬ìƒ
         {
-            Debug.Log("CancelAble »óÅÂ: ¾Ö´Ï¸ŞÀÌ¼Ç ÃÊ±âÈ­ ÈÄ Àç»ı");
-            animator.Play("Attack", 0, 0); // "Attack" Å¬¸³À» 0ÇÁ·¹ÀÓºÎÅÍ ´Ù½Ã Àç»ı
-            isCancelAble = false; // ÃÊ±âÈ­ ÈÄ CancelAble »óÅÂ¸¦ false·Î º¯°æ
+            Debug.Log("CancelAble ìƒíƒœ: ì• ë‹ˆë©”ì´ì…˜ ì´ˆê¸°í™” í›„ ì¬ìƒ");
+            animator.Play("Attack", 0, 0); // "Attack" í´ë¦½ì„ 0í”„ë ˆì„ë¶€í„° ë‹¤ì‹œ ì¬ìƒ
+            isCancelAble = false; // ì´ˆê¸°í™” í›„ CancelAble ìƒíƒœë¥¼ falseë¡œ ë³€ê²½
             return;
         }
 
@@ -132,7 +92,7 @@ public class WeaponComponent : MonoBehaviour
 
             if (stateInfo.normalizedTime < 1.0f)
             {
-                Debug.Log("¾Ö´Ï¸ŞÀÌ¼Ç ÁøÇà Áß: Áßº¹ ½ÇÇà ¹æÁö");
+                Debug.Log("ì• ë‹ˆë©”ì´ì…˜ ì§„í–‰ ì¤‘: ì¤‘ë³µ ì‹¤í–‰ ë°©ì§€");
                 return;
             }
         }
@@ -145,264 +105,208 @@ public class WeaponComponent : MonoBehaviour
         animator.SetBool("IsAttack", false);
     }
 
-    private void weaponSwap_Start(InputAction.CallbackContext context)
-    {
-        // ´­¸° Å°°¡ ¼ıÀÚ Å°(1~9 µî)ÀÎÁö È®ÀÎ
-        int weaponIndex;
-        if (int.TryParse(context.control.name, out weaponIndex))
-        {
-            // ¹«±â ÀÎµ¦½º·Î »ç¿ëÇÏ±â À§ÇØ 1À» »©ÁÜ (1¹ø Å° -> 0¹ø ¹«±â, 2¹ø Å° -> 1¹ø ¹«±â, ...)
-            weaponIndex -= 1;
-
-            // À¯È¿ÇÑ ¹«±â ÀÎµ¦½ºÀÎÁö È®ÀÎ
-            if (weaponIndex >= 0 && weaponIndex < weapons.Count)
-            {
-                SwapWeapon(weaponIndex);
-            }
-        }
-    }
-
-    private void weaponPickUp_Start(InputAction.CallbackContext context)
-    {
-        if (detectedWeapon != null)
-        {
-            EquipWeapon(detectedWeapon);
-            detectedWeapon = null; // ¹«±â¸¦ ÀåÂøÇÏ¸é Å½»öµÈ ¹«±â ÃÊ±âÈ­
-        }
-        else
-        {
-            Debug.Log("ÁÖº¯¿¡ ÀåÂøÇÒ ¼ö ÀÖ´Â ¹«±â°¡ ¾ø½À´Ï´Ù.");
-        }
-    }
-
     private void Aim_Start(InputAction.CallbackContext context)
     {
-        handIK.UpdateAimRigWeight(true); // ¿¡ÀÌ¹Ö ½ÃÀÛ ½Ã Weight¸¦ 1·Î º¯°æ
+
     }
 
     private void Aim_Cancel(InputAction.CallbackContext context)
     {
-        handIK.UpdateAimRigWeight(false); // ¿¡ÀÌ¹Ö Ãë¼Ò ½Ã Weight¸¦ 0À¸·Î º¯°æ
+
     }
 
-    private void Reload_Start(InputAction.CallbackContext context) // ³ªÁß¿¡ StateÁ¶°Ç ³Ö¾îÁÖ±â
+    private void Reload_Start(InputAction.CallbackContext context) // ë‚˜ì¤‘ì— Stateì¡°ê±´ ë„£ì–´ì£¼ê¸°
     {
         if (currentWeapon == null)
         {
-            Debug.LogWarning("ÇöÀç ÀåÂøµÈ ¹«±â°¡ ¾ø½À´Ï´Ù. ÀçÀåÀüÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("í˜„ì¬ ì¥ì°©ëœ ë¬´ê¸°ê°€ ì—†ìŠµë‹ˆë‹¤. ì¬ì¥ì „í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
         if (currentWeapon.ammo == currentWeapon.megazine)
         {
-            Debug.Log("Åº¾àÀÌ °¡µæ Â÷ ÀÖ¾î ÀçÀåÀüÀÌ ÇÊ¿äÇÏÁö ¾Ê½À´Ï´Ù.");
+            Debug.Log("íƒ„ì•½ì´ ê°€ë“ ì°¨ ìˆì–´ ì¬ì¥ì „ì´ í•„ìš”í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
             return;
         }
 
         if (animator == null)
         {
-            Debug.LogError("Animator ÄÄÆ÷³ÍÆ®°¡ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogError("Animator ì»´í¬ë„ŒíŠ¸ê°€ ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
             return;
         }
 
         currentWeapon.Reload();
     }
 
-
-    private void Equip()
+    public void Equip(GameObject weaponObject, bool instantiate = true)
     {
-        if (weaponPrefabs != null && weaponPrefabs.Length > 0)
+        // 1) ê¸°ì¡´ ë¬´ê¸° í•´ì œ
+        UnEquip();
+
+        // 2) Prefab ë˜ëŠ” ì”¬ ì˜¤ë¸Œì íŠ¸ë¥¼ instanceì— í• ë‹¹
+        GameObject instance;
+        if (instantiate)
         {
-            // weaponActiveOnStart ¹è¿­ÀÌ weaponPrefabs¿Í ±æÀÌ°¡ °°Áö ¾ÊÀ¸¸é ¿À·ù Ãâ·Â
-            if (weaponActiveOnStart.Length != weaponPrefabs.Length)
-            {
-                Debug.LogError("weaponActiveOnStart ¹è¿­ÀÇ Å©±â´Â weaponPrefabs ¹è¿­ÀÇ Å©±â¿Í ÀÏÄ¡ÇØ¾ß ÇÕ´Ï´Ù.");
-                return;
-            }
-
-            for (int i = 0; i < weaponPrefabs.Length; i++)
-            {
-                GameObject weaponInstance = Instantiate(weaponPrefabs[i]);
-                weaponInstance.name = weaponPrefabs[i].name;
-                WeaponBase weapon = weaponInstance.GetComponent<WeaponBase>();
-
-                if (weapon != null)
-                {
-                    // FindChildByNameÀ» »ç¿ëÇÏ¿© WeaponPivotÀ» Ã£±â
-                    Transform weaponPivot = transform.FindChildByName("WeaponPivot");
-                    if (weaponPivot != null)
-                    {
-                        // ¹«±â¸¦ WeaponPivotÀÇ ÀÚ½ÄÀ¸·Î ¼³Á¤
-                        weaponInstance.transform.SetParent(weaponPivot, false);
-                    }
-                    else
-                    {
-                        Debug.LogError("WeaponPivotÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-                    }
-
-                    weapon.Equip(); // Call the Equip() method on the weapon
-                    weapons.Add(weapon); // Add the weapon to the list of equipped weapons
-
-                    // ¹«±â¸¦ È°¼ºÈ­ÇÒÁö ºñÈ°¼ºÈ­ÇÒÁö ¼³Á¤ (weaponActiveOnStart ¹è¿­À» »ç¿ë)
-                    weapon.gameObject.SetActive(weaponActiveOnStart[i]);
-
-                    // ÃÖÃÊ ¹«±â ÀÌ¸§ ÀúÀå
-                    if (i == currentWeaponIndex)
-                    {
-                        initialWeaponName = weapon.name; // ÃÊ±â ¹«±â ÀÌ¸§ ÀúÀå
-                    }
-                }
-                else
-                {
-                    Debug.LogError($"{weaponPrefabs[i].name}¿¡ WeaponBase°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-                }
-            }
-
-            // weapons ¸®½ºÆ®¿¡ ¹«±âµéÀÌ Ãß°¡µÈ ÈÄ currentWeapon ¼³Á¤
-            if (weapons.Count > 0)
-            {
-                currentWeapon = weapons[currentWeaponIndex];
-                Debug.Log($"ÃÊ±â ÀåÂø ¹«±â: {currentWeapon.name}");
-
-                // ºñµ¿±âÀûÀ¸·Î IK ¼³Á¤
-                StartCoroutine(InitializeIKSettings()); // Ã¹ ¹øÂ° ¹«±â ÀåÂø ÈÄ IK ¾÷µ¥ÀÌÆ®
-            }
-            else
-            {
-                Debug.LogWarning("weapons ¸®½ºÆ®¿¡ ¹«±â°¡ ¾ø½À´Ï´Ù.");
-            }
-
-            // ¹«±âµéÀÌ ¸ğµÎ ÀåÂøµÈ ÈÄ IKSettingsUpdate() È£Ãâ
-            //IKSettingsUpdate();
+            // í”„ë¦¬íŒ¹ì¼ ë• ìƒˆë¡œ ì¸ìŠ¤í„´ìŠ¤í™”
+            instance = Instantiate(weaponObject, weaponPivot, false);
+            instance.name = weaponObject.name;
         }
         else
         {
-            Debug.LogError("¹«±â ÇÁ¸®ÆÕÀÌ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-        }
-    }
+            // ì´ë¯¸ ì”¬ì— ì¡´ì¬í•˜ëŠ” ì˜¤ë¸Œì íŠ¸
+            instance = weaponObject;
+            instance.transform.SetParent(weaponPivot, false);
 
-    private void SwapWeapon(int newWeaponIndex)
-    {
-        if (newWeaponIndex >= 0 && newWeaponIndex < weapons.Count && newWeaponIndex != currentWeaponIndex)
+            Rigidbody rb = instance.GetComponent<Rigidbody>();
+            if (rb != null)
+                rb.isKinematic = true;
+
+            Collider col = instance.GetComponent<Collider>();
+            if (col != null)
+                col.enabled = false;
+        }
+
+        // 3) WeaponBase ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
+        WeaponBase wb = instance.GetComponent<WeaponBase>();
+        if (wb == null)
         {
-            // ÇöÀç ¹«±â ºñÈ°¼ºÈ­
-            weapons[currentWeaponIndex].gameObject.SetActive(false);
-
-            // »õ·Î¿î ¹«±â È°¼ºÈ­
-            currentWeaponIndex = newWeaponIndex;
-            currentWeapon = weapons[currentWeaponIndex];
-            currentWeapon.gameObject.SetActive(true);
-
-            // ** ÃÊ±â ¹«±â¶ó¸é ÃÊ±â AnimatorController º¹¿ø **
-            if (currentWeapon.name == initialWeaponName)
-            {
-                RestoreInitialAnimatorController();
-            }
-            else
-            {
-                ApplyAOCForWeapon(currentWeapon);
-            }
-
-            IKSettingsUpdate();
+            Debug.LogError("ì¥ì°© ëŒ€ìƒì— WeaponBase ì»´í¬ë„ŒíŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤!");
+            Destroy(instance);
+            return;
         }
-    }
 
-    private void EquipWeapon(WeaponBase newWeapon)
-    {
-        Transform prevWeapon = weapons[currentWeaponIndex].transform;
-        int emptySlotIndex = weapons.FindIndex(w => w == null);
+        // 4) ìºë¦­í„°ëª…ê³¼ ë¬´ê¸°ëª…ìœ¼ë¡œ Pivot ë°ì´í„° ì¡°íšŒ
+        string characterName = gameObject.name;  // e.g. "Azusa"
+        string weaponName = wb.name;          // e.g. "Azusa_Weapon"
 
-        if (emptySlotIndex != -1)
+        PivotJsonEntry entry;
+        bool found = pivotManager.TryGetEntry(characterName, weaponName, out entry);
+        if (!found)
         {
-            weapons[emptySlotIndex] = newWeapon;
-        }
-        else
-        {
-            
-            weapons[currentWeaponIndex].UnEquip();
-            weapons[currentWeaponIndex] = newWeapon;
+            Debug.LogError($"[{characterName},{weaponName}] Pivot ë°ì´í„° ë¯¸ë“±ë¡");
+            return;
         }
 
-        newWeapon.transform.SetParent(transform.FindChildByName("WeaponPivot"));
-        newWeapon.transform.position = prevWeapon.position;
-        newWeapon.transform.rotation = new Quaternion(0, 0, 0, 0);
-        newWeapon.Equip();
+        // 5) JSONì—ì„œ ì½ì€ pos/rot/scale ì ìš©
+        instance.transform.localPosition = entry.pos;
+        instance.transform.localEulerAngles = entry.rot;
+        instance.transform.localScale = entry.scale;
 
-        currentWeapon = newWeapon;
-        currentWeaponIndex = weapons.IndexOf(newWeapon); // »õ ¹«±âÀÇ ½½·Ô ÀÎµ¦½º¸¦ ÀúÀå
+        // 6) WeaponBase ì´ˆê¸°í™” ë° í›„ì† ì²˜ë¦¬
+        wb.Equip();
+        currentWeapon = wb;
 
-        // ¹«±â È°¼ºÈ­
-        newWeapon.gameObject.SetActive(true);
-
-        // ** ÃÊ±â ¹«±â¶ó¸é ÃÊ±â AnimatorController º¹¿ø **
-        if (newWeapon.name == initialWeaponName)
+        // AnimatorController ì„¸íŒ…
+        if (wb.name == initialWeaponName)
         {
             RestoreInitialAnimatorController();
         }
         else
         {
-            ApplyAOCForWeapon(currentWeapon);
+            ApplyAOCForWeapon(wb);
         }
 
-        Debug.Log($"{newWeapon.name} ¹«±â¸¦ ÀåÂøÇß½À´Ï´Ù.");
+        // IK ë§¤í•‘
+        MapWeaponToIK(wb);
 
-        IKSettingsUpdate();
+        Debug.Log("ì¥ì°©ëœ ë¬´ê¸°: " + wb.name);
     }
 
-    private IEnumerator InitializeIKSettings()
+
+    private GameObject AttachExisting(GameObject obj, Transform parent)
     {
-        yield return new WaitForEndOfFrame(); // ÇÑ ÇÁ·¹ÀÓ ´ë±âÇÏ¿© ¹«±â ÃÊ±âÈ­ ¿Ï·á ´ë±â
-        IKSettingsUpdate(); // ¹«±â°¡ Á¦´ë·Î ÀåÂøµÈ ÈÄ IK ¼³Á¤ ÁøÇà
+        obj.transform.SetParent(parent, false);
+        if (obj.TryGetComponent<Rigidbody>(out var rb)) rb.isKinematic = true;
+        if (obj.TryGetComponent<Collider>(out var col)) col.enabled = false;
+        return obj;
     }
 
-    private void IKSettingsUpdate()
+    // ë‚˜ì¤‘ì— ë•…ë°”ë‹¥ì— ë“œëí•˜ëŠ” í˜•íƒœë¡œ ë³€ê²½ í•„ìš”
+    private void UnEquip()
     {
-        if (handIK != null)
+        if (currentWeapon != null)
         {
-            handIK.UpdateWeaponIKTargets();
-            handIK.ApplyWeaponOffsets();
-            handIK.BuildRig();
+            // 1) Hierarchyì—ì„œ ë¶„ë¦¬
+            Transform weaponTransform = currentWeapon.transform;
+            weaponTransform.SetParent(null);
+
+            // 2) Rigidbody í™œì„±í™” (ë¬¼ë¦¬ ì‹œë®¬ë ˆì´ì…˜ ì ìš©)
+            Rigidbody rbComponent;
+            if (weaponTransform.TryGetComponent<Rigidbody>(out rbComponent))
+            {
+                rbComponent.isKinematic = false;
+            }
+            else
+            {
+                // Rigidbodyê°€ ì—†ë‹¤ë©´ ìƒˆë¡œ ì¶”ê°€í•  ìˆ˜ë„ ìˆìŠµë‹ˆë‹¤.
+                rbComponent = weaponTransform.gameObject.AddComponent<Rigidbody>();
+            }
+
+            // 3) Collider í™œì„±í™”
+            Collider colComponent;
+            if (weaponTransform.TryGetComponent<Collider>(out colComponent))
+            {
+                colComponent.enabled = true;
+            }
+            else
+            {
+                // í•„ìš”í•˜ë‹¤ë©´ ì ì ˆí•œ Collider íƒ€ì…ì„ ì¶”ê°€
+                weaponTransform.gameObject.AddComponent<BoxCollider>();
+            }
+
+            // 4) ì•½ê°„ì˜ ì„í„ìŠ¤(ì„ íƒ)
+            //rbComponent.AddForce(transform.forward * 2f + Vector3.up * 1f, ForceMode.Impulse);
+
+            // 5) currentWeapon ë ˆí¼ëŸ°ìŠ¤ í•´ì œ
+            currentWeapon = null;
+        }
+    }
+
+    private void weaponPickUp_Start(InputAction.CallbackContext context)
+    {
+        // ê°ì§€ëœ(ì¤ê¸° ê°€ëŠ¥í•œ) ê°€ì¥ ê°€ê¹Œìš´ ë¬´ê¸° í•˜ë‚˜ êº¼ë‚´ê¸°
+        WeaponBase toPickup = GetDetectedWeapon();
+        if (toPickup != null)
+        {
+            // ì´ë¯¸ ì”¬ì— ìˆëŠ” ì˜¤ë¸Œì íŠ¸ì´ë¯€ë¡œ instantiate=false
+            Equip(toPickup.gameObject, false);
+
+            // ê°ì§€ ë¦¬ìŠ¤íŠ¸ì—ì„œ ì œê±°
+            ClearDetectedWeapon(toPickup);
+
+            Debug.Log("ë¬´ê¸° í”½ì—…: " + toPickup.name);
         }
         else
         {
-            Debug.LogWarning("HandIKComponent°¡ ¾ø°Å³ª ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.Log("ì£¼ë³€ì— ì¥ì°©í•  ìˆ˜ ìˆëŠ” ë¬´ê¸°ê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
-    }
-
-    public WeaponBase GetActiveWeapon() //¾Æ¸¶ ¹«±â µ¥¹ÌÁö ³ÖÀ»¶§ È£ÃâÇÒµí?
-    {
-        if (currentWeaponIndex >= 0 && currentWeaponIndex < weapons.Count)
-        {
-            return weapons[currentWeaponIndex];
-        }
-        return null;
     }
 
     private void ApplyAOCForWeapon(WeaponBase weapon)
     {
         if (weapon == null || animator == null) return;
 
-        // ÇöÀç Ä³¸¯ÅÍ ÀÌ¸§°ú ¹«±â ÀÌ¸§ °¡Á®¿À±â
-        string characterName = gameObject.name; // Ä³¸¯ÅÍ ÀÌ¸§
+        // í˜„ì¬ ìºë¦­í„° ì´ë¦„ê³¼ ë¬´ê¸° ì´ë¦„ ê°€ì ¸ì˜¤ê¸°
+        string characterName = gameObject.name; // ìºë¦­í„° ì´ë¦„
 
-        // ¹«±â ÀÌ¸§¿¡¼­ "_Weapon" ºÎºĞ Á¦°Å
+        // ë¬´ê¸° ì´ë¦„ì—ì„œ "_Weapon" ë¶€ë¶„ ì œê±°
         string weaponName = weapon.name.Replace("_Weapon", "");
 
-        // AOC ÀÌ¸§ Çü½Ä: {Ä³¸¯ÅÍÀÌ¸§}_Swap_{¹«±âÀÌ¸§}
+        // AOC ì´ë¦„ í˜•ì‹: {ìºë¦­í„°ì´ë¦„}_Swap_{ë¬´ê¸°ì´ë¦„}
         string aocName = $"{characterName}_Swap_{weaponName}";
 
-        // ¸®¼Ò½º¿¡¼­ AOC¸¦ ·Îµå
+        // ë¦¬ì†ŒìŠ¤ì—ì„œ AOCë¥¼ ë¡œë“œ
         AnimatorOverrideController aoc = Resources.Load<AnimatorOverrideController>(aocName);
 
         if (aoc != null)
         {
             animator.runtimeAnimatorController = aoc;
 
-            // **Áï½Ã »óÅÂ ÃÊ±âÈ­**
+            // **ì¦‰ì‹œ ìƒíƒœ ì´ˆê¸°í™”**
             animator.Rebind();
             animator.Update(0);
 
-            Debug.Log($"AOC Àû¿ë: {aocName}");
+            Debug.Log($"AOC ì ìš©: {aocName}");
         }
     }
 
@@ -412,48 +316,111 @@ public class WeaponComponent : MonoBehaviour
         {
             animator.runtimeAnimatorController = initialAnimatorController;
 
-            // **Áï½Ã »óÅÂ ÃÊ±âÈ­**
+            // **ì¦‰ì‹œ ìƒíƒœ ì´ˆê¸°í™”**
             animator.Rebind();
             animator.Update(0);
 
-            Debug.Log($"ÃÊ±â AnimatorController·Î º¹¿ø: {initialAnimatorController.name}");
+            Debug.Log($"ì´ˆê¸° AnimatorControllerë¡œ ë³µì›: {initialAnimatorController.name}");
         }
         else
         {
-            Debug.LogWarning("ÃÊ±â AnimatorController°¡ ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("ì´ˆê¸° AnimatorControllerê°€ ì €ì¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
         }
     }
 
+    private void MapWeaponToIK(WeaponBase weapon)
+    {
+        if (fbbIK == null || weapon == null) return;
+
+        var solver = fbbIK.solver;
+        var leftGrip = weapon.transform.Find("LeftHandGrip");
+        var rightGrip = weapon.transform.Find("RightHandGrip");
+        if (leftGrip == null || rightGrip == null)
+        {
+            Debug.LogError($"{weapon.name}ì— Left/RightHandGripì´ ì—†ìŠµë‹ˆë‹¤.");
+            return;
+        }
+
+        solver.leftHandEffector.target = leftGrip;
+        solver.rightHandEffector.target = rightGrip;
+        solver.leftHandEffector.positionWeight = 1f;
+        solver.leftHandEffector.rotationWeight = 1f;
+        solver.rightHandEffector.positionWeight = 1f;
+        solver.rightHandEffector.rotationWeight = 1f;
+
+        // IK ì¦‰ì‹œ ê°±ì‹ 
+        solver.Initiate(fbbIK.transform);
+        solver.Update();
+    }
+
+    public WeaponBase GetDetectedWeapon()
+    {
+        if (detectedWeapons.Count == 0)
+            return null;
+
+        WeaponBase nearest = null;
+        float bestDistSqr = float.MaxValue;
+        Vector3 pivotPos = weaponPivot.position;
+
+        foreach (WeaponBase wb in detectedWeapons)
+        {
+            if (wb == null) continue;
+            float distSqr = (wb.transform.position - pivotPos).sqrMagnitude;
+            if (distSqr < bestDistSqr)
+            {
+                bestDistSqr = distSqr;
+                nearest = wb;
+            }
+        }
+
+        return nearest;
+    }
+
+    public void SetDetectedWeapon(WeaponBase wb)
+    {
+        if (!detectedWeapons.Contains(wb))
+        {
+            detectedWeapons.Add(wb);
+            Debug.Log($"Detected weapon added: {wb.name}");
+        }
+    }
+
+    public void ClearDetectedWeapon(WeaponBase wb)
+    {
+        if (detectedWeapons.Remove(wb))
+            Debug.Log($"Detected weapon removed: {wb.name}");
+    }
+
     ///
-    /// ¾Ö´Ï¸ŞÀÌ¼Ç ¸Ş¼­µå
+    /// ì• ë‹ˆë©”ì´ì…˜ ë©”ì„œë“œ
     ///
 
     public void Attack()
     {
-        // currentWeaponÀÌ À¯È¿ÇÏ¸é CheckAmmo() È£Ãâ
+        // currentWeaponì´ ìœ íš¨í•˜ë©´ CheckAmmo() í˜¸ì¶œ
         if (currentWeapon != null)
         {
             currentWeapon.AmmoLeft();
         }
         else
         {
-            Debug.LogWarning("ÇöÀç ÀåÂøµÈ ¹«±â°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("í˜„ì¬ ì¥ì°©ëœ ë¬´ê¸°ê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
     public void CancelAble()
     {
         isCancelAble = true;
-        Debug.Log("CancelAble »óÅÂ");
+        Debug.Log("CancelAble ìƒíƒœ");
     }
 
     public void Impulse()
     {
-        
+
     }
 
     /// <summary>
-    /// ¹«±â ½ºÅÈÀ» ÇÃ·¹ÀÌ¾î stat¿¡ Àû¿ëÇÏ´Â ºÎºĞ
+    /// ë¬´ê¸° ìŠ¤íƒ¯ì„ í”Œë ˆì´ì–´ statì— ì ìš©í•˜ëŠ” ë¶€ë¶„
     /// </summary>
     /// <param name="weapon"></param>
     public void ApplyStats(WeaponBase weapon)

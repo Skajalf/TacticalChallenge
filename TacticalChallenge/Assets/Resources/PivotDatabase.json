@@ -1,0 +1,16 @@
+[
+  {
+    "character": "Azusa",
+    "weapon": "Azusa_Weapon",
+    "pos": { "x": -0.1222, "y": -0.0153, "z": 0.1113 },
+    "rot": { "x": 14.822,   "y": -70.269,    "z": 1.497    },
+    "scale": { "x": 1,   "y": 1,     "z": 1    }
+  },
+  {
+    "character": "Azusa",
+    "weapon": "Haruna_Weapon",
+    "pos": { "x": -0.206, "y": 0.578, "z": 0.049 },
+    "rot": { "x": -5.891,   "y": 1.503,    "z": -1.436  },
+    "scale": { "x": 1, "y": 1,   "z": 1  }
+  }
+]
