@@ -8,7 +8,9 @@ public class WeaponComponent : MonoBehaviour
 {
     [Header("Weapon Setup")]
     [SerializeField] private Transform weaponPivot;
-    [SerializeField] private GameObject weaponPrefab;
+    [SerializeField] private GameObject weaponPrefab; //고유무기 프리팹
+
+    private GameObject weaponInstance;
 
     private PivotManager pivotManager;
     private WeaponBase currentWeapon;
@@ -19,6 +21,7 @@ public class WeaponComponent : MonoBehaviour
 
     private Animator animator;
     private FullBodyBipedIK fbbIK;
+    private AimIK aimIK;
     private StatComponent statComponent;
 
     private RuntimeAnimatorController initialAnimatorController;
@@ -37,6 +40,7 @@ public class WeaponComponent : MonoBehaviour
         animator = GetComponent<Animator>();
         fbbIK = GetComponent<FullBodyBipedIK>();
         statComponent = GetComponent<StatComponent>();
+        aimIK = GetComponent<AimIK>();
 
         pivotManager = FindObjectOfType<PivotManager>();
         if (pivotManager == null)
@@ -206,6 +210,8 @@ public class WeaponComponent : MonoBehaviour
             ApplyAOCForWeapon(wb);
         }
 
+        weaponInstance = instance;
+
         // IK 매핑
         MapWeaponToIK(wb);
 
@@ -347,6 +353,8 @@ public class WeaponComponent : MonoBehaviour
         solver.leftHandEffector.rotationWeight = 1f;
         solver.rightHandEffector.positionWeight = 1f;
         solver.rightHandEffector.rotationWeight = 1f;
+
+        aimIK.solver.transform = weaponInstance.transform.Find("Aim").transform;
 
         // IK 즉시 갱신
         solver.Initiate(fbbIK.transform);
