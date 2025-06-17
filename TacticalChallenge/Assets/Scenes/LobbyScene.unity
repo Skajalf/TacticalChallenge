@@ -544,7 +544,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Tactical Challenge\n(\uD0DD\uD2F0\uCEEC \uCC4C\uB9B0\uC9C0)"
+  m_text: "<b>Tactical Challenge</b>\n(\uD0DD\uD2F0\uCEEC \uCC4C\uB9B0\uC9C0)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c374005b045ee8e45a29c0bc50aaf37e, type: 2}
   m_sharedMaterial: {fileID: -5593897333740789667, guid: c374005b045ee8e45a29c0bc50aaf37e,
@@ -578,7 +578,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -832,8 +832,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uB098\uAC00\uAE30"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
-  m_sharedMaterial: {fileID: 0}
+  m_fontAsset: {fileID: 11400000, guid: c374005b045ee8e45a29c0bc50aaf37e, type: 2}
+  m_sharedMaterial: {fileID: -5593897333740789667, guid: c374005b045ee8e45a29c0bc50aaf37e,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -863,7 +864,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -998,7 +999,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -1249,8 +1250,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 360.94095, y: 69.05697}
-  m_SizeDelta: {x: 644.765, y: 226.4236}
+  m_AnchoredPosition: {x: 330.7754, y: 91.134}
+  m_SizeDelta: {x: 584.434, y: 182.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1531380680
 MonoBehaviour:
@@ -1362,8 +1363,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC635\uC158"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
-  m_sharedMaterial: {fileID: 0}
+  m_fontAsset: {fileID: 11400000, guid: c374005b045ee8e45a29c0bc50aaf37e, type: 2}
+  m_sharedMaterial: {fileID: -5593897333740789667, guid: c374005b045ee8e45a29c0bc50aaf37e,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1393,7 +1395,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
