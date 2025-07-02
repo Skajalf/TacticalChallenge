@@ -67,6 +67,12 @@ public class WeaponComponent : MonoBehaviour
         InputAction reloadAction = playerInputActionMap.FindAction("Reload");
         reloadAction.started += Reload_Start;
 
+        //InputAction NormalSkill = playerInputActionMap.FindAction("NormalSkill");
+        //NormalSkill.started += NormalSkill_Start;
+
+        //InputAction EXSkill = playerInputActionMap.FindAction("EXSkill");
+        //EXSkill.started += EXSkill_Start;
+
         initialAnimatorController = animator.runtimeAnimatorController;
 
         if (weaponPrefab != null)
@@ -141,6 +147,16 @@ public class WeaponComponent : MonoBehaviour
 
         currentWeapon.Reload();
     }
+
+    //private void NormalSkill_Start(InputAction.CallbackContext context) // 테스트용 코드
+    //{
+    //    animator.SetTrigger("Skill");
+    //}
+
+    //private void EXSkill_Start(InputAction.CallbackContext context) // 테스트용 코드
+    //{
+    //    animator.SetTrigger("EXSkill");
+    //}
 
     public void Equip(GameObject weaponObject, bool instantiate = true)
     {
