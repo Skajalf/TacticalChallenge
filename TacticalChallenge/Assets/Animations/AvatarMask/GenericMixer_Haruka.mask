@@ -12,7 +12,7 @@ AvatarMask:
   - m_Path: 
     m_Weight: 1
   - m_Path: Haruka_Original_Halo
-    m_Weight: 0
+    m_Weight: 1
   - m_Path: Haruka_Original_Mesh
     m_Weight: 0
   - m_Path: Haruka_Original_Mesh/bone_root
