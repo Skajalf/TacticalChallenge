@@ -370,7 +370,7 @@ public class WeaponComponent : MonoBehaviour
         solver.rightHandEffector.positionWeight = 1f;
         solver.rightHandEffector.rotationWeight = 1f;
 
-        aimIK.solver.transform = weaponInstance.transform.Find("Aim").transform;
+        aimIK.solver.transform = weaponInstance.transform.Find("fire_01").transform;
 
         // IK 즉시 갱신
         solver.Initiate(fbbIK.transform);
