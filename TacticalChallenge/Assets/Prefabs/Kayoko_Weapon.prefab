@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 1487114401326225497}
   - component: {fileID: 6646679873060820504}
   - component: {fileID: 481536832391529103}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Kayoko_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

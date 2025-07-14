@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 4939294749665288767}
   - component: {fileID: 4992152753726612042}
   - component: {fileID: 5043925170628054050}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mika_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

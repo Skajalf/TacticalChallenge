@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 6794472105847715601}
   - component: {fileID: 3109763544775310151}
   - component: {fileID: -1130740641841357478}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Azusa_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

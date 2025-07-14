@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5680746371502812030}
   - component: {fileID: 2168941271834818326}
   - component: {fileID: 2362260740243585180}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Atsuko_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

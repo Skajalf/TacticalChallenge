@@ -448,7 +448,7 @@ GameObject:
   - component: {fileID: 7317443076469062920}
   - component: {fileID: 714391647075530085}
   - component: {fileID: -3923239533111831342}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Izuna_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

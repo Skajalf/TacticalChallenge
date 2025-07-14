@@ -350,31 +350,56 @@ public class WeaponComponent : MonoBehaviour
         }
     }
 
+    //private void MapWeaponToIK(WeaponBase weapon)
+    //{
+    //    if (fbbIK == null || weapon == null) return;
+
+    //    var solver = fbbIK.solver;
+    //    var leftGrip = weapon.transform.Find("LeftHandGrip");
+    //    var rightGrip = weapon.transform.Find("RightHandGrip");
+    //    if (leftGrip == null || rightGrip == null)
+    //    {
+    //        Debug.LogError($"{weapon.name}에 Left/RightHandGrip이 없습니다.");
+    //        return;
+    //    }
+
+    //    solver.leftHandEffector.target = leftGrip;
+    //    solver.rightHandEffector.target = rightGrip;
+    //    solver.leftHandEffector.positionWeight = 1f;
+    //    solver.leftHandEffector.rotationWeight = 1f;
+    //    solver.rightHandEffector.positionWeight = 1f;
+    //    solver.rightHandEffector.rotationWeight = 1f;
+
+    //    aimIK.solver.transform = weaponInstance.transform.Find("fire_01").transform;
+
+    //    // IK 즉시 갱신
+    //    solver.Initiate(fbbIK.transform);
+    //    solver.Update();
+    //}
+
     private void MapWeaponToIK(WeaponBase weapon)
     {
-        if (fbbIK == null || weapon == null) return;
-
-        var solver = fbbIK.solver;
-        var leftGrip = weapon.transform.Find("LeftHandGrip");
-        var rightGrip = weapon.transform.Find("RightHandGrip");
-        if (leftGrip == null || rightGrip == null)
+        if (aimIK == null || weapon == null)
         {
-            Debug.LogError($"{weapon.name}에 Left/RightHandGrip이 없습니다.");
+            Debug.LogError("AimIK 또는 weapon이 null입니다.");
             return;
         }
 
-        solver.leftHandEffector.target = leftGrip;
-        solver.rightHandEffector.target = rightGrip;
-        solver.leftHandEffector.positionWeight = 1f;
-        solver.leftHandEffector.rotationWeight = 1f;
-        solver.rightHandEffector.positionWeight = 1f;
-        solver.rightHandEffector.rotationWeight = 1f;
+        Transform firePoint = weapon.transform.Find("fire_01");
+        if (firePoint == null)
+        {
+            Debug.LogError($"{weapon.name}에 fire_01 포인트가 없습니다.");
+            return;
+        }
 
-        aimIK.solver.transform = weaponInstance.transform.Find("fire_01").transform;
+        aimIK.solver.Initiate(animator.transform);
 
-        // IK 즉시 갱신
-        solver.Initiate(fbbIK.transform);
-        solver.Update();
+        aimIK.solver.transform = firePoint;
+        Debug.Log($"[MapWeaponToAimIK] Aim Transform → {firePoint.name}");
+
+        aimIK.solver.IKPositionWeight = 1f;
+
+        aimIK.solver.Update();
     }
 
     public WeaponBase GetDetectedWeapon()
