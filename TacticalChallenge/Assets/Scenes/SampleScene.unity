@@ -1844,6 +1844,74 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1908185956
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.331
+      objectReference: {fileID: 0}
+    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.085
+      objectReference: {fileID: 0}
+    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3015174873635946888, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
+      propertyPath: m_Name
+      value: Mika_Weapon
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8705f080af707e04eb9999c1565b5ac0, type: 3}
 --- !u!1001 &1924264393
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34738,3 +34806,4 @@ SceneRoots:
   - {fileID: 1737590687}
   - {fileID: 1905907113}
   - {fileID: 1924264393}
+  - {fileID: 1908185956}
