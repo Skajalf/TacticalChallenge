@@ -10,7 +10,7 @@ public class CameraComponent : MonoBehaviour
 {
     [Header("Camera Settings")]
     [SerializeField] private bool bUseCamera = true;  // 카메라 사용 여부
-    [SerializeField] private Vector2 zoomRange = new Vector2(3.0f, 5.0f);
+    [SerializeField] private Vector2 zoomRange = new Vector2(2.0f, 3.0f);
     [SerializeField] private float zoomSensitivity = 0.1f;
     [SerializeField] private float zoomLerp = 40.0f;
 
@@ -18,7 +18,7 @@ public class CameraComponent : MonoBehaviour
     [SerializeField] private Vector2 mouseSensitivity = new Vector2(0.1f, 0.1f);  // 마우스 민감도 x는 좌우, y는 수직
 
     [Header("Camera Pitch Limits")]
-    [SerializeField] private Vector2 limitPitchAngle = new Vector2(-45f, 75f);
+    [SerializeField] private Vector2 limitPitchAngle = new Vector2(-20f, 75f);
 
     [Header("Collision Settings")]
     [SerializeField] private LayerMask collisionMask;

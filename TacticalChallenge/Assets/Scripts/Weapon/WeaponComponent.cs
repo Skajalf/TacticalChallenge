@@ -8,7 +8,9 @@ public class WeaponComponent : MonoBehaviour
 {
     [Header("Weapon Setup")]
     [SerializeField] private Transform weaponPivot;
-    [SerializeField] private GameObject weaponPrefab;
+    [SerializeField] private GameObject weaponPrefab; //고유무기 프리팹
+
+    private GameObject weaponInstance;
 
     private PivotManager pivotManager;
     private WeaponBase currentWeapon;
@@ -19,6 +21,7 @@ public class WeaponComponent : MonoBehaviour
 
     private Animator animator;
     private FullBodyBipedIK fbbIK;
+    private AimIK aimIK;
     private StatComponent statComponent;
 
     private RuntimeAnimatorController initialAnimatorController;
@@ -37,6 +40,7 @@ public class WeaponComponent : MonoBehaviour
         animator = GetComponent<Animator>();
         fbbIK = GetComponent<FullBodyBipedIK>();
         statComponent = GetComponent<StatComponent>();
+        aimIK = GetComponent<AimIK>();
 
         pivotManager = FindObjectOfType<PivotManager>();
         if (pivotManager == null)
@@ -62,6 +66,12 @@ public class WeaponComponent : MonoBehaviour
 
         InputAction reloadAction = playerInputActionMap.FindAction("Reload");
         reloadAction.started += Reload_Start;
+
+        //InputAction NormalSkill = playerInputActionMap.FindAction("NormalSkill");
+        //NormalSkill.started += NormalSkill_Start;
+
+        //InputAction EXSkill = playerInputActionMap.FindAction("EXSkill");
+        //EXSkill.started += EXSkill_Start;
 
         initialAnimatorController = animator.runtimeAnimatorController;
 
@@ -138,6 +148,16 @@ public class WeaponComponent : MonoBehaviour
         currentWeapon.Reload();
     }
 
+    //private void NormalSkill_Start(InputAction.CallbackContext context) // 테스트용 코드
+    //{
+    //    animator.SetTrigger("Skill");
+    //}
+
+    //private void EXSkill_Start(InputAction.CallbackContext context) // 테스트용 코드
+    //{
+    //    animator.SetTrigger("EXSkill");
+    //}
+
     public void Equip(GameObject weaponObject, bool instantiate = true)
     {
         // 1) 기존 무기 해제
@@ -205,6 +225,8 @@ public class WeaponComponent : MonoBehaviour
         {
             ApplyAOCForWeapon(wb);
         }
+
+        weaponInstance = instance;
 
         // IK 매핑
         MapWeaponToIK(wb);
@@ -328,29 +350,56 @@ public class WeaponComponent : MonoBehaviour
         }
     }
 
+    //private void MapWeaponToIK(WeaponBase weapon)
+    //{
+    //    if (fbbIK == null || weapon == null) return;
+
+    //    var solver = fbbIK.solver;
+    //    var leftGrip = weapon.transform.Find("LeftHandGrip");
+    //    var rightGrip = weapon.transform.Find("RightHandGrip");
+    //    if (leftGrip == null || rightGrip == null)
+    //    {
+    //        Debug.LogError($"{weapon.name}에 Left/RightHandGrip이 없습니다.");
+    //        return;
+    //    }
+
+    //    solver.leftHandEffector.target = leftGrip;
+    //    solver.rightHandEffector.target = rightGrip;
+    //    solver.leftHandEffector.positionWeight = 1f;
+    //    solver.leftHandEffector.rotationWeight = 1f;
+    //    solver.rightHandEffector.positionWeight = 1f;
+    //    solver.rightHandEffector.rotationWeight = 1f;
+
+    //    aimIK.solver.transform = weaponInstance.transform.Find("fire_01").transform;
+
+    //    // IK 즉시 갱신
+    //    solver.Initiate(fbbIK.transform);
+    //    solver.Update();
+    //}
+
     private void MapWeaponToIK(WeaponBase weapon)
     {
-        if (fbbIK == null || weapon == null) return;
-
-        var solver = fbbIK.solver;
-        var leftGrip = weapon.transform.Find("LeftHandGrip");
-        var rightGrip = weapon.transform.Find("RightHandGrip");
-        if (leftGrip == null || rightGrip == null)
+        if (aimIK == null || weapon == null)
         {
-            Debug.LogError($"{weapon.name}에 Left/RightHandGrip이 없습니다.");
+            Debug.LogError("AimIK 또는 weapon이 null입니다.");
             return;
         }
 
-        solver.leftHandEffector.target = leftGrip;
-        solver.rightHandEffector.target = rightGrip;
-        solver.leftHandEffector.positionWeight = 1f;
-        solver.leftHandEffector.rotationWeight = 1f;
-        solver.rightHandEffector.positionWeight = 1f;
-        solver.rightHandEffector.rotationWeight = 1f;
+        Transform firePoint = weapon.transform.Find("fire_01");
+        if (firePoint == null)
+        {
+            Debug.LogError($"{weapon.name}에 fire_01 포인트가 없습니다.");
+            return;
+        }
 
-        // IK 즉시 갱신
-        solver.Initiate(fbbIK.transform);
-        solver.Update();
+        aimIK.solver.Initiate(animator.transform);
+
+        aimIK.solver.transform = firePoint;
+        Debug.Log($"[MapWeaponToAimIK] Aim Transform → {firePoint.name}");
+
+        aimIK.solver.IKPositionWeight = 1f;
+
+        aimIK.solver.Update();
     }
 
     public WeaponBase GetDetectedWeapon()
