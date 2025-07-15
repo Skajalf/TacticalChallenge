@@ -8,16 +8,37 @@
   },
   {
     "character": "Azusa",
-    "weapon": "Haruna_Weapon",
-    "pos": { "x": -0.206, "y": 0.578, "z": 0.049 },
-    "rot": { "x": -5.891,   "y": 1.503,    "z": -1.436  },
-    "scale": { "x": 1, "y": 1,   "z": 1  }
-  },
-  {
-    "character": "Azusa",
     "weapon": "Atsuko_Weapon",
     "pos": {"x": -0.091, "y": 0.009, "z": 0.061},
     "rot": {"x": 2.164, "y": -82.135, "z": 92.154},
+    "scale": {"x": 1.0, "y": 1.0, "z": 1.0}
+  },
+  {
+    "character": "Azusa",
+    "weapon": "Haruka_Weapon",
+    "pos": {"x": -0.067, "y": 0.01, "z": 0.056},
+    "rot": {"x": 6.788, "y": -72.658, "z": 86.816},
+    "scale": {"x": 1.0, "y": 1.0, "z": 1.0}
+  },
+  {
+    "character": "Azusa",
+    "weapon": "Haruna_Weapon",
+    "pos": { "x": -0.206, "y": 0.578, "z": 0.049 },
+    "rot": { "x": -5.891,   "y": 1.503,    "z": -1.436  },
+    "scale": { "x": 1.0, "y": 1.0,   "z": 1.0  }
+  },
+  {
+    "character": "Azusa",
+    "weapon": "Izuna_Weapon",
+    "pos": {"x": -0.0786, "y": 0.0053, "z": 0.046},
+    "rot": {"x": 8.737, "y": -52.248, "z": 95.507},
+    "scale": {"x": 0.8, "y": 0.8, "z": 0.8}
+  },
+  {
+    "character": "Azusa",
+    "weapon": "Kayoko_Weapon",
+    "pos": {"x": -0.0632, "y": 0, "z": 0.0421},
+    "rot": {"x": 0, "y": -78.52, "z": 90},
     "scale": {"x": 1.0, "y": 1.0, "z": 1.0}
   },
   {
