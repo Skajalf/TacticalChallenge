@@ -56,10 +56,80 @@
   "scale": { "x": 1, "y": 1, "z": 1 }
   },
   {
+  "character": "Atsuko",
+  "weapon": "Azusa_Weapon",
+  "pos": { "x": -0.0602, "y": -0.0064, "z": 0.082 },
+  "rot": { "x": 13.496, "y": -75.539, "z": 90.069 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Atsuko",
+  "weapon": "Haruka_Weapon",
+  "pos": { "x": -0.0512, "y": 0.0103, "z": 0.0584 },
+  "rot": { "x": 11.827, "y": -75.335, "z": 91.207 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Atsuko",
+  "weapon": "Izuna_Weapon",
+  "pos": { "x": -0.106, "y": 0.001, "z": 0.033 },
+  "rot": { "x": -4.672, "y": -47.083, "z": 98.494 },
+  "scale": { "x": 1, "y": 1, "z": 0.9 }
+  },
+  {
+  "character": "Atsuko",
+  "weapon": "Kayoko_Weapon",
+  "pos": { "x": -0.0507, "y": 0.0082, "z": 0.0375 },
+  "rot": { "x": -5.453, "y": -87.832, "z": 96.808 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Atsuko",
+  "weapon": "Mika_Weapon",
+  "pos": { "x": -0.075, "y": 0.017, "z": 0.0508 },
+  "rot": { "x": 13.105, "y": -76.411, "z": 95.817 },
+  "scale": { "x": 0.9, "y": 0.9, "z": 0.9 }
+  },
+  {
   "character": "Haruka",
   "weapon": "Haruka_Weapon",
   "pos": { "x": -0.050999999, "y": 0.0120000001, "z": 0.0529999994 },
   "rot": { "x": 13.2514248, "y": 283.677216, "z": 87.9695663 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Haruka",
+  "weapon": "Atsuko_Weapon",
+  "pos": { "x": -0.0611, "y": 0.009, "z": 0.0611 },
+  "rot": { "x": 13.447, "y": -83.151, "z": 86.259 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Haruka",
+  "weapon": "Azusa_Weapon",
+  "pos": { "x": -0.0615, "y": 0.0066, "z": 0.0814 },
+  "rot": { "x": 15.977, "y": -78.794, "z": 85.349 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Haruka",
+  "weapon": "Izuna_Weapon",
+  "pos": { "x": -0.051, "y": 0.012, "z": 0.053 },
+  "rot": { "x": 6.746, "y": -56.568, "z": 95.061 },
+  "scale": { "x": 0.9, "y": 0.9, "z": 0.9 }
+  },
+  {
+  "character": "Haruka",
+  "weapon": "Kayoko_Weapon",
+  "pos": { "x": -0.0543, "y": 0.0124, "z": 0.0398 },
+  "rot": { "x": 13.251, "y": -76.323, "z": 87.97 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Haruka",
+  "weapon": "Mika_Weapon",
+  "pos": { "x": -0.055, "y": 0.009, "z": 0.054 },
+  "rot": { "x": 4.121, "y": -73.66, "z": 96.452 },
   "scale": { "x": 1, "y": 1, "z": 1 }
   },
   {
