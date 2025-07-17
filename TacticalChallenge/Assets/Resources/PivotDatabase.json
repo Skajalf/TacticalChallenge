@@ -140,6 +140,41 @@
   "scale": { "x": 1, "y": 1, "z": 1 }
   },
   {
+  "character": "Kayoko",
+  "weapon": "Atsuko_Weapon",
+  "pos": { "x": -0.0662, "y": 0.0125, "z": 0.0575 },
+  "rot": { "x": 15.292, "y": -82.814, "z": 91.482 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Kayoko",
+  "weapon": "Azusa_Weapon",
+  "pos": { "x": -0.0486, "y": 0.0107, "z": 0.0825 },
+  "rot": { "x": 17.218, "y": -80.657, "z": 85.405 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Kayoko",
+  "weapon": "Haruka_Weapon",
+  "pos": { "x": -0.054, "y": 0.014, "z": 0.053 },
+  "rot": { "x": 15.073, "y": -73.357, "z": 94.431 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Kayoko",
+  "weapon": "Izuna_Weapon",
+  "pos": { "x": -0.09, "y": 0.007, "z": 0.039 },
+  "rot": { "x": 7.806, "y": -51.891, "z": 98.859 },
+  "scale": { "x": 1, "y": 1, "z": 0.9 }
+  },
+  {
+  "character": "Kayoko",
+  "weapon": "Mika_Weapon",
+  "pos": { "x": -0.0672, "y": 0.0117, "z": 0.0472 },
+  "rot": { "x": 7.031, "y": -70.227, "z": 91.308 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
   "character": "Izuna",
   "weapon": "Izuna_Weapon",
   "pos": { "x": -0.0763999969, "y": 0.00700000022, "z": 0.0359000005 },
@@ -147,10 +182,80 @@
   "scale": { "x": 1, "y": 1, "z": 1 }
   },
   {
+  "character": "Izuna",
+  "weapon": "Atsuko_Weapon",
+  "pos": { "x": -0.0586, "y": 0.0137, "z": 0.0634 },
+  "rot": { "x": 17.359, "y": -88.458, "z": 89.289 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Izuna",
+  "weapon": "Azusa_Weapon",
+  "pos": { "x": -0.0628, "y": 0.0138, "z": 0.0809 },
+  "rot": { "x": 15.636, "y": -71.355, "z": 94.772 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Izuna",
+  "weapon": "Haruka_Weapon",
+  "pos": { "x": -0.0628, "y": 0.0125, "z": 0.0597 },
+  "rot": { "x": 10.573, "y": -77.466, "z": 93.501 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Izuna",
+  "weapon": "Kayoko_Weapon",
+  "pos": { "x": -0.0711, "y": 0.0089, "z": 0.0442 },
+  "rot": { "x": 5.959, "y": -76.071, "z": 93.736 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Izuna",
+  "weapon": "Mika_Weapon",
+  "pos": { "x": -0.0668, "y": 0.0136, "z": 0.067 },
+  "rot": { "x": 6.944, "y": -77.164, "z": 101.972 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
   "character": "Mika",
   "weapon": "Mika_Weapon",
   "pos": { "x": -0.067900002, "y": 0.0204000007, "z": 0.0720999986 },
   "rot": { "x": 11.4014616, "y": 281.902924, "z": 97.8396988 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Mika",
+  "weapon": "Atsuko_Weapon",
+  "pos": { "x": -0.0679, "y": 0.0204, "z": 0.0721 },
+  "rot": { "x": 12.965, "y": -88.977, "z": 94.089 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Mika",
+  "weapon": "Azusa_Weapon",
+  "pos": { "x": -0.062, "y": 0.023, "z": 0.077 },
+  "rot": { "x": 9.942, "y": -88.229, "z": 89.153 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Mika",
+  "weapon": "Haruka_Weapon",
+  "pos": { "x": -0.0535, "y": 0.0255, "z": 0.0579 },
+  "rot": { "x": 14.218, "y": -76.75, "z": 89.525 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Mika",
+  "weapon": "Izuna_Weapon",
+  "pos": { "x": -0.075, "y": 0.013, "z": 0.036 },
+  "rot": { "x": 4.259, "y": -58.238, "z": 109.042 },
+  "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+  "character": "Mika",
+  "weapon": "Kayoko_Weapon",
+  "pos": { "x": -0.0579, "y": 0.0227, "z": 0.0431 },
+  "rot": { "x": -6.56, "y": -76.237, "z": 77.782 },
   "scale": { "x": 1, "y": 1, "z": 1 }
   }
 ]
