@@ -32,15 +32,19 @@ public class Pistol_17 : WeaponBase
     {
         base.Reload();
 
+        animator = FindAnyObjectByType<WeaponComponent>().GetComponent<Animator>();
+        // TODO :: 루트 오브젝트의 루트 (CHxxxx_Weapon의 루트는 Weapon_pivot, Weapon_pivot의 루트인
+        // CHxxxx의 애니메이터를 찾아오는 코드를 init() 부분에 추가해야 한다.) 를 찾는 방법을 찾기.
+
         if (animator == null)
         {
             Debug.LogError("Animator가 설정되지 않았습니다. Animator 컴포넌트가 올바르게 연결되어 있는지 확인하세요.");
             return;
         }
 
+
         if (!IsReload && ammo.Value < megazine.Value)
         {
-            animator.SetTrigger("Reload");
             StartCoroutine(ReloadCoroutine());
         }
         else

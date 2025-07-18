@@ -45,7 +45,6 @@ public class Demons_Roar : WeaponBase
 
         if (!IsReload && ammo.Value < megazine.Value)
         {
-            animator.SetTrigger("Reload");
             StartCoroutine(ReloadCoroutine());
         }
         else
@@ -53,7 +52,6 @@ public class Demons_Roar : WeaponBase
             Debug.Log("재장전이 필요하지 않습니다.");
         }
     }
-
 
     public override void Equip()
     {

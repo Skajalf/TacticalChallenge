@@ -145,18 +145,14 @@ public class WeaponComponent : MonoBehaviour
             return;
         }
 
+        int reloadIdx = UnityEngine.Random.Range(0, currentWeapon.RandomReload);
+        animator.SetInteger("Reload", reloadIdx);
+        animator.SetTrigger("ReloadTrigger");
+
+        Debug.Log($"애니메이터에 재장전 트리거 실행 (Reload={reloadIdx})");
+
         currentWeapon.Reload();
     }
-
-    //private void NormalSkill_Start(InputAction.CallbackContext context) // 테스트용 코드
-    //{
-    //    animator.SetTrigger("Skill");
-    //}
-
-    //private void EXSkill_Start(InputAction.CallbackContext context) // 테스트용 코드
-    //{
-    //    animator.SetTrigger("EXSkill");
-    //}
 
     public void Equip(GameObject weaponObject, bool instantiate = true)
     {

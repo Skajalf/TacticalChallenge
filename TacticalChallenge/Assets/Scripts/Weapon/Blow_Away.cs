@@ -46,7 +46,6 @@ public class Blow_Away : WeaponBase
 
         if (!IsReload && ammo.Value < megazine.Value)
         {
-            animator.SetTrigger("Reload");
             StartCoroutine(ReloadCoroutine());
         }
         else
@@ -54,7 +53,6 @@ public class Blow_Away : WeaponBase
             Debug.Log("재장전이 필요하지 않습니다.");
         }
     }
-
 
     public override void Equip()
     {

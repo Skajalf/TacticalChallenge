@@ -235,14 +235,15 @@ MonoBehaviour:
   critScale: {fileID: 0}
   lifeSteal: {fileID: 0}
   speed: {fileID: 0}
-  megazine: {fileID: 0}
-  ammo: {fileID: 0}
+  megazine: {fileID: 11400000, guid: 34db4efcea0f9f841a08bff41ff72004, type: 2}
+  ammo: {fileID: 11400000, guid: 502f79ca1d0040e44af85fb610dc1d77, type: 2}
   reloadTime: {fileID: 0}
   damageDelay: {fileID: 0}
   range: {fileID: 0}
   hitLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  RandomReload: 2
   weaponStats: {fileID: 0}
   projectilePrefab: {fileID: 0}
   cartridgeParticle: {fileID: 0}

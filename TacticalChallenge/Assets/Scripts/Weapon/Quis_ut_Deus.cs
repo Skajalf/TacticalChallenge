@@ -42,11 +42,10 @@ public class Quis_ut_Deus : WeaponBase
             Debug.LogError("Animator가 설정되지 않았습니다. Animator 컴포넌트가 올바르게 연결되어 있는지 확인하세요.");
             return;
         }
-        
+
 
         if (!IsReload && ammo.Value < megazine.Value)
         {
-            animator.SetTrigger("Reload");
             StartCoroutine(ReloadCoroutine());
         }
         else
@@ -54,7 +53,6 @@ public class Quis_ut_Deus : WeaponBase
             Debug.Log("재장전이 필요하지 않습니다.");
         }
     }
-
 
     public override void Equip()
     {

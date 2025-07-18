@@ -20,6 +20,8 @@ public abstract class WeaponBase : MonoBehaviour
     [SerializeField] protected Stat range;          // 사거리
     [SerializeField] protected LayerMask hitLayerMask; // 피격 가능 대상 (폭발 같은 경우라던지)
 
+    [SerializeField] public int RandomReload = 1;
+
     [SerializeField] protected WeaponStatData weaponStats;
 
     [Header("Weapon Visuals")]

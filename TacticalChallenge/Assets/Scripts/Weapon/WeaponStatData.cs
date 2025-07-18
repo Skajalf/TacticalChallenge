@@ -18,6 +18,11 @@ public class WeaponStatData : ScriptableObject
     [SerializeField] private float range;          // 사거리
     [SerializeField] private LayerMask hitLayerMask; // 피격 가능 대상 (폭발 같은 경우라던지)
 
+    [Header("Animation Settings")]
+    [SerializeField] private int randomReload = 1; // 재장전 애니메이션 개수
+
+    public int RandomReload => randomReload;
+
     public string WeaponName => weaponName;
     public float Power => power;
     public float ArmorPiercing => armorPiercing;
