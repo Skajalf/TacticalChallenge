@@ -96,6 +96,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Cover",
+                    "type": "Button",
+                    "id": "24d80dd0-555a-4a5c-8d01-ee1c2faa7367",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Action",
                     "type": "Button",
                     "id": "85bd3891-bbe2-4102-9eac-5eecd62031ac",
@@ -350,6 +359,17 @@
                     "processors": "",
                     "groups": "PC",
                     "action": "SpecialSkill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6e66f24d-3fb2-4f56-9870-73dfeebd3a1a",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Cover",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

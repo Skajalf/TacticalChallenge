@@ -23,6 +23,7 @@ public class WeaponComponent : MonoBehaviour
     private FullBodyBipedIK fbbIK;
     private AimIK aimIK;
     private StatComponent statComponent;
+    private MovingComponent movingComponent;
 
     private RuntimeAnimatorController initialAnimatorController;
     private string initialWeaponName;
@@ -40,6 +41,7 @@ public class WeaponComponent : MonoBehaviour
         animator = GetComponent<Animator>();
         fbbIK = GetComponent<FullBodyBipedIK>();
         statComponent = GetComponent<StatComponent>();
+        movingComponent = GetComponent<MovingComponent>();
         aimIK = GetComponent<AimIK>();
 
         pivotManager = FindObjectOfType<PivotManager>();
@@ -117,12 +119,22 @@ public class WeaponComponent : MonoBehaviour
 
     private void Aim_Start(InputAction.CallbackContext context)
     {
+        animator.SetBool("IsAim", true);
 
+        if (movingComponent != null && movingComponent.bCover)
+        {
+            aimIK.enabled = true;
+        }
     }
 
     private void Aim_Cancel(InputAction.CallbackContext context)
     {
+        animator.SetBool("IsAim", false);
 
+        if (movingComponent != null && movingComponent.bCover)
+        {
+            aimIK.enabled = false;
+        }
     }
 
     private void Reload_Start(InputAction.CallbackContext context) // 나중에 State조건 넣어주기

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using RootMotion.FinalIK;
 using static UnityEngine.EventSystems.StandaloneInputModule;
 
 public class MovingComponent : MonoBehaviour
@@ -40,6 +41,7 @@ public class MovingComponent : MonoBehaviour
     private Animator animator;
     private CameraComponent cameraComponent;  // CameraComponent 참조 추가
     private Transform cameraRootTransform;
+    private AimIK aimIK;
 
     public bool bCanMove { get; private set; } = true;
     public bool bRun { get; private set; }
@@ -65,6 +67,7 @@ public class MovingComponent : MonoBehaviour
         cameraRootTransform = transform.FindChildByName("CameraRoot").transform;
 
         PlayerInput input = GetComponent<PlayerInput>();
+        aimIK = GetComponent<AimIK>();
 
         InputActionMap actionMap = input.actions.FindActionMap("Player");
 
@@ -82,18 +85,28 @@ public class MovingComponent : MonoBehaviour
         InputAction alt = actionMap.FindAction("Alt");
         alt.started += startAlt;
         alt.canceled += cancelAlt;
+
+        InputAction cover = actionMap.FindAction("Cover");
+        cover.started += Togglecover;
     }
 
     public void Update()
     {
         CheckGrounded();
-        
-        Cover();
         Gravity();
     }
 
     public void FixedUpdate()
     {
+        if (bCover)
+        {
+            // 엄폐 중에는 물리 속도를 0으로 고정
+            rigidbodyController.velocity = Vector3.zero;
+            // 수직 속도도 0으로 해서 떨어지는 현상 방지
+            verticalVelocity = Vector3.zero;
+            return;
+        }
+
         Movement();
         Jump();
     }
@@ -139,6 +152,18 @@ public class MovingComponent : MonoBehaviour
         bAlt = false;
     }
 
+    private void Togglecover(InputAction.CallbackContext context)
+    {
+        if (!bCover)
+        {
+            CanCover();
+        }
+        else
+        {
+            ExitCover();
+        }
+    }
+
     #endregion
 
     public void Movement()
@@ -173,7 +198,7 @@ public class MovingComponent : MonoBehaviour
 
     public void Rotation()
     {
-        if (!bCanMove || bAlt) return;
+        if (bAlt) return;
 
         // 1) 목표 회전(카메라 Yaw)
         float targetYaw = cameraRootTransform.eulerAngles.y;
@@ -195,10 +220,9 @@ public class MovingComponent : MonoBehaviour
 
     public void Jump()
     {
-        if (bCover)
+        if (bJump && bCover)
         {
-            bCover = false;
-            animator.SetBool("Cover", false);
+            ExitCover();
         }
 
         if (bJump && bGrounded)
@@ -235,26 +259,30 @@ public class MovingComponent : MonoBehaviour
         );
     }
 
-    private void Cover()
+    private void CanCover()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, coverRadius, coverLayer);
-
-        if (hitColliders.Length > 0)
+        Collider[] hits = Physics.OverlapSphere(transform.position, coverRadius, coverLayer);
+        if (hits.Length > 0)
         {
-            coverTimer += Time.deltaTime;
+            // 커버 진입
+            bCover = true;
+            bCanMove = false;
+            animator.SetBool("Cover", true);
 
-            if (coverTimer >= coverDetectionTime)
-            {
-                bCover = true;
-                animator.SetBool("Cover", true);
-            }
+            aimIK.enabled = false;
+            //cameraComponent?.SetCoverMode(true);
         }
-        else
-        {
-            coverTimer = 0f;
-            bCover = false;
-            animator.SetBool("Cover", false);
-        }
+    }
+
+    private void ExitCover()
+    {
+        // 커버 해제
+        bCover = false;
+        bCanMove = true;
+        animator.SetBool("Cover", false);
+
+        aimIK.enabled = true;
+        //cameraComponent?.SetCoverMode(false);
     }
 
 #if UNITY_EDITOR
