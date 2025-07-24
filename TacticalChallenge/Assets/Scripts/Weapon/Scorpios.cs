@@ -43,7 +43,6 @@ public class Scorpios : WeaponBase
             return;
         }
 
-
         if (!IsReload && ammo.Value < megazine.Value)
         {
             StartCoroutine(ReloadCoroutine());
