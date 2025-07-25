@@ -24,6 +24,14 @@ public class MovingComponent : MonoBehaviour
     [SerializeField] private float coverRadius = 0.5f;
     [SerializeField] private float coverDetectionTime = 0.5f;
 
+    [Header("Pakour Settings")]
+    [SerializeField] private float parkourDistance = 1.0f;
+    [SerializeField] private float parkourHeight = 0.3f;
+    [SerializeField] private float parkourDuration = 0.5f;
+
+    private float currentParkourDistance;
+    private float currentParkourHeight;
+
     [Header("Ground Settings")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Vector3 groundCheckOffset = new Vector3(0, 0.05f, 0);
@@ -34,6 +42,9 @@ public class MovingComponent : MonoBehaviour
     private Vector2 currentInputMove;
     private Vector3 verticalVelocity = Vector3.zero;
     private Quaternion cameraRotation;
+
+    private Collider currentCoverCollider;
+    private Vector3 coverNormal;
 
     private float coverTimer = 0f;
 
@@ -104,6 +115,9 @@ public class MovingComponent : MonoBehaviour
             rigidbodyController.velocity = Vector3.zero;
             // 수직 속도도 0으로 해서 떨어지는 현상 방지
             verticalVelocity = Vector3.zero;
+
+            Jump();
+
             return;
         }
 
@@ -220,12 +234,16 @@ public class MovingComponent : MonoBehaviour
 
     public void Jump()
     {
-        if (bJump && bCover)
+        if (!bJump) return;
+
+        if (bCover)
         {
-            ExitCover();
+            Parkour();
+            bJump = false;
+            return;
         }
 
-        if (bJump && bGrounded)
+        if (bGrounded)
         {
             verticalVelocity.y = jumpForce;
             animator.SetTrigger("IsJump");
@@ -261,16 +279,26 @@ public class MovingComponent : MonoBehaviour
 
     private void CanCover()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, coverRadius, coverLayer);
-        if (hits.Length > 0)
+        RaycastHit hit;
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
+        Vector3 dir = cameraRootTransform.forward;
+
+        if (Physics.Raycast(origin, dir, out hit, coverRadius, coverLayer))
         {
-            // 커버 진입
+            // 기존 세팅
             bCover = true;
             bCanMove = false;
             animator.SetBool("Cover", true);
-
             aimIK.enabled = false;
-            //cameraComponent?.SetCoverMode(true);
+
+            currentCoverCollider = hit.collider;
+            coverNormal = hit.normal;
+
+            float obsHeight = hit.collider.bounds.max.y - transform.position.y;
+            float obsDepth = Vector3.Dot(hit.collider.bounds.size, coverNormal);
+
+            currentParkourDistance = Mathf.Max(parkourDistance, obsDepth + 0.1f);
+            currentParkourHeight = Mathf.Max(parkourHeight, obsHeight + 0.1f);
         }
     }
 
@@ -285,6 +313,43 @@ public class MovingComponent : MonoBehaviour
         //cameraComponent?.SetCoverMode(false);
     }
 
+    private void Parkour()
+    {
+        if (currentCoverCollider == null) { ExitCover(); return; }
+
+        Vector3 startPos = transform.position;
+        Vector3 endPos = startPos - coverNormal * currentParkourDistance;
+
+        animator.SetTrigger("IsJump");
+        StartCoroutine(ParkourRoutine(startPos, endPos, parkourDuration));
+    }
+
+    private IEnumerator ParkourRoutine(Vector3 from, Vector3 to, float duration)
+    {
+        float elapsed = 0f;
+        bCover = false;
+        bCanMove = false;
+        animator.SetBool("Cover", false);
+        aimIK.enabled = true;
+
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+            Vector3 horizontal = Vector3.Lerp(from, to, t);
+
+            float arcHeight = Mathf.Sin(t * Mathf.PI) * currentParkourHeight;
+            horizontal.y = Mathf.Lerp(from.y, to.y, t) + arcHeight;
+
+            transform.position = horizontal;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = to;
+        bCanMove = true;
+        currentCoverCollider = null;
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
@@ -295,6 +360,12 @@ public class MovingComponent : MonoBehaviour
         // Draw cover radius
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, coverRadius);
+
+        if (currentCoverCollider != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, transform.position + coverNormal);
+        }
     }
 
     private void OnGUI()
