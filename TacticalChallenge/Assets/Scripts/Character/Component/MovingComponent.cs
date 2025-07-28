@@ -23,6 +23,7 @@ public class MovingComponent : MonoBehaviour
     [SerializeField] private LayerMask coverLayer;
     [SerializeField] private float coverRadius = 0.5f;
     [SerializeField] private float coverDetectionTime = 0.5f;
+    private Obstacles nearbyCoverObstacle = null;
 
     [Header("Pakour Settings")]
     [SerializeField] private float parkourDistance = 1.0f;
@@ -101,6 +102,35 @@ public class MovingComponent : MonoBehaviour
         cover.started += Togglecover;
     }
 
+    private void OnEnable()
+    {
+        Obstacles.OnCoverAvailable += HandleCoverAvailable;
+        Obstacles.OnCoverUnavailable += HandleCoverUnavailable;
+    }
+
+    private void OnDisable()
+    {
+        Obstacles.OnCoverAvailable -= HandleCoverAvailable;
+        Obstacles.OnCoverUnavailable -= HandleCoverUnavailable;
+    }
+
+    private void HandleCoverAvailable(Obstacles obstacle, Transform player)
+    {
+        if (player != transform) return;
+        nearbyCoverObstacle = obstacle;
+        Debug.Log("[커버 진입 가능 지점 감지됨]");
+    }
+
+    private void HandleCoverUnavailable(Obstacles obstacle, Transform player)
+    {
+        if (player != transform) return;
+        if (nearbyCoverObstacle == obstacle)
+        {
+            nearbyCoverObstacle = null;
+            Debug.Log("[커버 진입 지점 이탈]");
+        }
+    }
+
     public void Update()
     {
         CheckGrounded();
@@ -168,13 +198,13 @@ public class MovingComponent : MonoBehaviour
 
     private void Togglecover(InputAction.CallbackContext context)
     {
-        if (!bCover)
-        {
-            CanCover();
-        }
-        else
+        if (bCover)
         {
             ExitCover();
+        }
+        else if (nearbyCoverObstacle != null)
+        {
+            CanCover();
         }
     }
 
@@ -236,7 +266,8 @@ public class MovingComponent : MonoBehaviour
     {
         if (!bJump) return;
 
-        if (bCover)
+        // 커버 중이거나 커버 근처에 있을 때는 파쿠르 시도
+        if (bCover || nearbyCoverObstacle != null)
         {
             Parkour();
             bJump = false;
@@ -281,7 +312,9 @@ public class MovingComponent : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 origin = transform.position + Vector3.up * 0.5f;
-        Vector3 dir = cameraRootTransform.forward;
+        Vector3 dir = transform.forward;
+        dir.y = 0f;
+        dir.Normalize();
 
         if (Physics.Raycast(origin, dir, out hit, coverRadius, coverLayer))
         {
@@ -315,14 +348,51 @@ public class MovingComponent : MonoBehaviour
 
     private void Parkour()
     {
-        if (currentCoverCollider == null) { ExitCover(); return; }
+        // 엄폐 상태인 경우 → 이미 currentCoverCollider 있음
+        if (bCover)
+        {
+            if (currentCoverCollider == null) { ExitCover(); return; }
+        }
+        else if (nearbyCoverObstacle != null)
+        {
+            // 엄폐 상태는 아니지만 엄폐물이 근처에 있을 경우 → Raycast로 확인
+            RaycastHit hit;
+            Vector3 origin = transform.position + Vector3.up * 0.5f;
 
+            // 카메라 XZ 기반이 아니라 캐릭터 기준 전방
+            Vector3 dir = transform.forward;
+            dir.y = 0f; // 완전히 수평 방향
+            dir.Normalize();
+
+            if (Physics.Raycast(origin, dir, out hit, coverRadius, coverLayer))
+            {
+                currentCoverCollider = hit.collider;
+                coverNormal = hit.normal;
+
+                float obsHeight = hit.collider.bounds.max.y - transform.position.y;
+                float obsDepth = Vector3.Dot(hit.collider.bounds.size, coverNormal);
+
+                currentParkourDistance = Mathf.Max(parkourDistance, obsDepth + 0.1f);
+                currentParkourHeight = Mathf.Max(parkourHeight, obsHeight + 0.1f);
+            }
+            else
+            {
+                return; // 엄폐물 근처지만 앞에 아무것도 없음
+            }
+        }
+        else
+        {
+            return; // 엄폐 상태도 아니고, nearbyCoverObstacle도 없음
+        }
+
+        // 파쿠르 실행
         Vector3 startPos = transform.position;
         Vector3 endPos = startPos - coverNormal * currentParkourDistance;
 
         animator.SetTrigger("IsJump");
         StartCoroutine(ParkourRoutine(startPos, endPos, parkourDuration));
     }
+
 
     private IEnumerator ParkourRoutine(Vector3 from, Vector3 to, float duration)
     {
