@@ -23437,8 +23437,8 @@ MonoBehaviour:
   coverLayer:
     serializedVersion: 2
     m_Bits: 128
-  coverRadius: 0.5
-  coverDetectionTime: 0.5
+  coverRadius: 1
+  coverDetectionTime: 0.1
   parkourDistance: 1
   parkourHeight: 0.3
   parkourDuration: 0.5
