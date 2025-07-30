@@ -49,7 +49,8 @@ public class MovingComponent : MonoBehaviour
 
     private float coverTimer = 0f;
 
-    private Rigidbody rigidbodyController;
+    //private Rigidbody rigidbodyController;
+    private CharacterController characterController;
     private Animator animator;
     private CameraComponent cameraComponent;  // CameraComponent 참조 추가
     private Transform cameraRootTransform;
@@ -71,8 +72,10 @@ public class MovingComponent : MonoBehaviour
     {
         cameraComponent = FindObjectOfType<CameraComponent>();  // CameraComponent 찾기
         
-        rigidbodyController = GetComponent<Rigidbody>();
-        rigidbodyController.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        //rigidbodyController = GetComponent<Rigidbody>();
+        //rigidbodyController.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+        characterController = GetComponent<CharacterController>();
 
         animator = GetComponent<Animator>();
 
@@ -134,16 +137,12 @@ public class MovingComponent : MonoBehaviour
     public void Update()
     {
         CheckGrounded();
-        Gravity();
     }
 
     public void FixedUpdate()
     {
         if (bCover)
         {
-            // 엄폐 중에는 물리 속도를 0으로 고정
-            rigidbodyController.velocity = Vector3.zero;
-            // 수직 속도도 0으로 해서 떨어지는 현상 방지
             verticalVelocity = Vector3.zero;
 
             Jump();
@@ -151,8 +150,9 @@ public class MovingComponent : MonoBehaviour
             return;
         }
 
-        Movement();
         Jump();
+        Gravity();
+        Movement();
     }
 
     public void LateUpdate()
@@ -235,10 +235,13 @@ public class MovingComponent : MonoBehaviour
         }
         animator.SetBool("IsRun", bRun);
 
-        // 4) 실제 이동
-        Vector3 move = characterDirection * Time.fixedDeltaTime + verticalVelocity * Time.fixedDeltaTime;
-        rigidbodyController.MovePosition(rigidbodyController.position + move);
+        // 4) 중력 포함한 실제 이동
+        Vector3 move = characterDirection + verticalVelocity;
+
+        // 5) CharacterController로 이동 적용 (deltaTime 반영)
+        characterController.Move(move * Time.deltaTime);
     }
+
 
     public void Rotation()
     {
@@ -396,26 +399,30 @@ public class MovingComponent : MonoBehaviour
 
     private IEnumerator ParkourRoutine(Vector3 from, Vector3 to, float duration)
     {
-        float elapsed = 0f;
+        // 1) 파쿠르 시작 전
+        characterController.enabled = false;
         bCover = false;
         bCanMove = false;
         animator.SetBool("Cover", false);
         aimIK.enabled = true;
 
+        float elapsed = 0f;
         while (elapsed < duration)
         {
             float t = elapsed / duration;
             Vector3 horizontal = Vector3.Lerp(from, to, t);
-
-            float arcHeight = Mathf.Sin(t * Mathf.PI) * currentParkourHeight;
-            horizontal.y = Mathf.Lerp(from.y, to.y, t) + arcHeight;
-
+            float arc = Mathf.Sin(Mathf.PI * t) * currentParkourHeight;
+            horizontal.y = Mathf.Lerp(from.y, to.y, t) + arc;
             transform.position = horizontal;
+
             elapsed += Time.deltaTime;
             yield return null;
         }
 
+        // 2) 최종 위치 & 복원
         transform.position = to;
+        characterController.enabled = true;
+
         bCanMove = true;
         currentCoverCollider = null;
     }
