@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9196245876672905253}
   - component: {fileID: 5680746371502812030}
+  - component: {fileID: 3360771356206695078}
   - component: {fileID: 2168941271834818326}
   - component: {fileID: 2362260740243585180}
   m_Layer: 6
@@ -96,6 +97,33 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000000117346644, y: 0.04131023, z: 0.019804277}
     m_Extent: {x: 0.024516216, y: 0.113008164, z: 0.26754797}
   m_DirtyAABB: 0
+--- !u!54 &3360771356206695078
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4241223794790428075}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &2168941271834818326
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -111,7 +139,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -129,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef150c662ec17dc45aadffb8baa7a279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponName: 
+  weaponName: Atsuko_Weapon
   power: {fileID: 0}
   armorPiercing: {fileID: 0}
   specialPiercing: {fileID: 0}
@@ -145,6 +173,7 @@ MonoBehaviour:
   hitLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  RandomReload: 1
   weaponStats: {fileID: 0}
   projectilePrefab: {fileID: 0}
   cartridgeParticle: {fileID: 0}

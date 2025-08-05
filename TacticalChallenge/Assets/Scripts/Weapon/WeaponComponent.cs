@@ -181,17 +181,21 @@ public class WeaponComponent : MonoBehaviour
         }
         else
         {
-            // 이미 씬에 존재하는 오브젝트
             instance = weaponObject;
             instance.transform.SetParent(weaponPivot, false);
+        }
 
-            Rigidbody rb = instance.GetComponent<Rigidbody>();
-            if (rb != null)
-                rb.isKinematic = true;
+        Rigidbody rb = instance.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false; // 선택: 중력도 꺼야 장착 중 떠 있거나 움직이지 않음
+        }
 
-            Collider col = instance.GetComponent<Collider>();
-            if (col != null)
-                col.enabled = false;
+        Collider[] cols = instance.GetComponents<Collider>();
+        foreach (var col in cols)
+        {
+            col.enabled = false;
         }
 
         // 3) WeaponBase 컴포넌트 가져오기
@@ -260,34 +264,19 @@ public class WeaponComponent : MonoBehaviour
             Transform weaponTransform = currentWeapon.transform;
             weaponTransform.SetParent(null);
 
-            // 2) Rigidbody 활성화 (물리 시뮬레이션 적용)
-            Rigidbody rbComponent;
-            if (weaponTransform.TryGetComponent<Rigidbody>(out rbComponent))
+            Rigidbody rb = weaponTransform.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                rbComponent.isKinematic = false;
-            }
-            else
-            {
-                // Rigidbody가 없다면 새로 추가할 수도 있습니다.
-                rbComponent = weaponTransform.gameObject.AddComponent<Rigidbody>();
+                rb.isKinematic = false;
+                rb.useGravity = true;
             }
 
-            // 3) Collider 활성화
-            Collider colComponent;
-            if (weaponTransform.TryGetComponent<Collider>(out colComponent))
+            Collider[] cols = weaponTransform.GetComponents<Collider>();
+            foreach (var col in cols)
             {
-                colComponent.enabled = true;
-            }
-            else
-            {
-                // 필요하다면 적절한 Collider 타입을 추가
-                weaponTransform.gameObject.AddComponent<BoxCollider>();
+                col.enabled = true;
             }
 
-            // 4) 약간의 임펄스(선택)
-            //rbComponent.AddForce(transform.forward * 2f + Vector3.up * 1f, ForceMode.Impulse);
-
-            // 5) currentWeapon 레퍼런스 해제
             currentWeapon = null;
         }
     }
