@@ -3174,6 +3174,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4391717955021561558, guid: c0812477d2d7ad24e9f6c2953d9e996e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5596558567179875094, guid: c0812477d2d7ad24e9f6c2953d9e996e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23422,6 +23427,8 @@ MonoBehaviour:
   weaponPivot: {fileID: 659580112}
   weaponPrefab: {fileID: 4241223794790428075, guid: f7210a1b0449b4b44a8d16b1daa95c22,
     type: 3}
+  HandBone: {fileID: 0}
+  IsLeftHandGrip: 0
 --- !u!114 &5866666020301629923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24161,6 +24168,8 @@ MonoBehaviour:
   weaponPivot: {fileID: 1249756572}
   weaponPrefab: {fileID: 4399959466946253332, guid: 106cf2e4b1f038342a8ca25fe6524270,
     type: 3}
+  HandBone: {fileID: 0}
+  IsLeftHandGrip: 0
 --- !u!114 &5866666020712340744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24455,6 +24464,8 @@ MonoBehaviour:
   weaponPivot: {fileID: 501930439}
   weaponPrefab: {fileID: 6714397545694761850, guid: c0812477d2d7ad24e9f6c2953d9e996e,
     type: 3}
+  HandBone: {fileID: 4518989117569578411}
+  IsLeftHandGrip: 1
 --- !u!114 &5866666021293604128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25608,6 +25619,8 @@ MonoBehaviour:
   weaponPivot: {fileID: 447699729}
   weaponPrefab: {fileID: 3015174873635946888, guid: 8705f080af707e04eb9999c1565b5ac0,
     type: 3}
+  HandBone: {fileID: 0}
+  IsLeftHandGrip: 0
 --- !u!114 &5866666021328099889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26409,6 +26422,8 @@ MonoBehaviour:
   weaponPivot: {fileID: 601367468}
   weaponPrefab: {fileID: 3505290956719821928, guid: 02effb9730f094c48a1343f77b0174b0,
     type: 3}
+  HandBone: {fileID: 0}
+  IsLeftHandGrip: 0
 --- !u!114 &5866666021351740399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27072,6 +27087,8 @@ MonoBehaviour:
   weaponPivot: {fileID: 806906179}
   weaponPrefab: {fileID: 8375908335377788594, guid: 7b7b2348345c4ba44bc9f3ac892201b0,
     type: 3}
+  HandBone: {fileID: 0}
+  IsLeftHandGrip: 0
 --- !u!114 &5866666021976470414
 MonoBehaviour:
   m_ObjectHideFlags: 0

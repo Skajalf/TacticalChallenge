@@ -10,6 +10,14 @@ public class WeaponComponent : MonoBehaviour
     [SerializeField] private Transform weaponPivot;
     [SerializeField] private GameObject weaponPrefab; //고유무기 프리팹
 
+    [Header("Hand Animation Setup")]
+    [SerializeField] private Transform HandBone; // 탄창 잡는 손
+    [SerializeField] private bool IsLeftHandGrip = false;  // 왼손 그립을 쓸지 여부
+
+    private Transform magazineBone; // 탄창 오브젝트
+    private Transform gripBone; // 무기 프리팹 안의 Left/RightHandGrip
+    private Transform magazineParent; //원래 magazine 부모
+
     private GameObject weaponInstance;
 
     private PivotManager pivotManager;
@@ -26,6 +34,8 @@ public class WeaponComponent : MonoBehaviour
     private MovingComponent movingComponent;
 
     private RuntimeAnimatorController initialAnimatorController;
+    private FullBodyBipedEffector magazineEffectorType = FullBodyBipedEffector.LeftHand;
+
     private string initialWeaponName;
 
     private bool isCancelAble;
@@ -242,6 +252,14 @@ public class WeaponComponent : MonoBehaviour
 
         weaponInstance = instance;
 
+        string gripName = IsLeftHandGrip ? "LeftHandGrip" : "RightHandGrip";
+
+        gripBone = weaponInstance.transform.Find(gripName);
+        if (gripBone == null)
+            Debug.LogError($"{gripName}을(를) 찾을 수 없습니다!");
+
+        DetectEffector();
+
         // IK 매핑
         MapWeaponToIK(wb);
 
@@ -349,31 +367,6 @@ public class WeaponComponent : MonoBehaviour
         }
     }
 
-    //private void MapWeaponToIK(WeaponBase weapon)
-    //{
-    //    if (aimIK == null || weapon == null)
-    //    {
-    //        Debug.LogError("AimIK 또는 weapon이 null입니다.");
-    //        return;
-    //    }
-
-    //    Transform firePoint = weapon.transform.Find("fire_01");
-    //    if (firePoint == null)
-    //    {
-    //        Debug.LogError($"{weapon.name}에 fire_01 포인트가 없습니다.");
-    //        return;
-    //    }
-
-    //    aimIK.solver.Initiate(animator.transform);
-
-    //    aimIK.solver.transform = firePoint;
-    //    Debug.Log($"[MapWeaponToAimIK] Aim Transform → {firePoint.name}");
-
-    //    aimIK.solver.IKPositionWeight = 1f;
-
-    //    aimIK.solver.Update();
-    //}
-
     private void MapWeaponToIK(WeaponBase weapon)
     {
         if (fbbIK == null || aimIK == null || weapon == null)
@@ -455,6 +448,29 @@ public class WeaponComponent : MonoBehaviour
         t.localScale = info.scale;
     }
 
+    private void DetectEffector()
+    {
+        if (HandBone == null) return;
+
+        string handName = HandBone.name.ToLower();
+
+        if (handName.Contains("left") || handName.Contains("_l") || handName.Contains("l "))
+        {
+            magazineEffectorType = FullBodyBipedEffector.LeftHand;
+        }
+        else if (handName.Contains("right") || handName.Contains("_r") || handName.Contains("r "))
+        {
+            magazineEffectorType = FullBodyBipedEffector.RightHand;
+        }
+        else
+        {
+            Debug.LogWarning($"HandBone 이름으로부터 손을 인식하지 못했습니다: {HandBone.name}, 기본값 RightHand로 처리합니다.");
+            magazineEffectorType = FullBodyBipedEffector.RightHand;
+        }
+
+        Debug.Log($"[WeaponComponent] HandBone '{HandBone.name}' → IK Effector = {magazineEffectorType}");
+    }
+
     public WeaponBase GetDetectedWeapon()
     {
         if (detectedWeapons.Count == 0)
@@ -476,6 +492,11 @@ public class WeaponComponent : MonoBehaviour
         }
 
         return nearest;
+    }
+
+    private IKEffector GetMagazineEffector()
+    {
+        return fbbIK?.solver?.GetEffector(magazineEffectorType);
     }
 
     public void SetDetectedWeapon(WeaponBase wb)
@@ -514,6 +535,56 @@ public class WeaponComponent : MonoBehaviour
     {
         isCancelAble = true;
         Debug.Log("CancelAble 상태");
+    }
+
+    public void OnReloadStart()
+    {
+        IKEffector effector = GetMagazineEffector();
+        if (effector != null)
+        {
+            effector.positionWeight = 0f;
+            effector.rotationWeight = 0f;
+        }
+    }
+
+    // 탄창 잡는 시점 → IK 타겟 magazineBone, Weight 켜기 + 부모를 손에 붙이기
+    public void OnMagazineStart()
+    {
+        if (magazineBone == null || HandBone == null) return;
+
+        IKEffector effector = GetMagazineEffector();
+        effector.target = magazineBone;
+        effector.positionWeight = 1f;
+        effector.rotationWeight = 1f;
+
+        magazineParent = magazineBone.parent;
+        magazineBone.SetParent(HandBone, worldPositionStays: true);
+    }
+
+    // 탄창 분리 후 손 떼기(필요 시 IK 끄기)
+    public void OnMagazineEnd()
+    {
+        IKEffector effector = GetMagazineEffector();
+        effector.positionWeight = 0f;
+        effector.rotationWeight = 0f;
+    }
+
+    // 새 탄창 끼우는 시점 → magazineBone을 무기로 재부착
+    public void OnInsertMagazine()
+    {
+        if (magazineBone == null)
+            return;
+
+        magazineBone.SetParent(magazineParent, worldPositionStays: true);
+    }
+
+    // 재장전 끝 → 손잡이로 IK 타겟 복귀, Weight 켜기
+    public void OnReloadEnd()
+    {
+        IKEffector effector = GetMagazineEffector();
+        effector.target = gripBone;
+        effector.positionWeight = 1f;
+        effector.rotationWeight = 1f;
     }
 
     public void Impulse()

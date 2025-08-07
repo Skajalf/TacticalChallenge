@@ -17,30 +17,7 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: <Root Transform>
     rigImportErrors: 
-    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
-      copied configuration does not match position in animation file:\n\t'Bip001
-      L Thigh' : position error = 345.409576 mm\n\t'Bip001 L Calf' : position error
-      = 752.379211 mm\n\t'Bip001 L Foot' : position error = 690.540466 mm\n\t'Bip001
-      L Toe0' : position error = 216.158585 mm\n\t'Bip001 R Thigh' : position error
-      = 345.409454 mm\n\t'Bip001 R Calf' : position error = 752.379089 mm\n\t'Bip001
-      R Foot' : position error = 690.540466 mm\n\t'Bip001 R Toe0' : position error
-      = 216.158554 mm\n\t'Bip001 Spine' : position error = 433.074524 mm\n\t'Bip001
-      Spine1' : position error = 313.313385 mm\n\t'Bip001 L Clavicle' : position
-      error = 290.755219 mm\n\t'Bip001 L UpperArm' : position error = 241.478500
-      mm\n\t'Bip001 L Forearm' : position error = 461.644501 mm\n\t'Bip001 L Hand'
-      : position error = 532.662537 mm\n\t'Bip001 L Finger0' : position error = 127.556458
-      mm\n\t'Bip001 L Finger01' : position error = 126.060051 mm\n\t'Bip001 L Finger1'
-      : position error = 301.196808 mm\n\t'Bip001 L Finger11' : position error =
-      101.665588 mm\n\t'Bip001 L Finger2' : position error = 284.968933 mm\n\t'Bip001
-      L Finger21' : position error = 86.214081 mm\n\t'Bip001 Neck' : position error
-      = 494.478516 mm\n\t'Bip001 Head' : position error = 144.714966 mm\n\t'Bip001
-      R Clavicle' : position error = 290.755341 mm\n\t'Bip001 R UpperArm' : position
-      error = 241.478729 mm\n\t'Bip001 R Forearm' : position error = 461.645050 mm\n\t'Bip001
-      R Hand' : position error = 532.663208 mm\n\t'Bip001 R Finger0' : position error
-      = 127.556458 mm\n\t'Bip001 R Finger01' : position error = 126.060127 mm\n\t'Bip001
-      R Finger1' : position error = 301.196991 mm\n\t'Bip001 R Finger11' : position
-      error = 101.665741 mm\n\t'Bip001 R Finger2' : position error = 284.969208 mm\n\t'Bip001
-      R Finger21' : position error = 86.214218 mm\n"
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -54,7 +31,76 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Azusa_Original_Normal_Reload
+      takeName: Azusa_Original_Normal_Reload
+      internalID: 7821035381135283173
+      firstFrame: 0
+      lastFrame: 56
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.13675214
+        functionName: OnMagazineStart
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 89c118aad5544264dafbb848e108d7a5,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: OnReloadStart
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 89c118aad5544264dafbb848e108d7a5,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.18518518
+        functionName: OnMagazineEnd
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 89c118aad5544264dafbb848e108d7a5,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.54985756
+        functionName: OnInsertMagazine
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 89c118aad5544264dafbb848e108d7a5,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.94017094
+        functionName: OnReloadEnd
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 89c118aad5544264dafbb848e108d7a5,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
