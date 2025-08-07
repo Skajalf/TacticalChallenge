@@ -220,9 +220,11 @@ public class WeaponComponent : MonoBehaviour
         }
 
         // 5) JSON에서 읽은 pos/rot/scale 적용
-        instance.transform.localPosition = entry.pos;
-        instance.transform.localEulerAngles = entry.rot;
-        instance.transform.localScale = entry.scale;
+        instance.transform.localPosition = entry.weaponPos;
+        instance.transform.localEulerAngles = entry.weaponRot;
+        instance.transform.localScale = entry.weaponScale;
+
+        ApplyGripPivots(instance.transform, entry);
 
         // 6) WeaponBase 초기화 및 후속 처리
         wb.Equip();
@@ -349,54 +351,108 @@ public class WeaponComponent : MonoBehaviour
 
     //private void MapWeaponToIK(WeaponBase weapon)
     //{
-    //    if (fbbIK == null || weapon == null) return;
-
-    //    var solver = fbbIK.solver;
-    //    var leftGrip = weapon.transform.Find("LeftHandGrip");
-    //    var rightGrip = weapon.transform.Find("RightHandGrip");
-    //    if (leftGrip == null || rightGrip == null)
+    //    if (aimIK == null || weapon == null)
     //    {
-    //        Debug.LogError($"{weapon.name}에 Left/RightHandGrip이 없습니다.");
+    //        Debug.LogError("AimIK 또는 weapon이 null입니다.");
     //        return;
     //    }
 
-    //    solver.leftHandEffector.target = leftGrip;
-    //    solver.rightHandEffector.target = rightGrip;
-    //    solver.leftHandEffector.positionWeight = 1f;
-    //    solver.leftHandEffector.rotationWeight = 1f;
-    //    solver.rightHandEffector.positionWeight = 1f;
-    //    solver.rightHandEffector.rotationWeight = 1f;
+    //    Transform firePoint = weapon.transform.Find("fire_01");
+    //    if (firePoint == null)
+    //    {
+    //        Debug.LogError($"{weapon.name}에 fire_01 포인트가 없습니다.");
+    //        return;
+    //    }
 
-    //    aimIK.solver.transform = weaponInstance.transform.Find("fire_01").transform;
+    //    aimIK.solver.Initiate(animator.transform);
 
-    //    // IK 즉시 갱신
-    //    solver.Initiate(fbbIK.transform);
-    //    solver.Update();
+    //    aimIK.solver.transform = firePoint;
+    //    Debug.Log($"[MapWeaponToAimIK] Aim Transform → {firePoint.name}");
+
+    //    aimIK.solver.IKPositionWeight = 1f;
+
+    //    aimIK.solver.Update();
     //}
 
     private void MapWeaponToIK(WeaponBase weapon)
     {
-        if (aimIK == null || weapon == null)
+        if (fbbIK == null || aimIK == null || weapon == null)
         {
-            Debug.LogError("AimIK 또는 weapon이 null입니다.");
+            Debug.LogError("FBBIK, AimIK 또는 weapon이 null입니다.");
             return;
         }
 
+        IKSolverFullBodyBiped solver = fbbIK.solver;
+
+        Transform leftGrip = weapon.transform.Find("LeftHandGrip");
+        Transform rightGrip = weapon.transform.Find("RightHandGrip");
+
+        if (leftGrip == null || rightGrip == null)
+        {
+            Debug.LogError($"{weapon.name}에 LeftHandGrip/RightHandGrip이 없습니다.");
+        }
+        else
+        {
+            solver.leftHandEffector.target = leftGrip;
+            solver.leftHandEffector.positionWeight = 1f;
+            solver.leftHandEffector.rotationWeight = 1f;
+
+            solver.rightHandEffector.target = rightGrip;
+            solver.rightHandEffector.positionWeight = 1f;
+            solver.rightHandEffector.rotationWeight = 1f;
+
+            // 즉시 반영
+            solver.Initiate(fbbIK.transform);
+            solver.Update();
+            Debug.Log($"[MapWeaponToIK] FBBIK 그립 세팅 → {leftGrip.name}, {rightGrip.name}");
+        }
+
         Transform firePoint = weapon.transform.Find("fire_01");
+
         if (firePoint == null)
         {
             Debug.LogError($"{weapon.name}에 fire_01 포인트가 없습니다.");
             return;
         }
+        else
+        {
+            aimIK.solver.Initiate(animator.transform);
+            aimIK.solver.transform = firePoint;
+            aimIK.solver.IKPositionWeight = 1f;
+            aimIK.solver.Update();
 
-        aimIK.solver.Initiate(animator.transform);
+            Debug.Log($"[MapWeaponToAimIK] Aim Transform → {firePoint.name}");
+        }
+    }
 
-        aimIK.solver.transform = firePoint;
-        Debug.Log($"[MapWeaponToAimIK] Aim Transform → {firePoint.name}");
+    private void ApplyGripPivots(Transform weaponRoot, PivotJsonEntry entry)
+    {
+        // 왼손 그립
+        if (entry.leftHandGrip != null)
+        {
+            Transform left = weaponRoot.Find("LeftHandGrip");
+            if (left != null)
+                ApplyTransformInfo(left, entry.leftHandGrip);
+            else
+                Debug.LogWarning("LeftHandGrip 오브젝트가 없습니다.");
+        }
 
-        aimIK.solver.IKPositionWeight = 1f;
+        // 오른손 그립
+        if (entry.rightHandGrip != null)
+        {
+            Transform right = weaponRoot.Find("RightHandGrip");
+            if (right != null)
+                ApplyTransformInfo(right, entry.rightHandGrip);
+            else
+                Debug.LogWarning("RightHandGrip 오브젝트가 없습니다.");
+        }
+    }
 
-        aimIK.solver.Update();
+    private void ApplyTransformInfo(Transform t, WeaponTransformInfo info)
+    {
+        t.localPosition = info.position;
+        t.localEulerAngles = info.rotation;
+        t.localScale = info.scale;
     }
 
     public WeaponBase GetDetectedWeapon()

@@ -49,7 +49,6 @@ public class MovingComponent : MonoBehaviour
 
     private float coverTimer = 0f;
 
-    //private Rigidbody rigidbodyController;
     private CharacterController characterController;
     private Animator animator;
     private CameraComponent cameraComponent;  // CameraComponent 참조 추가
@@ -71,9 +70,6 @@ public class MovingComponent : MonoBehaviour
     public void Init()
     {
         cameraComponent = FindObjectOfType<CameraComponent>();  // CameraComponent 찾기
-        
-        //rigidbodyController = GetComponent<Rigidbody>();
-        //rigidbodyController.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
         characterController = GetComponent<CharacterController>();
 

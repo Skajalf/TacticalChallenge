@@ -1,16 +1,29 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
+public class WeaponTransformInfo
+{
+    public Vector3 position;
+    public Vector3 rotation;
+    public Vector3 scale;
+}
+
+[Serializable]
 public class PivotJsonEntry
 {
     public string character;    // ex: "Azusa"
     public string weapon;       // ex: "Azusa_Weapon"
-    public Vector3 pos;         // localPosition
-    public Vector3 rot;         // localEulerAngles
-    public Vector3 scale;       // localScale
+
+    public Vector3 weaponPos;         // localPosition
+    public Vector3 weaponRot;         // localEulerAngles
+    public Vector3 weaponScale;       // localScale
+
+    public WeaponTransformInfo leftHandGrip;
+    public WeaponTransformInfo rightHandGrip;
 }
 
 // JsonUtility가 최상위 배열을 바로 파싱하지 못하므로 wrapper 필요
