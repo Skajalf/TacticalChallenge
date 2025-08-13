@@ -24,9 +24,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373432360769727475}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000006322046, y: 0.0000007152558, z: -0.0000002384186,
-    w: 1}
-  m_LocalPosition: {x: -0.00010015487, y: -0.021179961, z: 0.4253335}
+  m_LocalRotation: {x: 0.014568961, y: 0.045961846, z: 0.006095401, w: -0.9988183}
+  m_LocalPosition: {x: 0.002, y: -0.021, z: 0.432}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -263,7 +262,7 @@ MonoBehaviour:
   critScale: {fileID: 0}
   lifeSteal: {fileID: 0}
   speed: {fileID: 0}
-  megazine: {fileID: 11400000, guid: 34db4efcea0f9f841a08bff41ff72004, type: 2}
+  magazine: {fileID: 0}
   ammo: {fileID: 11400000, guid: 502f79ca1d0040e44af85fb610dc1d77, type: 2}
   reloadTime: {fileID: 0}
   damageDelay: {fileID: 0}
@@ -289,6 +288,7 @@ MonoBehaviour:
   weaponPoseOffset: {x: 0, y: 0, z: 0}
   weaponAimingOffset: {x: 0, y: 0, z: 0}
   animationWaitTime: 0
+  animator: {fileID: 0}
 --- !u!1 &4627335679588089230
 GameObject:
   m_ObjectHideFlags: 0

@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cf771a96efc9d04ea398094dae49c92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponName: 
+  weaponName: Et_Omnia_Vanitas
   power: {fileID: 0}
   armorPiercing: {fileID: 0}
   specialPiercing: {fileID: 0}
@@ -323,17 +323,18 @@ MonoBehaviour:
   critScale: {fileID: 0}
   lifeSteal: {fileID: 0}
   speed: {fileID: 0}
-  megazine: {fileID: 0}
-  ammo: {fileID: 0}
-  reloadTime: {fileID: 0}
+  megazine: {fileID: 11400000, guid: 34db4efcea0f9f841a08bff41ff72004, type: 2}
+  ammo: {fileID: 11400000, guid: 502f79ca1d0040e44af85fb610dc1d77, type: 2}
+  reloadTime: {fileID: 11400000, guid: bb231f6cb4ab54a42b3080f23157723a, type: 2}
   damageDelay: {fileID: 0}
   range: {fileID: 0}
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   RandomReload: 1
   weaponStats: {fileID: 0}
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 5281290268849229969, guid: 7f11e453c15223441a6272b6c59f5f07,
+    type: 3}
   cartridgeParticle: {fileID: 0}
   weaponHolsterName: WeaponPivot
   bulletTransformName: fire_01

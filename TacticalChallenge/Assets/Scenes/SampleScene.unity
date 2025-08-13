@@ -3174,15 +3174,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4391717955021561558, guid: c0812477d2d7ad24e9f6c2953d9e996e,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5596558567179875094, guid: c0812477d2d7ad24e9f6c2953d9e996e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.8406315
+      value: 23.570631
       objectReference: {fileID: 0}
     - target: {fileID: 5596558567179875094, guid: c0812477d2d7ad24e9f6c2953d9e996e,
         type: 3}
@@ -3192,7 +3187,7 @@ PrefabInstance:
     - target: {fileID: 5596558567179875094, guid: c0812477d2d7ad24e9f6c2953d9e996e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.0757363
+      value: 19.607737
       objectReference: {fileID: 0}
     - target: {fileID: 5596558567179875094, guid: c0812477d2d7ad24e9f6c2953d9e996e,
         type: 3}
@@ -3577,7 +3572,7 @@ PrefabInstance:
     - target: {fileID: 3308417013980945092, guid: 106cf2e4b1f038342a8ca25fe6524270,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.1376297
+      value: 14.59237
       objectReference: {fileID: 0}
     - target: {fileID: 3308417013980945092, guid: 106cf2e4b1f038342a8ca25fe6524270,
         type: 3}
@@ -3587,7 +3582,7 @@ PrefabInstance:
     - target: {fileID: 3308417013980945092, guid: 106cf2e4b1f038342a8ca25fe6524270,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.1579275
+      value: 19.689926
       objectReference: {fileID: 0}
     - target: {fileID: 3308417013980945092, guid: 106cf2e4b1f038342a8ca25fe6524270,
         type: 3}
@@ -4318,7 +4313,7 @@ PrefabInstance:
     - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.13537
+      value: 19.86537
       objectReference: {fileID: 0}
     - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
         type: 3}
@@ -4328,7 +4323,7 @@ PrefabInstance:
     - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.085
+      value: 19.617
       objectReference: {fileID: 0}
     - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
         type: 3}
@@ -4391,7 +4386,7 @@ PrefabInstance:
     - target: {fileID: 9196245876672905253, guid: f7210a1b0449b4b44a8d16b1daa95c22,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.76
+      value: 21.49
       objectReference: {fileID: 0}
     - target: {fileID: 9196245876672905253, guid: f7210a1b0449b4b44a8d16b1daa95c22,
         type: 3}
@@ -4401,7 +4396,7 @@ PrefabInstance:
     - target: {fileID: 9196245876672905253, guid: f7210a1b0449b4b44a8d16b1daa95c22,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.098
+      value: 19.63
       objectReference: {fileID: 0}
     - target: {fileID: 9196245876672905253, guid: f7210a1b0449b4b44a8d16b1daa95c22,
         type: 3}
@@ -7082,7 +7077,7 @@ Transform:
   m_GameObject: {fileID: 919132147546286367}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3800001, y: 6.253833, z: 17.561}
+  m_LocalPosition: {x: 17.97, y: 6.253833, z: 32.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7101,7 +7096,7 @@ Transform:
   m_GameObject: {fileID: 919132148209049028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.38, y: 6.2538323, z: 17.878448}
+  m_LocalPosition: {x: 19.969997, y: 6.2538323, z: 32.867447}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7120,7 +7115,7 @@ Transform:
   m_GameObject: {fileID: 919132148697578968}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.38, y: 6.253833, z: 15.8784485}
+  m_LocalPosition: {x: 19.969997, y: 6.253833, z: 30.867447}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7138,7 +7133,7 @@ Transform:
   m_GameObject: {fileID: 919132148664900333}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.726, y: 6.253833, z: 34.364}
+  m_LocalPosition: {x: 18.425, y: 6.253833, z: 34.364}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8626,7 +8621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &919132148697578968
 GameObject:
   m_ObjectHideFlags: 0
@@ -8652,7 +8647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &919132149088482122
 GameObject:
   m_ObjectHideFlags: 0
@@ -23428,7 +23423,6 @@ MonoBehaviour:
   weaponPrefab: {fileID: 4241223794790428075, guid: f7210a1b0449b4b44a8d16b1daa95c22,
     type: 3}
   HandBone: {fileID: 0}
-  IsLeftHandGrip: 0
 --- !u!114 &5866666020301629923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24169,7 +24163,6 @@ MonoBehaviour:
   weaponPrefab: {fileID: 4399959466946253332, guid: 106cf2e4b1f038342a8ca25fe6524270,
     type: 3}
   HandBone: {fileID: 0}
-  IsLeftHandGrip: 0
 --- !u!114 &5866666020712340744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24465,7 +24458,6 @@ MonoBehaviour:
   weaponPrefab: {fileID: 6714397545694761850, guid: c0812477d2d7ad24e9f6c2953d9e996e,
     type: 3}
   HandBone: {fileID: 4518989117569578411}
-  IsLeftHandGrip: 1
 --- !u!114 &5866666021293604128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25620,7 +25612,6 @@ MonoBehaviour:
   weaponPrefab: {fileID: 3015174873635946888, guid: 8705f080af707e04eb9999c1565b5ac0,
     type: 3}
   HandBone: {fileID: 0}
-  IsLeftHandGrip: 0
 --- !u!114 &5866666021328099889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26423,7 +26414,6 @@ MonoBehaviour:
   weaponPrefab: {fileID: 3505290956719821928, guid: 02effb9730f094c48a1343f77b0174b0,
     type: 3}
   HandBone: {fileID: 0}
-  IsLeftHandGrip: 0
 --- !u!114 &5866666021351740399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27088,7 +27078,6 @@ MonoBehaviour:
   weaponPrefab: {fileID: 8375908335377788594, guid: 7b7b2348345c4ba44bc9f3ac892201b0,
     type: 3}
   HandBone: {fileID: 0}
-  IsLeftHandGrip: 0
 --- !u!114 &5866666021976470414
 MonoBehaviour:
   m_ObjectHideFlags: 0

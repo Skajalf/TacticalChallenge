@@ -44,7 +44,7 @@ public class Ideal : WeaponBase
         }
 
 
-        if (!IsReload && ammo.Value < megazine.Value)
+        if (!IsReload && ammo.Value < magazine.Value)
         {
             StartCoroutine(ReloadCoroutine());
         }
@@ -76,10 +76,10 @@ public class Ideal : WeaponBase
             }
         }
 
-        if (cartrigePoint == null)
+        if (cartridgePoint == null)
         {
-            cartrigePoint = weaponTransform.FindChildByName(cartridgeTransformName);
-            if (cartrigePoint == null)
+            cartridgePoint = weaponTransform.FindChildByName(cartridgeTransformName);
+            if (cartridgePoint == null)
             {
                 Debug.LogError($"탄피 발사 위치를 찾을 수 없습니다: {cartridgeTransformName}");
                 return;
@@ -178,7 +178,7 @@ public class Ideal : WeaponBase
         // 재장전 시간 대기
         yield return new WaitForSeconds(reloadTime.Value);
 
-        ammo = megazine; // 탄약을 가득 채움
+        ammo = magazine; // 탄약을 가득 채움
 
         // 재장전 완료 후 사운드/효과 처리 (선택 사항)
         Debug.Log("재장전 완료!");

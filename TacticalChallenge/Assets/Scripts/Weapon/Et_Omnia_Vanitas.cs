@@ -18,78 +18,72 @@ public class Et_Omnia_Vanitas : WeaponBase
 
     protected override void Attack()
     {
-        // 발사 중이라면 중복 발사 방지
-        if (IsFiring || IsReload || ammo.Value <= 0)
+        Debug.Log($"[Attack] Enter. CurrentAmmo={CurrentAmmo} IsFiring={IsFiring} IsReload={IsReload} IsEmpty={IsEmpty}");
+
+        if (IsFiring || IsReload)
         {
-            Debug.Log("발사 중이거나 탄약이 부족하거나 재장전 중입니다.");
+            Debug.Log("[Et_Omnia_Vanitas] 발사 불가: IsFiring or IsReload");
+            return;
+        }
+
+        if (IsEmpty)
+        {
+            Debug.Log("[Et_Omnia_Vanitas] 탄약 없음 - 재장전 시도");
+            Reload();
             return;
         }
 
         base.Attack();
-        StartCoroutine(FireCoroutine());  // 코루틴 호출
+        StartCoroutine(FireCoroutine());
     }
 
     public override void Reload()
     {
         base.Reload();
 
-        animator = FindAnyObjectByType<WeaponComponent>().GetComponent<Animator>();
-        // TODO :: 루트 오브젝트의 루트 (CHxxxx_Weapon의 루트는 Weapon_pivot, Weapon_pivot의 루트인
-        // CHxxxx의 애니메이터를 찾아오는 코드를 init() 부분에 추가해야 한다.) 를 찾는 방법을 찾기.
-
-        if (animator == null)
+        if (MagazineSize <= 0)
         {
-            Debug.LogError("Animator가 설정되지 않았습니다. Animator 컴포넌트가 올바르게 연결되어 있는지 확인하세요.");
+            Debug.LogError($"[{name}] Reload 호출했지만 MagazineSize가 0입니다. Inspector 설정을 확인하세요.");
             return;
         }
 
+        if (IsReload)
+        {
+            Debug.Log("[Et_Omnia_Vanitas] 이미 재장전 중.");
+            return;
+        }
 
-        if (!IsReload && ammo.Value < megazine.Value)
+        if (CurrentAmmo >= MagazineSize)
         {
-            StartCoroutine(ReloadCoroutine());
+            Debug.Log("[Et_Omnia_Vanitas] 이미 탄창이 가득합니다.");
+            return;
         }
-        else
-        {
-            Debug.Log("재장전이 필요하지 않습니다.");
-        }
+
+        StartCoroutine(ReloadCoroutine());
     }
 
     public override void Equip()
     {
-        if (weaponTransform == null)
-        {
-            weaponTransform = transform.root.FindChildByName(weaponHolsterName);
-            if (weaponTransform == null)
-            {
-                Debug.LogError($"무기 홀스터를 찾을 수 없습니다: {weaponHolsterName}");
-                return;
-            }
-        }
+        base.Equip();
 
+        weaponTransform = this.transform;
+
+        // 먼저 직계로 찾고, 없으면 재귀 탐색
+        bulletTransform = weaponTransform.Find(bulletTransformName) ?? weaponTransform.FindChildByName(bulletTransformName);
         if (bulletTransform == null)
         {
-            bulletTransform = weaponTransform.FindChildByName(bulletTransformName);
-            if (bulletTransform == null)
-            {
-                Debug.LogError($"탄환 발사 위치를 찾을 수 없습니다: {bulletTransformName}");
-                return;
-            }
+            Debug.LogError($"[{name}] 탄환 발사 위치를 찾을 수 없습니다: {bulletTransformName}");
+            return;
         }
 
-        if (cartrigePoint == null)
+        cartridgePoint = weaponTransform.Find(cartridgeTransformName) ?? weaponTransform.FindChildByName(cartridgeTransformName);
+        if (cartridgePoint == null)
         {
-            cartrigePoint = weaponTransform.FindChildByName(cartridgeTransformName);
-            if (cartrigePoint == null)
-            {
-                Debug.LogError($"탄피 발사 위치를 찾을 수 없습니다: {cartridgeTransformName}");
-                return;
-            }
+            Debug.LogWarning($"[{name}] 탄피 발사 위치를 찾을 수 없습니다: {cartridgeTransformName} (없어도 동작 가능할 수 있음)");
         }
 
-        base.Equip();
-        transform.SetParent(weaponTransform, false);
         gameObject.SetActive(true);
-
+        Debug.Log($"[{name}] Equip 완료. bullet:{bulletTransform.name}, cartridge:{(cartridgePoint != null ? cartridgePoint.name : "null")}");
     }
 
     public override void UnEquip()
@@ -114,24 +108,52 @@ public class Et_Omnia_Vanitas : WeaponBase
     {
         base.AmmoLeft();
 
-        if (ammo.Value > 0 && !IsReload)
+        Debug.Log($"[AmmoLeft] CurrentAmmo={CurrentAmmo} MagazineSize={MagazineSize} IsReload={IsReload} IsFiring={IsFiring}");
+
+        if (MagazineSize <= 0)
         {
-            Attack(); // 탄약이 남아있을 경우 발사 시도
+            Debug.LogError($"[{name}] MagazineSize가 0이므로 동작을 중단합니다. (설정오류)");
+            return;
+        }
+
+        if (CurrentAmmo > 0 && !IsReload)
+        {
+            Attack();
         }
         else
         {
-            Reload(); // 탄약이 부족할 경우 재장전 시도
+            Reload();
         }
     }
 
     private void Fire()
     {
-        ammo.DefaultValue--;
+        bool used = AmmoUse(1);
+        if (!used)
+        {
+            Debug.LogWarning("[Et_Omnia_Vanitas] Fire 호출했으나 탄약 부족");
+            return;
+        }
 
+        // 실제 공격 처리 (데미지/레이캐스트 등)
         WeaponUtility.Fire(transform, bulletTransform, range.Value, damageDelay.Value, power.Value, hitLayerMask, this);
 
-        // 투사체 발사 처리
+        // 투사체(프리팹) 생성
         FireProjectile();
+
+        // 탄피 이펙트 등
+        if (cartridgeParticle != null && cartridgePoint != null)
+        {
+            Instantiate(cartridgeParticle, cartridgePoint.position, cartridgePoint.rotation);
+        }
+
+        // 화염 이펙트
+        if (flameParticle != null && bulletTransform != null)
+        {
+            Instantiate(flameParticle, bulletTransform.position, bulletTransform.rotation);
+        }
+
+        Debug.Log($"[Et_Omnia_Vanitas] Fired. Remaining {CurrentAmmo}/{MagazineSize}");
     }
 
     private void FireProjectile()
@@ -157,11 +179,14 @@ public class Et_Omnia_Vanitas : WeaponBase
 
     private IEnumerator FireCoroutine()
     {
+        Debug.Log("[FireCoroutine] started");
+
         IsFiring = true;  // 발사 시작
         Fire();           // 발사 실행
 
         // 애니메이션 재생 시간만큼 대기
         yield return new WaitForSeconds(animationWaitTime);
+        Debug.Log("[FireCoroutine] after wait - 총알 발사중.");
 
         // 발사가 완료되었으므로 발사 중 상태 초기화
         IsFiring = false;
@@ -176,9 +201,9 @@ public class Et_Omnia_Vanitas : WeaponBase
         Particle();
 
         // 재장전 시간 대기
-        yield return new WaitForSeconds(reloadTime.Value);
+        yield return new WaitForSeconds(reloadTime != null ? reloadTime.Value : 1.0f);
 
-        ammo = megazine; // 탄약을 가득 채움
+        CurrentAmmo = MagazineSize;
 
         // 재장전 완료 후 사운드/효과 처리 (선택 사항)
         Debug.Log("재장전 완료!");
