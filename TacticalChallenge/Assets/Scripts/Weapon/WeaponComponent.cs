@@ -86,6 +86,8 @@ public class WeaponComponent : MonoBehaviour
 
         initialAnimatorController = animator.runtimeAnimatorController;
 
+        MapFeetIK();
+
         if (weaponPrefab != null)
         {
             Equip(weaponPrefab);
@@ -511,6 +513,58 @@ public class WeaponComponent : MonoBehaviour
     {
         if (detectedWeapons.Remove(wb))
             Debug.Log($"Detected weapon removed: {wb.name}");
+    }
+
+    private void MapFeetIK()
+    {
+        if (fbbIK == null) return;
+
+        Transform lThigh = transform.FindChildByName("Bip001 L Thigh");
+        Transform lFoot = transform.FindChildByName("Bip001 L Foot");
+        Transform rThigh = transform.FindChildByName("Bip001 R Thigh");
+        Transform rFoot = transform.FindChildByName("Bip001 R Foot");
+
+        if (lThigh != null) fbbIK.references.leftThigh = lThigh;
+        if (lFoot != null) fbbIK.references.leftFoot = lFoot;
+        if (rThigh != null) fbbIK.references.rightThigh = rThigh;
+        if (rFoot != null) fbbIK.references.rightFoot = rFoot;
+        
+        IKSolverFullBodyBiped solver = fbbIK.solver;
+
+        if (fbbIK.references.leftFoot != null)
+        {
+            solver.leftFootEffector.target = lFoot;
+            solver.leftFootEffector.position = fbbIK.references.leftFoot.position;
+            solver.leftFootEffector.rotation = fbbIK.references.leftFoot.rotation;
+            solver.leftFootEffector.positionWeight = 1f;
+            solver.leftFootEffector.rotationWeight = 1f;
+        }
+
+        // Left Thigh
+        if (fbbIK.references.leftThigh != null)
+        {
+            solver.leftThighEffector.target = lThigh;
+            solver.leftThighEffector.position = fbbIK.references.leftThigh.position;
+            solver.leftThighEffector.positionWeight = 1f;
+        }
+
+        // Right Foot
+        if (fbbIK.references.rightFoot != null)
+        {
+            solver.rightFootEffector.target = rFoot;
+            solver.rightFootEffector.position = fbbIK.references.rightFoot.position;
+            solver.rightFootEffector.rotation = fbbIK.references.rightFoot.rotation;
+            solver.rightFootEffector.positionWeight = 1f;
+            solver.rightFootEffector.rotationWeight = 1f;
+        }
+
+        // Right Thigh
+        if (fbbIK.references.rightThigh != null)
+        {
+            solver.rightThighEffector.target = rThigh;
+            solver.rightThighEffector.position = fbbIK.references.rightThigh.position;
+            solver.rightThighEffector.positionWeight = 1f;
+        }
     }
 
     ///
