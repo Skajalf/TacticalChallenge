@@ -188,7 +188,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 933864567bb3faa44ad9ac07f131b980, type: 2}
+  - {fileID: 2100000, guid: 43f3dddd672058348a34aa20278d0da6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -292,7 +292,7 @@ MonoBehaviour:
   critScale: {fileID: 0}
   lifeSteal: {fileID: 0}
   speed: {fileID: 0}
-  megazine: {fileID: 0}
+  magazine: {fileID: 0}
   ammo: {fileID: 0}
   reloadTime: {fileID: 0}
   damageDelay: {fileID: 0}
@@ -318,6 +318,7 @@ MonoBehaviour:
   weaponPoseOffset: {x: 0, y: 0, z: 0}
   weaponAimingOffset: {x: 0, y: 0, z: 0}
   animationWaitTime: 0
+  animator: {fileID: 0}
 --- !u!1 &5900435468558354098
 GameObject:
   m_ObjectHideFlags: 0

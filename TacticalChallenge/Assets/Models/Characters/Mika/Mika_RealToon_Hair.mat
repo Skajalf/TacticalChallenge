@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2683166311667590437
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,12 +20,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mika_RealToon_Weapon
+  m_Name: Mika_RealToon_Hair
   m_Shader: {fileID: 4800000, guid: 6459b2db96a08ca41b0f9b39dc7ad59e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - N_F_EAL_ON
+  - N_F_MC_ON
   - N_F_O_ON
   - N_F_RDC_ON
   - N_F_RELGI_ON
@@ -37,7 +51,6 @@ Material:
   - _SELFSHADOWAFFECTEDBYLIGHTSHADOWSTRENGTH_OFF
   - _SELFSHADOWSHADOWTATVIEWDIRECTION_OFF
   - _SHOWNORMAL_OFF
-  - _SPECMODE_OFF
   - _STIL_OFF
   - _TEXTUREPATTERNSTYLE_OFF
   - _USESECONDARYCUTOUT_OFF
@@ -91,11 +104,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MCapMask:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: ffbe55158de05db4282b2f0f746d4f72, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: c659e57f73b9e544997e60b5458e7c1e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1dfb51cbfc6c1b64a8534dae67b78c62, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskGloss:
@@ -107,7 +120,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskSelfLit:
-        m_Texture: {fileID: 2800000, guid: be41aad98cd6bd94399f5380ef7a41fe, type: 3}
+        m_Texture: {fileID: 2800000, guid: 74f0fffa8d3a45d44ad8a35918b3d9fd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTransparency:
@@ -213,7 +226,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Glow_Edge_Width: 1
-    - _HighlightColorPower: 1
+    - _HighlightColorPower: 0.3
     - _LLI_Max: 1
     - _LLI_Min: 0
     - _LigIgnoYNorDir: 0
@@ -246,7 +259,7 @@ Material:
     - _N_F_HDLS: 0
     - _N_F_HPSS: 0
     - _N_F_LLI: 0
-    - _N_F_MC: 0
+    - _N_F_MC: 1
     - _N_F_MSSOLTFO: 0
     - _N_F_NFD: 0
     - _N_F_NLASOBF: 0
@@ -303,12 +316,12 @@ Material:
     - _RimLightInLight: 1
     - _RimLightSoftness: 1
     - _RimLightUnfill: 1.5
-    - _SPECIN: 1
-    - _SPECMODE: 0
+    - _SPECIN: 0.3
+    - _SPECMODE: 1
     - _STIL: 0
     - _Saturation: 1
     - _SelfLitHighContrast: 1
-    - _SelfLitIntensity: 0
+    - _SelfLitIntensity: 1
     - _SelfLitPower: 2
     - _SelfShadowAffectedByLightShadowStrength: 0
     - _SelfShadowHardness: 1
@@ -377,16 +390,3 @@ Material:
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _XYZPosition: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &3437487632965449916
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7
