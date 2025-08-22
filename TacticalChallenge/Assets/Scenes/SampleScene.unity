@@ -174,7 +174,7 @@ MonoBehaviour:
   ShoulderOffset: {x: 0.5, y: -0.4, z: 0}
   VerticalArmLength: 0.4
   CameraSide: 1
-  CameraDistance: 3
+  CameraDistance: 5
   CameraCollisionFilter:
     serializedVersion: 2
     m_Bits: 0
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bUseCamera: 1
-  zoomRange: {x: 2, y: 3}
+  zoomRange: {x: 3, y: 5}
   zoomSensitivity: 0.1
   zoomLerp: 40
   mouseSensitivity: {x: 0.1, y: 0.1}
@@ -24828,7 +24828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bUseCamera: 1
-  zoomRange: {x: 2, y: 3}
+  zoomRange: {x: 3, y: 5}
   zoomSensitivity: 0.1
   zoomLerp: 40
   mouseSensitivity: {x: 0.1, y: 0.1}
@@ -25568,7 +25568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bUseCamera: 1
-  zoomRange: {x: 2, y: 3}
+  zoomRange: {x: 3, y: 5}
   zoomSensitivity: 0.1
   zoomLerp: 40
   mouseSensitivity: {x: 0.1, y: 0.1}
@@ -27017,7 +27017,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bUseCamera: 1
-  zoomRange: {x: 2, y: 3}
+  zoomRange: {x: 3, y: 5}
   zoomSensitivity: 0.1
   zoomLerp: 40
   mouseSensitivity: {x: 0.1, y: 0.1}

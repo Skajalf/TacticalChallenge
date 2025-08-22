@@ -10,7 +10,7 @@ public class CameraComponent : MonoBehaviour
 {
     [Header("Camera Settings")]
     [SerializeField] private bool bUseCamera = true;  // 카메라 사용 여부
-    [SerializeField] private Vector2 zoomRange = new Vector2(2.0f, 3.0f);
+    [SerializeField] private Vector2 zoomRange = new Vector2(3.0f, 5.0f);
     [SerializeField] private float zoomSensitivity = 0.1f;
     [SerializeField] private float zoomLerp = 40.0f;
 
