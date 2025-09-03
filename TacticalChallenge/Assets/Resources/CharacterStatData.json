@@ -1,0 +1,14 @@
+{
+  "version":1,
+  "characters":[
+    {
+      "CharacterName":"Mika",
+      "HP":120.0,
+      "Stamina":60.0,
+      "AP":10.0,
+      "MoveSpeed":5.0,
+      "DefenceType":"Heavy",
+      "Armor":12.0
+    }
+  ]
+}

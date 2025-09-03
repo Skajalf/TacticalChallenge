@@ -1,0 +1,13 @@
+{
+  "version":1,
+  "weapons":[
+    {
+      "WeaponName":"Mika_Weapon",
+      "WeaponType":"SMG",
+      "AttackType":"Piercing",
+      "AttackSpeed":2.5,
+      "Magazine":25,
+      "ArmorPiercing":1.0
+    }
+  ]
+}
