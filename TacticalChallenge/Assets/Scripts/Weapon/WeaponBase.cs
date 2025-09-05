@@ -1,76 +1,67 @@
 using Cinemachine;
 using System;
+using System.Collections;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
-public abstract class WeaponBase : MonoBehaviour
+enum ATKType
+{
+    Explosive,
+    Piercing,
+    Mystic
+}
+
+public abstract class WeaponBase : Entity
 {
     [Header("Weapon Data Setting")]
-    [SerializeField] protected string weaponName;    // 무기 이름
-    [SerializeField] protected Stat power;          // 무기 데미지
-    [SerializeField] protected Stat armorPiercing; // 방어 관통
-    [SerializeField] protected Stat specialPiercing; // 특수 관통
-    [SerializeField] protected Stat critRate;       // 치명타 확률
-    [SerializeField] protected Stat critScale;      // 치명타 배율
-    [SerializeField] protected Stat lifeSteal;      // 생명력 흡수
-    [SerializeField] protected Stat speed;          // 추가 이동속도
-    [SerializeField] public Stat magazine;       // 탄창 크기
-    [SerializeField] public Stat ammo;           // 현재 탄수
-    [SerializeField] protected Stat reloadTime;     // 재장전 시간
-    [SerializeField] protected Stat damageDelay;    // 탄착 시간
-    [SerializeField] protected Stat range;          // 사거리
-    [SerializeField] protected LayerMask hitLayerMask; // 피격 가능 대상 (폭발 같은 경우라던지)
+    [SerializeField] private float power;         // 무기 데미지
+    [SerializeField] private int maxAmmo;       // 탄창 크기
+    [SerializeField] private float armorPiercing; // 방어력 관통
+    [SerializeField] private float reloadTime;    // 재장전 시간
+    [SerializeField] private ATKType attackType;  // 공격타입
 
-    [SerializeField] public int RandomReload = 1;
-
-    [SerializeField] protected WeaponStatData weaponStats;
+    [SerializeField] public int RandomReload = 1; // 애니메이션 타입 (장전 모션이 복수 있는 캐릭터의 경우 1 이외의 숫자)
 
     [Header("Weapon Visuals")]
-    [SerializeField] protected GameObject projectilePrefab;   // 탄환 프리팹
-    [SerializeField] protected GameObject cartridgeParticle;  // 탄피 프리팹
-    [SerializeField] protected string weaponHolsterName = "WeaponPivot"; // 총의 위치 이름
-    [SerializeField] protected string bulletTransformName = "fire_01";   // 총알이 소환되는 위치 이름
-    [SerializeField] protected string cartridgeTransformName = "fire_02"; // 탄피가 소환되는 위치 이름
-    [SerializeField] protected GameObject flameParticle;       // 총구 화염 이펙트
+    [SerializeField] private GameObject projectilePrefab;   // 탄환 프리팹
+    [SerializeField] private GameObject cartridgeParticle;  // 탄피 프리팹
+    [SerializeField] private string weaponHolsterName = "WeaponPivot"; // 총의 위치 이름
+    [SerializeField] private string bulletTransformName = "fire_01";   // 총알이 소환되는 위치 이름
+    [SerializeField] private string cartridgeTransformName = "fire_02"; // 탄피가 소환되는 위치 이름
+    [SerializeField] private GameObject flameParticle;       // 총구 화염 이펙트
 
     [Header("Impulse Setting")]
-    [SerializeField] protected Vector3 impulseDirection;
-    [SerializeField] protected Cinemachine.NoiseSettings impulseSettings;
-    protected CinemachineImpulseSource impulse;
+    [SerializeField] private Vector3 impulseDirection;
+    [SerializeField] private Cinemachine.NoiseSettings impulseSettings;
+    private CinemachineImpulseSource impulse;
 
     [Header("Impact Setting")]
-    [SerializeField] protected int hitImpactIndex;
-    [SerializeField] protected GameObject hitParticle;
-    [SerializeField] protected GameObject damageParticle;
-    [SerializeField] protected Vector3 hitParticlePositionOffset;
-    [SerializeField] protected Vector3 hitParticleScaleOffset = Vector3.one;
+    [SerializeField] private int hitImpactIndex;
+    [SerializeField] private GameObject hitParticle;
+    [SerializeField] private GameObject damageParticle;
+    [SerializeField] private Vector3 hitParticlePositionOffset;
+    [SerializeField] private Vector3 hitParticleScaleOffset = Vector3.one;
 
     [Header("Weapon Offset Setting")]
-    protected GameObject rootObject;
-    protected Transform weaponTransform;
-    protected Transform bulletTransform;
-    protected Transform cartridgePoint;
-    public Vector3 weaponPoseOffset;
-    public Vector3 weaponAimingOffset;
+    private Transform weaponTransform;
+    private Transform bulletTransform;
+    private Transform cartridgePoint;
+    private Vector3 weaponPoseOffset;
+    private Vector3 weaponAimingOffset;
 
-    //private Stat[] stats;
-
-
-    protected bool IsReload { get; set; }
+    protected bool IsReloading { get; set; }
     protected bool IsFiring { get; set; }
-    [SerializeField] protected float animationWaitTime;
-
-    public Animator animator;
-
+    
     protected int currentAmmo = 0;
+
     public int CurrentAmmo
     {
         get => currentAmmo;
-        set => currentAmmo = Mathf.Clamp(value, 0, MagazineSize);
+        set => currentAmmo = Mathf.Clamp(value, 0, maxAmmo);
     }
 
-    public int MagazineSize => magazine != null ? Mathf.RoundToInt(magazine.Value) : 0;
     public bool IsEmpty => CurrentAmmo <= 0;
-    public bool IsFull => CurrentAmmo >= MagazineSize;
+    public bool IsFull => CurrentAmmo >= maxAmmo;
 
     protected virtual void Awake()
     {
@@ -79,51 +70,13 @@ public abstract class WeaponBase : MonoBehaviour
 
     protected virtual void Init()
     {
-        rootObject = transform.root != null ? transform.root.gameObject : gameObject;
-
-        if (weaponStats != null)
-        {
-            weaponName = weaponStats.WeaponName;
-            if (power != null) power.DefaultValue = weaponStats.Power;
-            if (armorPiercing != null) armorPiercing.DefaultValue = weaponStats.ArmorPiercing;
-            if (specialPiercing != null) specialPiercing.DefaultValue = weaponStats.SpecialPiercing;
-            if (critRate != null) critRate.DefaultValue = weaponStats.CritRate;
-            if (critScale != null) critScale.DefaultValue = weaponStats.CritScale;
-            if (lifeSteal != null) lifeSteal.DefaultValue = weaponStats.LifeSteal;
-            if (speed != null) speed.DefaultValue = weaponStats.Speed;
-            if (magazine != null) magazine.DefaultValue = weaponStats.Megazine;
-            if (reloadTime != null) reloadTime.DefaultValue = weaponStats.ReloadTime;
-            if (damageDelay != null) damageDelay.DefaultValue = weaponStats.DamageDelay;
-            if (range != null) range.DefaultValue = weaponStats.Range;
-            hitLayerMask = weaponStats.HitLayerMask;
-        }
+        IsFiring = false;
     }
 
-    public virtual void InitializeAmmo()
+    public virtual void InitializeAmmo() // 게임이 시작하면서 총이 초기화 될 때 호출
     {
-        Debug.Log($"[{name}] InitializeAmmo called. magazine assigned? {(magazine != null)} ammo assigned? {(ammo != null)} weaponStats assigned? {(weaponStats != null)}");
-
-        if (magazine == null)
-        {
-            Debug.LogError($"[{name}] magazine Stat이 할당되지 않았습니다! Inspector에서 magazine을 설정하세요.");
-            currentAmmo = 0;
-            return;
-        }
-
-        int magSize = MagazineSize;
-        if (magSize <= 0)
-        {
-            Debug.LogError($"[{name}] MagazineSize가 0입니다. Stat의 DefaultValue 또는 weaponStats 값을 확인하세요.");
-            currentAmmo = 0;
-            return;
-        }
-
-        if (ammo != null)
-            currentAmmo = Mathf.Clamp(Mathf.RoundToInt(ammo.Value), 0, magSize);
-        else
-            currentAmmo = magSize;
-
-        Debug.Log($"[{name}] InitializeAmmo -> {currentAmmo}/{magSize}");
+        Debug.Assert(maxAmmo > 0, $"{gameObject.GetInstanceID()}의 탄창이 {maxAmmo} 입니다.");
+        currentAmmo = maxAmmo;
     }
 
     // 탄약 소비
@@ -140,29 +93,166 @@ public abstract class WeaponBase : MonoBehaviour
     {
         if (amount <= 0) return 0;
         int before = CurrentAmmo;
-        CurrentAmmo = Mathf.Min(MagazineSize, CurrentAmmo + amount);
+        CurrentAmmo = Mathf.Min(maxAmmo, CurrentAmmo + amount);
         return CurrentAmmo - before;
     }
 
-    protected virtual void Attack()
+    public virtual void Attack()
     {
-        Debug.Log($"{this.name} Attack() 기본 실행 (자식에서 오버라이드하세요).");
+        // 발사 중이라면 중복 발사 방지
+        if (IsFiring || IsReloading || IsEmpty)
+            return;
+
+        StartCoroutine(FireCoroutine());  // 코루틴 호출
+    }
+    private IEnumerator FireCoroutine()
+    {
+        IsFiring = true;  // 발사 시작
+        Fire(transform, bulletTransform, 1, 0, power, 11, this);           // 발사 실행
+
+        // 애니메이션 재생 시간만큼 대기
+        yield return new WaitForSeconds(1);
+
+        // 발사가 완료되었으므로 발사 중 상태 초기화
+        IsFiring = false;
     }
 
-    public virtual void Reload()
+    public void Fire(Transform weaponTransform, Transform bulletTransform, float range, float damageDelay, float power, LayerMask hitLayerMask, MonoBehaviour caller)
     {
-        Debug.Log($"{this.name} Reload() 기본 실행 (자식에서 오버라이드하세요).");
+        RaycastHit hit;
+        Vector3 fireDirection = weaponTransform.forward; // 발사 방향
+        Vector3 startPoint = bulletTransform.position;   // 총알 발사 위치
+
+        if (AmmoUse(1) != true)
+            return;
+
+        // 레이캐스트로 타격 확인
+        if (Physics.Raycast(startPoint, fireDirection, out hit, range, hitLayerMask))
+        {
+            // 타격된 객체의 이름 출력
+            Debug.Log($"명중한 객체 이름: {hit.collider.name}");
+
+            // MonoBehaviour를 가진 caller가 코루틴 실행
+            caller.StartCoroutine(ApplyDamageWithDelay(hit, damageDelay, power));
+        }
+        else
+        {
+            Debug.Log("목표에 명중하지 않았습니다.");
+        }
+
+        FireProjectile();
+    }
+    private void FireProjectile()
+    {
+        if (projectilePrefab == null || bulletTransform == null)
+        {
+            Debug.LogWarning("투사체 프리팹 또는 발사 위치가 설정되지 않았습니다.");
+            return;
+        }
+
+        // 투사체 인스턴스 생성
+        var projectileInstance = Instantiate(projectilePrefab, bulletTransform.position, bulletTransform.rotation);
+        Debug.Log($"{bulletTransform.position} : 총알 위치 / {bulletTransform.rotation} : 총구방향"); 
+
+        // 생성된 투사체에서 Test_Projectile 스크립트를 가져옴
+        var projectile = projectileInstance.GetComponent<Projectile>();
+
+        if (projectile != null)
+        {
+            // 무기 정보 전달
+            projectile.weapon = this;
+        }
+    }
+
+    private IEnumerator ApplyDamageWithDelay(RaycastHit hit, float delay, float power)
+    {
+        yield return new WaitForSeconds(delay);
+
+        var target = hit.collider.GetComponent<IDamageable>();
+        if (target != null)
+        {
+            target.TakeDamage(power);
+            Debug.Log($"데미지 {power} 적용 완료.");
+        }
+        else
+        {
+            Debug.LogWarning("데미지를 적용할 수 없는 대상입니다.");
+        }
+    }
+
+
+    public virtual bool Reload()
+    {
+        if (!IsReloading && currentAmmo < maxAmmo)
+        {
+            StartCoroutine(ReloadCoroutine());
+        }
+        else
+        {
+            Debug.Log("재장전이 필요하지 않습니다.");
+            return false;
+        }
+        return true;
+    }
+
+    private IEnumerator ReloadCoroutine()
+    {
+        IsReloading = true;
+
+        // 재장전 사운드나 파티클 이펙트 호출 (추가 효과)
+        Sound();
+        Particle();
+
+        // 재장전 시간 대기
+        yield return new WaitForSeconds(reloadTime);
+
+        currentAmmo = maxAmmo; // 탄약을 가득 채움
+
+        // 재장전 완료 후 사운드/효과 처리 (선택 사항)
+        Debug.Log("재장전 완료!");
+
+        IsReloading = false;
     }
 
     public virtual void Equip()
     {
-        // 일반적으로 WeaponComponent가 부모/transform 연결 후 호출
-        Debug.Log($"{this.name} Equip() 기본 실행.");
+        if (weaponTransform == null)
+        {
+            weaponTransform = transform.root.FindChildByName(weaponHolsterName);
+            if (weaponTransform == null)
+            {
+                Debug.LogError($"무기 홀스터를 찾을 수 없습니다: {weaponHolsterName}");
+                return;
+            }
+        }
+
+        if (bulletTransform == null)
+        {
+            bulletTransform = weaponTransform.FindChildByName(bulletTransformName);
+            if (bulletTransform == null)
+            {
+                Debug.LogError($"탄환 발사 위치를 찾을 수 없습니다: {bulletTransformName}");
+                return;
+            }
+        }
+
+        if (cartridgePoint == null)
+        {
+            cartridgePoint = weaponTransform.FindChildByName(cartridgeTransformName);
+            if (cartridgePoint == null)
+            {
+                Debug.LogError($"탄피 발사 위치를 찾을 수 없습니다: {cartridgeTransformName}");
+                return;
+            }
+        }
+
+        transform.SetParent(weaponTransform, false);
+        gameObject.SetActive(true);
     }
 
     public virtual void UnEquip()
     {
-        Debug.Log($"{this.name} UnEquip() 기본 실행.");
+        
     }
 
     protected virtual void Impulse() { }
@@ -170,7 +260,4 @@ public abstract class WeaponBase : MonoBehaviour
     protected virtual void Particle() { }
 
     // 애니메이션 이벤트에서 WeaponComponent가 호출 -> 자식에서 구현
-    public virtual void AmmoLeft()
-    {
-    }
 }
