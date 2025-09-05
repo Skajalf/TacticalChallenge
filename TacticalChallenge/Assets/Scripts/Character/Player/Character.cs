@@ -9,7 +9,6 @@ public abstract class Character : MonoBehaviour
 {
     protected Animator animator;
     protected StateComponent state;
-    protected StatComponent statComponent;
 
     // protected AudioSource audioSource;
 
@@ -17,10 +16,8 @@ public abstract class Character : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         state = GetComponent<StateComponent>();
-        statComponent = GetComponent<StatComponent>();
     }
 
-    public StatComponent GetStatComponent() { return statComponent; }
     
 
 }

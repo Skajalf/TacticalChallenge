@@ -29,6 +29,6 @@ public class Projectile : MonoBehaviour
     // Ãæµ¹ ½Ã ÃÑ¾Ë ÆÄ±«
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 }

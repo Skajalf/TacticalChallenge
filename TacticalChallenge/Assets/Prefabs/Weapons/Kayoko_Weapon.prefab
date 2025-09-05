@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 1487114401326225497}
   - component: {fileID: 6245256104864759611}
   - component: {fileID: 6646679873060820504}
-  - component: {fileID: 481536832391529103}
+  - component: {fileID: 9209599966200473023}
   m_Layer: 6
   m_Name: Kayoko_Weapon
   m_TagString: Untagged
@@ -155,7 +155,7 @@ Transform:
   m_GameObject: {fileID: 4399959466946253332}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 18.96, y: 0.794, z: 20.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -272,7 +272,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.031994056, y: 0.123727046, z: 0.27760237}
   m_Center: {x: -0.00014881024, y: 0.015154857, z: 0.06498146}
---- !u!114 &481536832391529103
+--- !u!114 &9209599966200473023
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -281,28 +281,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 4399959466946253332}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a68be95a5dc4aa244abb1c0a9e8414c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 86a82d4d0ee78b54ba981291d3df88b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponName: 
-  power: {fileID: 0}
-  armorPiercing: {fileID: 0}
-  specialPiercing: {fileID: 0}
-  critRate: {fileID: 0}
-  critScale: {fileID: 0}
-  lifeSteal: {fileID: 0}
-  speed: {fileID: 0}
-  magazine: {fileID: 0}
-  ammo: {fileID: 0}
-  reloadTime: {fileID: 0}
-  damageDelay: {fileID: 0}
-  range: {fileID: 0}
-  hitLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
+  ID: Kayoko
+  power: 5
+  maxAmmo: 10
+  armorPiercing: 0.5
+  reloadTime: 3
+  attackType: 0
   RandomReload: 1
-  weaponStats: {fileID: 0}
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 5281290268849229969, guid: 7f11e453c15223441a6272b6c59f5f07,
+    type: 3}
   cartridgeParticle: {fileID: 0}
   weaponHolsterName: WeaponPivot
   bulletTransformName: fire_01
@@ -315,10 +305,6 @@ MonoBehaviour:
   damageParticle: {fileID: 0}
   hitParticlePositionOffset: {x: 0, y: 0, z: 0}
   hitParticleScaleOffset: {x: 1, y: 1, z: 1}
-  weaponPoseOffset: {x: 0, y: 0, z: 0}
-  weaponAimingOffset: {x: 0, y: 0, z: 0}
-  animationWaitTime: 0
-  animator: {fileID: 0}
 --- !u!1 &5900435468558354098
 GameObject:
   m_ObjectHideFlags: 0

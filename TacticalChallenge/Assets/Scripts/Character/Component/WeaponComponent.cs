@@ -8,7 +8,7 @@ public class WeaponComponent : MonoBehaviour
 {
     [Header("Weapon Setup")]
     [SerializeField] private Transform weaponPivot;
-    [SerializeField] private GameObject weaponPrefab; //고유무기 프리팹
+    [SerializeField] private GameObject weaponPrefab; //고유(선택된무기)무기 프리팹 (초기화 용도)
 
     [Header("Hand Animation Setup")]
     [SerializeField] private Transform HandBone; // 탄창 잡는 손
@@ -17,7 +17,7 @@ public class WeaponComponent : MonoBehaviour
     private Transform gripBone; // 무기 프리팹 안의 Left/RightHandGrip
     private Transform magazineParent; //원래 magazine 부모
 
-    private GameObject weaponInstance;
+    private GameObject weaponInstance; // 실제로 인스턴스니까 뭐... 교체할때 쓰는 그건가봄
 
     private PivotManager pivotManager;
     private WeaponBase currentWeapon;
@@ -29,7 +29,6 @@ public class WeaponComponent : MonoBehaviour
     private Animator animator;
     private FullBodyBipedIK fbbIK;
     private AimIK aimIK;
-    private StatComponent statComponent;
     private MovingComponent movingComponent;
 
     private RuntimeAnimatorController initialAnimatorController;
@@ -49,7 +48,6 @@ public class WeaponComponent : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
         fbbIK = GetComponent<FullBodyBipedIK>();
-        statComponent = GetComponent<StatComponent>();
         movingComponent = GetComponent<MovingComponent>();
         aimIK = GetComponent<AimIK>();
 
@@ -156,12 +154,6 @@ public class WeaponComponent : MonoBehaviour
             return;
         }
 
-        if (currentWeapon.ammo == currentWeapon.magazine)
-        {
-            Debug.Log("탄약이 가득 차 있어 재장전이 필요하지 않습니다.");
-            return;
-        }
-
         if (animator == null)
         {
             Debug.LogError("Animator 컴포넌트가 초기화되지 않았습니다.");
@@ -238,7 +230,6 @@ public class WeaponComponent : MonoBehaviour
         ApplyGripPivots(instance.transform, entry);
 
         // 6) WeaponBase 초기화 및 후속 처리
-        wb.animator = animator;
         wb.InitializeAmmo();
         wb.Equip();
         currentWeapon = wb;
@@ -576,7 +567,7 @@ public class WeaponComponent : MonoBehaviour
         // currentWeapon이 유효하면 CheckAmmo() 호출
         if (currentWeapon != null)
         {
-            currentWeapon.AmmoLeft();
+            currentWeapon.Attack();
         }
         else
         {
@@ -667,6 +658,6 @@ public class WeaponComponent : MonoBehaviour
     public void ApplyStats(WeaponBase weapon)
     {
 
-        statComponent.HasStat(weapon.ammo);
+        
     }
 }

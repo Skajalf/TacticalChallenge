@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(StatComponent))]
 public class Player : Character
 {
 
@@ -20,7 +19,6 @@ public class Player : Character
     
     private void APRegenTest()
     {
-        statComponent.GetStat("AP").DefaultValue += 0.1f;
     }
 
 }

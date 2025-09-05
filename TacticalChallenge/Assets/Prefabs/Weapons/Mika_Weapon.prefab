@@ -254,25 +254,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86a82d4d0ee78b54ba981291d3df88b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponName: 
-  power: {fileID: 0}
-  armorPiercing: {fileID: 0}
-  specialPiercing: {fileID: 0}
-  critRate: {fileID: 0}
-  critScale: {fileID: 0}
-  lifeSteal: {fileID: 0}
-  speed: {fileID: 0}
-  magazine: {fileID: 0}
-  ammo: {fileID: 11400000, guid: 502f79ca1d0040e44af85fb610dc1d77, type: 2}
-  reloadTime: {fileID: 0}
-  damageDelay: {fileID: 0}
-  range: {fileID: 0}
-  hitLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
+  ID: 
+  power: 5
+  maxAmmo: 30
+  armorPiercing: 0.5
+  reloadTime: 3
+  attackType: 0
   RandomReload: 2
-  weaponStats: {fileID: 0}
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 5281290268849229969, guid: 7f11e453c15223441a6272b6c59f5f07,
+    type: 3}
   cartridgeParticle: {fileID: 0}
   weaponHolsterName: WeaponPivot
   bulletTransformName: fire_01
@@ -285,10 +275,6 @@ MonoBehaviour:
   damageParticle: {fileID: 0}
   hitParticlePositionOffset: {x: 0, y: 0, z: 0}
   hitParticleScaleOffset: {x: 1, y: 1, z: 1}
-  weaponPoseOffset: {x: 0, y: 0, z: 0}
-  weaponAimingOffset: {x: 0, y: 0, z: 0}
-  animationWaitTime: 0
-  animator: {fileID: 0}
 --- !u!1 &4627335679588089230
 GameObject:
   m_ObjectHideFlags: 0
