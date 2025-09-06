@@ -2,38 +2,51 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float speed = 75.0f; // ÃÑ¾Ë ¼Óµµ
-    [SerializeField] private float destroyTime = 10.0f; // ÀÏÁ¤ ½Ã°£ ÈÄ ÃÑ¾Ë ºñÈ°¼ºÈ­
+    [SerializeField] private float speed = 75.0f; // ì´ì•Œ ì†ë„
+    [SerializeField] private float destroyTime = 10.0f; // ì¼ì • ì‹œê°„ í›„ ì´ì•Œ ë¹„í™œì„±í™”
 
-    private Rigidbody rb; // Rigidbody ÄÄÆ÷³ÍÆ®
-    public WeaponBase weapon; // Weapon Á¤º¸¸¦ ÀúÀåÇÒ º¯¼ö
+    private Rigidbody rb; // Rigidbody ì»´í¬ë„ŒíŠ¸
+    public WeaponBase weapon; // Weapon ì •ë³´ë¥¼ ì €ì¥í•  ë³€ìˆ˜
 
-    // Awake ¸Ş¼­µå¿¡¼­ Rigidbody °¡Á®¿À±â
+    // Awake ë©”ì„œë“œì—ì„œ Rigidbody ê°€ì ¸ì˜¤ê¸°
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    // Start ¸Ş¼­µå¿¡¼­ ¼Óµµ ¼³Á¤ÇÏ¿© ÃÑ¾Ë ¹ß»ç
+    // Start ë©”ì„œë“œì—ì„œ ì†ë„ ì„¤ì •í•˜ì—¬ ì´ì•Œ ë°œì‚¬
     private void Start()
     {
         if (rb != null)
         {
-            rb.velocity = transform.forward * speed; // ¼Óµµ ¼³Á¤
+            rb.velocity = transform.forward * speed; // ì†ë„ ì„¤ì •
         }
 
-        // ÀÏÁ¤ ½Ã°£ ÈÄ ÃÑ¾Ë ÆÄ±«
+        // ì¼ì • ì‹œê°„ í›„ ì´ì•Œ íŒŒê´´
         //Destroy(gameObject, destroyTime);
     }
 
     private void Update()
     {
-        rb.AddForce(new Vector3(0f, 0.05f , 0f));
+        //rb.AddForce(new Vector3(0f, 0.05f , 0f));
     }
 
-    // Ãæµ¹ ½Ã ÃÑ¾Ë ÆÄ±«
+    // ì¶©ëŒ ì‹œ ì´ì•Œ íŒŒê´´
     private void OnTriggerEnter(Collider other)
     {
-        
+        //ìƒëŒ€ë°©ì—ê²Œ ì •ë³´ ì „ë‹¬ í›„(RigidBody ê°€ ì•„ë‹ˆë¼ì„œ ìƒê´€ì—†ì„ ë“¯?), PoolManagerë¡œ ë°˜ë‚©
+    }
+    
+    public static bool Shoot(Vector3 initialLocation, Vector3 direction, float speed, float time)
+    {
+        // WeaponBase.Fire()ì—ì„œ í˜¸ì¶œí•˜ëŠ”ê²Œ ì¢‹ì„ ê²ƒ ê°™ìŒ. ê·¸ëŸ¬ë ¤ë©´, public staticìœ¼ë¡œ ë˜ì–´ìˆì–´ì•¼ í•  ê²ƒì´ê³ .. 
+        // initialLocationì€ ë¡œì»¬í¬ì§€ì…˜(weapon í•˜ë‹¨ì— ë¶™ì„ ë“¯)ì´ ë  ê±°ê³ , directionê³¼ speed, time ëª¨ë‘ ê·¸ë ‡ë‹¤.
+
+        // if(time > time) PoolManager.Return(gameObject)
+    }
+
+    public void OnDisable()
+    {
+        // íŒŒê´´ë˜ê±°ë‚˜, ë¹„í™œì„±í™” ì‹œí‚¬ ë•Œ => PoolManagerë¡œ ë°˜ë‚©í•  ë•Œ...
     }
 }
