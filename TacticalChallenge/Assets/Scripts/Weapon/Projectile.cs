@@ -36,7 +36,7 @@ public class Projectile : MonoBehaviour
     {
         //상대방에게 정보 전달 후(RigidBody 가 아니라서 상관없을 듯?), PoolManager로 반납
     }
-    
+
     public static bool Shoot(Vector3 initialLocation, Vector3 direction, float speed, float time)
     {
         // WeaponBase.Fire()에서 호출하는게 좋을 것 같음. 그러려면, public static으로 되어있어야 할 것이고.. 
