@@ -4421,7 +4421,19 @@ MonoBehaviour:
   decimals: 0
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 919132148664900333}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   eventSource: {fileID: 0}
 --- !u!114 &943804299
 MonoBehaviour:
@@ -10420,6 +10432,7 @@ GameObject:
   - component: {fileID: 224661631505371414}
   - component: {fileID: 114653010233219108}
   - component: {fileID: 114283569659565676}
+  - component: {fileID: 224661631505371415}
   m_Layer: 5
   m_Name: Character AP
   m_TagString: Untagged
@@ -10891,7 +10904,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.05882353}
+  m_Color: {r: 0.5229619, g: 0.7262117, b: 0.9811321, a: 0.05882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -10946,7 +10959,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10.0
+  m_text: 0.0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 84dd14695854bbc43a5faa24fcf93d0d, type: 2}
   m_sharedMaterial: {fileID: 21261991626553910, guid: 84dd14695854bbc43a5faa24fcf93d0d,
@@ -11029,7 +11042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.06132078, g: 0.5742134, b: 1, a: 1}
+  m_Color: {r: 0.2783019, g: 0.66493577, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -11041,7 +11054,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 1
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -11058,14 +11071,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20c6dbf0102c7bc468113ccdd97dad83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPercent: 10
+  currentPercent: 0
   speed: 5
   minValue: 0
   maxValue: 10
   valueLimit: 100
   loadingBar: {fileID: 114492029623689848}
   textPercent: {fileID: 114290682941260338}
-  isOn: 1
+  isOn: 0
   restart: 0
   invert: 0
   addPrefix: 0
@@ -11076,7 +11089,19 @@ MonoBehaviour:
   decimals: 1
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 919132148664900333}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
   eventSource: {fileID: 0}
 --- !u!4 &115448936964846499
 Transform:
@@ -11539,6 +11564,20 @@ RectTransform:
   m_AnchoredPosition: {x: 450, y: 75}
   m_SizeDelta: {x: 450, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &224661631505371415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368212869634680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c958cb033315434aae94c893a1230b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progressBar: {fileID: 114653010233219108}
+  targetPlayer: {fileID: 5866666021328099897}
 --- !u!224 &224665957294156104
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14127,6 +14166,8 @@ GameObject:
   - component: {fileID: 5866666021328099890}
   - component: {fileID: 5866666021328099896}
   - component: {fileID: 5866666021328099889}
+  - component: {fileID: 5866666021328099898}
+  - component: {fileID: 5866666021328099897}
   - component: {fileID: 5866666021328099888}
   - component: {fileID: 5866666021328099887}
   - component: {fileID: 5866666021328099895}
@@ -31362,6 +31403,36 @@ CharacterController:
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &5866666021328099897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148664900333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71dd598c2b40bfd4ea30048017fb73de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  APRegen: 1
+--- !u!114 &5866666021328099898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148664900333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e826d834a1c454241a2776e93f8cb45e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseMaxHP: 200
+  baseMaxAP: 10
+  baseMaxSpeed: 5
+  baseMaxDefence: 15
+  initialAP: 0
 --- !u!95 &5866666021351740393
 Animator:
   serializedVersion: 5

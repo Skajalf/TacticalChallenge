@@ -43,6 +43,7 @@ public class Projectile : MonoBehaviour
         // initialLocation은 로컬포지션(weapon 하단에 붙을 듯)이 될 거고, direction과 speed, time 모두 그렇다.
 
         // if(time > time) PoolManager.Return(gameObject)
+        return true;
     }
 
     public void OnDisable()
