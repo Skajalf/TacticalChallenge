@@ -76,11 +76,11 @@ public class StatComponent : MonoBehaviour
         return true;
     }
 
-    //테스트 용도로 사용했음
-    //public void DebugDamage100(GameObject giver = null)
-    //{
-    //    TakeDamage(100f, giver);
-    //}
+    //테스트 용도로 사용
+    public void DebugDamage100(GameObject giver = null)
+    {
+        TakeDamage(100f, giver);
+    }
 
     public virtual void RecoverAP(float amount)
     {

@@ -41,8 +41,8 @@ public class Player : Character
 
     private void Test(InputAction.CallbackContext context)
     {
-        //bool died = GetDamage(100f, this.gameObject);
-        UseAP(5);
+        bool died = GetDamage(100f, this.gameObject);
+        //UseAP(5);
     }
 
     private void OnEnable()
