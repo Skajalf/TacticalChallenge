@@ -4442,12 +4442,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 943804295}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Script: {fileID: 11500000, guid: aab8f1fcce3459a4fa05fcb254657cbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 1
+  progressBar: {fileID: 943804298}
+  targetPlayer: {fileID: 5866666021328099897}
+  smooth: 1
+  smoothDuration: 0.12
 --- !u!1 &947084894
 GameObject:
   m_ObjectHideFlags: 0
@@ -31428,7 +31431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e826d834a1c454241a2776e93f8cb45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMaxHP: 200
+  baseMaxHP: 650
   baseMaxAP: 10
   baseMaxSpeed: 5
   baseMaxDefence: 15
