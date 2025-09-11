@@ -276,6 +276,11 @@ public class CameraComponent : MonoBehaviour
         return cameraRotation.eulerAngles.y;
     }
 
+    public Vector2 GetZoomRange()
+    {
+        return zoomRange;
+    }
+
     #region Input Methods
     private void Input_Look_Performed(InputAction.CallbackContext context)
     {

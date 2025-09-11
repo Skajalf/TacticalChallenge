@@ -8,6 +8,8 @@ using static UnityEngine.EventSystems.StandaloneInputModule;
 
 public class MovingComponent : MonoBehaviour
 {
+    public enum MoveState { Idle, Move, Run }
+
     [Header("Movement Settings")]
     [SerializeField] private float walkSpeed = 2.0f;
     [SerializeField] private float runSpeed = 3.0f;
@@ -46,6 +48,9 @@ public class MovingComponent : MonoBehaviour
 
     private Collider currentCoverCollider;
     private Vector3 coverNormal;
+
+    public event System.Action<MoveState> OnMoveStateChanged;
+    public MoveState currentState = MoveState.Idle;
 
     private float coverTimer = 0f;
 
@@ -236,6 +241,8 @@ public class MovingComponent : MonoBehaviour
 
         // 5) CharacterController로 이동 적용 (deltaTime 반영)
         characterController.Move(move * Time.deltaTime);
+
+        UpdateMoveState();
     }
 
 
@@ -249,6 +256,31 @@ public class MovingComponent : MonoBehaviour
 
         // 2) 부드럽게 보간해서 회전
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSmooth);
+    }
+
+    private void UpdateMoveState()
+    {
+        MoveState newState;
+
+        if (inputMove.magnitude <= deadZone)
+        {
+            newState = MoveState.Idle;
+        }
+        else if (bRun)
+        {
+            newState = MoveState.Run;
+        }
+        else
+        {
+            newState = MoveState.Move;
+        }
+
+        if (newState != currentState)
+        {
+            currentState = newState;
+
+            OnMoveStateChanged?.Invoke(currentState);
+        }
     }
 
     public void Move()
