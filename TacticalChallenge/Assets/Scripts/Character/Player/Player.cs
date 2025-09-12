@@ -14,6 +14,10 @@ public class Player : Character
     public float AP => stat != null ? stat.CurrentAP : 0f;
     public float MaxAP => stat != null ? stat.MaxAP : 1f;
 
+    // 테스트용
+    [SerializeField] private float testDamageRadius = 5f; // 공격 반경
+    [SerializeField] private float testDamageAmount = 20f; // 데미지 양
+
     private void Stat_OnHPChanged(float cur, float max) => OnHPChanged?.Invoke(cur, max);
     private void Stat_OnAPChanged(float cur, float max) => OnAPChanged?.Invoke(cur, max);
 
@@ -41,8 +45,19 @@ public class Player : Character
 
     private void Test(InputAction.CallbackContext context)
     {
-        bool died = GetDamage(100f, this.gameObject);
+        //bool died = GetDamage(100f, this.gameObject);
         //UseAP(5);
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, testDamageRadius);
+
+        foreach (var hitCollider in hitColliders)
+        {
+            Enemy enemy = hitCollider.GetComponentInParent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.GetDamage(testDamageAmount, this.gameObject);
+            }
+        }
     }
 
     private void OnEnable()
