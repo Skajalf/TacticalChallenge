@@ -15,10 +15,11 @@ public abstract class WeaponBase : Entity
 {
     [Header("Weapon Data Setting")]
     [SerializeField] private float power;         // 무기 데미지
-    [SerializeField] private int maxAmmo;       // 탄창 크기
+    [SerializeField] private int maxAmmo;         // 탄창 크기
     [SerializeField] private float armorPiercing; // 방어력 관통
     [SerializeField] private float reloadTime;    // 재장전 시간
     [SerializeField] private ATKType attackType;  // 공격타입
+    [SerializeField] private float roundPerMinute = 1f;// 탄 발사주기
 
     [SerializeField] public int RandomReload = 1; // 애니메이션 타입 (장전 모션이 복수 있는 캐릭터의 경우 1 이외의 숫자)
 
@@ -63,14 +64,19 @@ public abstract class WeaponBase : Entity
     public bool IsEmpty => CurrentAmmo <= 0;
     public bool IsFull => CurrentAmmo >= maxAmmo;
 
-    protected virtual void Awake()
+    protected void Awake()
     {
         Init();
     }
 
-    protected virtual void Init()
+    protected void Init()
     {
         IsFiring = false;
+        if(bulletTransform == null)
+        {
+            bulletTransform = transform.FindChildByName(bulletTransformName);
+            Debug.Assert(bulletTransform != null, $"{GetInstanceID()}의 BulletTransform - fire02가 null입니다.");
+        }
     }
 
     public virtual void InitializeAmmo() // 게임이 시작하면서 총이 초기화 될 때 호출
@@ -83,13 +89,13 @@ public abstract class WeaponBase : Entity
     public virtual bool AmmoUse(int amount = 1)
     {
         if (amount <= 0) return false;
-        if (CurrentAmmo <= 0) return false;
+        if (IsEmpty) return false;
         CurrentAmmo = Mathf.Max(0, CurrentAmmo - amount);
         return true;
     }
 
     // 탄약 추가 (리턴: 실제 추가된 수)
-    public virtual int AddAmmo(int amount)
+    public int AddAmmo(int amount)
     {
         if (amount <= 0) return 0;
         int before = CurrentAmmo;
@@ -97,31 +103,33 @@ public abstract class WeaponBase : Entity
         return CurrentAmmo - before;
     }
 
-    public virtual void Attack()
+    public void Attack()
     {
-        // 발사 중이라면 중복 발사 방지
+        // 발사 중 혹은 탄창이 비었다면 중복 발사 방지
         if (IsFiring || IsReloading || IsEmpty)
             return;
 
         StartCoroutine(FireCoroutine());  // 코루틴 호출
     }
+
     private IEnumerator FireCoroutine()
     {
-        IsFiring = true;  // 발사 시작
-        Fire(transform, bulletTransform, 1, 0, power, 11, this);           // 발사 실행
+        IsFiring = true;  // 발사 시작 및 Firing Flag True 
 
-        // 애니메이션 재생 시간만큼 대기
-        yield return new WaitForSeconds(1);
+        Fire(1, 0, 11, this);         // 발사 실행
+
+        // RPM 시간만큼 대기
+        yield return new WaitForSeconds(roundPerMinute);
 
         // 발사가 완료되었으므로 발사 중 상태 초기화
         IsFiring = false;
     }
 
-    public void Fire(Transform weaponTransform, Transform bulletTransform, float range, float damageDelay, float power, LayerMask hitLayerMask, MonoBehaviour caller)
+    public void Fire(float range, float damageDelay, LayerMask hitLayerMask, MonoBehaviour caller)
     {
         RaycastHit hit;
         Vector3 fireDirection = weaponTransform.forward; // 발사 방향
-        Vector3 startPoint = bulletTransform.position;   // 총알 발사 위치
+        Vector3 startPoint = bulletTransform.localToWorldMatrix.GetPosition();   // 총알 발사 위치
 
         if (AmmoUse(1) != true)
             return;
@@ -151,30 +159,30 @@ public abstract class WeaponBase : Entity
         }
 
         // 투사체 인스턴스 생성
-        var projectileInstance = Instantiate(projectilePrefab, bulletTransform.position, bulletTransform.rotation);
-        Debug.Log($"{bulletTransform.position} : 총알 위치 / {bulletTransform.rotation} : 총구방향"); 
+        var projectileInstance = ObjectPoolingManager.Instance.GetFromPool(projectilePrefab, bulletTransform.localToWorldMatrix.GetPosition(), bulletTransform.rotation, weaponTransform);
+        Debug.Log($"{bulletTransform.localToWorldMatrix.GetPosition()} : 총알 위치 / {bulletTransform.rotation} : 총구방향"); 
 
-        // 생성된 투사체에서 Test_Projectile 스크립트를 가져옴
-        var projectile = projectileInstance.GetComponent<Projectile>();
-
-        if (projectile != null)
+        if (projectileInstance != null)
         {
             // 무기 정보 전달
-            projectile.weapon = this;
+            projectileInstance.GetComponent<Projectile>().Shoot(bulletTransform.localToWorldMatrix.GetPosition(), bulletTransform.rotation.eulerAngles, 75f, 10f);
         }
     }
 
+    // 데미지 콜 하는 부분. 나중엔 서버측의 메서드를 가져다 이용해야할 것.
     private IEnumerator ApplyDamageWithDelay(RaycastHit hit, float delay, float power)
     {
         yield return new WaitForSeconds(delay);
 
-        var target = hit.collider.GetComponent<IDamageable>();
+        var target = hit.collider.GetComponent<Character>();
         if (target != null)
         {
-            target.TakeDamage(power);
-            Debug.Log($"데미지 {power} 적용 완료.");
+            if (target.GetDamage(power))
+                Debug.Log($"데미지 {power} 적용 완료.");
+            else
+                Debug.Log($"데미지 미적용");
         }
-        else
+        else 
         {
             Debug.LogWarning("데미지를 적용할 수 없는 대상입니다.");
         }

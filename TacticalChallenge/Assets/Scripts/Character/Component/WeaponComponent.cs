@@ -6,9 +6,13 @@ using RootMotion.FinalIK;
 
 public class WeaponComponent : MonoBehaviour
 {
+    #region Fields
     [Header("Weapon Setup")]
     [SerializeField] private Transform weaponPivot;
-    [SerializeField] private GameObject weaponPrefab; //고유(선택된무기)무기 프리팹 (초기화 용도)
+    [SerializeField] private GameObject weaponPrefab;
+    private WeaponBase weaponBase;
+    // WeaponPrefab은 현재 캐릭터가 들고 있는 waeponInstance를 의미한다.
+    // 캐릭터는 생성되면서 이미 생성된 무기 인스턴스를 전달받고 WeaponBase에 이를 등록한다
 
     [Header("Hand Animation Setup")]
     [SerializeField] private Transform HandBone; // 탄창 잡는 손
@@ -37,6 +41,8 @@ public class WeaponComponent : MonoBehaviour
     private string initialWeaponName;
 
     private bool isCancelAble;
+
+    #endregion
 
     private void Awake()
     {
@@ -562,17 +568,12 @@ public class WeaponComponent : MonoBehaviour
     /// 애니메이션 메서드
     ///
 
-    public void Attack()
+    public void Attack() // WeaponBase Wrapping Method
     {
-        // currentWeapon이 유효하면 CheckAmmo() 호출
         if (currentWeapon != null)
-        {
             currentWeapon.Attack();
-        }
         else
-        {
             Debug.LogWarning("현재 장착된 무기가 없습니다.");
-        }
     }
 
     public void CancelAble()

@@ -85,6 +85,8 @@ public class ObjectPoolingManager : MonoBehaviour
         }
     }
 
+    public GameObject GetFromPool(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null) => GetFromPool(prefab.name, position, rotation, parent);
+
     public GameObject GetFromPool(string prefabName, Vector3 position, Quaternion rotation, Transform parent = null)
     {
         if (!poolDict.TryGetValue(prefabName, out Pool pool))
