@@ -21,6 +21,11 @@ public class UI_HPBar : MonoBehaviour
     private Coroutine damageAnim;
     private float prevValue;
 
+    [SerializeField] private Image seperatorImage;
+    [SerializeField] private float segmentHP = 100f; // 셰이더의 _Steps 값으로 사용
+
+    private Material seperatorMaterial;
+
     private void Start()
     {
         if (targetPlayer == null)
@@ -28,21 +33,34 @@ public class UI_HPBar : MonoBehaviour
             targetPlayer = FindObjectOfType<Player>();
         }
 
-        if (targetPlayer != null) SetTarget(targetPlayer);
+        if (targetPlayer != null)
+        {
+            SetTarget(targetPlayer);
+        }
     }
 
     public void SetTarget(Player p)
     {
         if (p == null) return;
 
-        if (targetPlayer != null) targetPlayer.OnHPChanged -= HandleHPChanged;
+        if (targetPlayer != null)
+        {
+            targetPlayer.OnHPChanged -= HandleHPChanged;
+        }
 
         targetPlayer = p;
+
+        if (seperatorImage != null)
+        {
+            seperatorMaterial = seperatorImage.material;
+        }
 
         if (progressBar != null)
         {
             progressBar.maxValue = targetPlayer.MaxHP;
             progressBar.SetValue(targetPlayer.HP);
+
+            UpdateShaderProperties();
         }
 
         if (damageImage != null)
@@ -64,6 +82,8 @@ public class UI_HPBar : MonoBehaviour
         float prev = prevValue;
         float now = current;
         prevValue = current;
+
+        UpdateShaderProperties();
 
         if (!smooth)
         {
@@ -97,6 +117,23 @@ public class UI_HPBar : MonoBehaviour
         }
     }
 
+    private void UpdateShaderProperties()
+    {
+        if (seperatorMaterial == null || targetPlayer == null)
+        {
+            return;
+        }
+
+        float rectWidth = seperatorImage.rectTransform.rect.width;
+        float maxHP = targetPlayer.MaxHP;
+        float currentHP = targetPlayer.HP;
+
+        seperatorMaterial.SetFloat("_Width", rectWidth);
+        seperatorMaterial.SetFloat("_MaxHP", maxHP);
+        seperatorMaterial.SetFloat("_HSRatio", SafeFraction(currentHP, maxHP));
+        seperatorMaterial.SetFloat("_Steps", segmentHP); // 에디터에서 설정한 값을 셰이더에 전달
+    }
+
     private IEnumerator AnimateMainBar(float fromValue, float toValue, float duration)
     {
         float t = 0f;
@@ -105,9 +142,11 @@ public class UI_HPBar : MonoBehaviour
             t += Time.unscaledDeltaTime;
             float v = Mathf.Lerp(fromValue, toValue, Mathf.Clamp01(t / duration));
             progressBar.SetValue(v);
+            seperatorMaterial.SetFloat("_HSRatio", SafeFraction(v, targetPlayer.MaxHP));
             yield return null;
         }
         progressBar.SetValue(toValue);
+        seperatorMaterial.SetFloat("_HSRatio", SafeFraction(toValue, targetPlayer.MaxHP));
         anim = null;
     }
 

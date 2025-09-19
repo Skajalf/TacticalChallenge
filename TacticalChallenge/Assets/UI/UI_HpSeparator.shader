@@ -5,9 +5,10 @@ Shader "ABS/UI/Health Separator"
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (0,0,0,1)
         
-        _Steps ("Steps", Float) = 1
+        _Steps ("Segment HP", Float) = 100
         _HSRatio ("Hp-Shield Ratio", Range(0,1)) = 1
-        _Width ("Rect Width", Int) = 160
+        _Width ("Rect Width", Float) = 160
+        _MaxHP ("Max HP", Float) = 1000
         _Thickness ("Thickness", Float) = 1
         
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
@@ -70,16 +71,16 @@ Shader "ABS/UI/Health Separator"
 
             struct appdata_t
             {
-                float4 vertex   : POSITION;
-                float4 color    : COLOR;
+                float4 vertex    : POSITION;
+                float4 color   : COLOR;
                 float2 texcoord : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
             {
-                float4 vertex   : SV_POSITION;
-                fixed4 color    : COLOR;
+                float4 vertex    : SV_POSITION;
+                fixed4 color   : COLOR;
                 float2 texcoord  : TEXCOORD0;
                 float4 worldPosition : TEXCOORD1;
                 half4  mask : TEXCOORD2;
@@ -87,7 +88,7 @@ Shader "ABS/UI/Health Separator"
             };
 
             sampler2D _MainTex;
-        
+            
             fixed4 _Color;
             fixed4 _TextureSampleAdd;
             float4 _ClipRect;
@@ -99,6 +100,7 @@ Shader "ABS/UI/Health Separator"
             half _HSRatio;
             half _Thickness;
             half _Width;
+            half _MaxHP;
 
             v2f vert(appdata_t v)
             {
@@ -110,7 +112,6 @@ Shader "ABS/UI/Health Separator"
                 float4 vPosition = UnityObjectToClipPos(v.vertex);
                 OUT.worldPosition = v.vertex;
 
-                // 픽셀 스냅 기능 추가함
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(vPosition);
                 #else
@@ -134,28 +135,26 @@ Shader "ABS/UI/Health Separator"
             {
                 half4 c = IN.color * (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd);
 
-                // 그리지 않음
                 if (IN.texcoord.x > _HSRatio)
                 {
                     c.a = 0;
                 }
                 else
                 {
-                    #ifdef CLOSE_BAR_ON
-                    const half width = _Width * _HSRatio - _Thickness;
-                    #else
-                    const half width = _Width * _HSRatio;
-                    #endif
-                    
                     const half x = IN.texcoord.x * _Width;
-                    const half step = _Steps + 0.000000001;
-                    const half cell = width / step;
-
-                    // uv.x로 가로 위치를 구하고 한 칸 길이로 나눈 나머지가 두께보다 적으면 색칠.
-                    // 각 셀의 왼쪽에 바가 그려진다.
-                    if (x % cell > cell - _Thickness)
+                    const half pixel_per_hp = _Width / _MaxHP; 
+                    const half segment_pixel = _Steps * pixel_per_hp;
+                    
+                    if (x % segment_pixel < _Thickness)
                     {
-                        c = _Color;
+                        if (x > _Thickness)
+                        {
+                            c = _Color;
+                        }
+                        else
+                        {
+                            c.a = 0;
+                        }
                     }
                     else
                     {

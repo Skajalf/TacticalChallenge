@@ -116,6 +116,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _HSRatio: 1
+    - _MaxHP: 650
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -131,7 +132,7 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _Steps: 6.5
+    - _Steps: 100
     - _Surface: 0
     - _Thickness: 2
     - _UseUIAlphaClip: 1
