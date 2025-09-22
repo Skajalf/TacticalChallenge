@@ -265,14 +265,6 @@ public class WeaponComponent : MonoBehaviour
     }
 
 
-    private GameObject AttachExisting(GameObject obj, Transform parent)
-    {
-        obj.transform.SetParent(parent, false);
-        if (obj.TryGetComponent<Rigidbody>(out var rb)) rb.isKinematic = true;
-        if (obj.TryGetComponent<Collider>(out var col)) col.enabled = false;
-        return obj;
-    }
-
     // 나중에 땅바닥에 드랍하는 형태로 변경 필요
     private void UnEquip()
     {

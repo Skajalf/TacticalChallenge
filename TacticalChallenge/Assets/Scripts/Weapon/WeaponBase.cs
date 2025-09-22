@@ -14,22 +14,22 @@ enum ATKType
 public class WeaponBase : Entity
 {
     [Header("Weapon Data Setting")]
-    [SerializeField] private float power;         // ¹«±â µ¥¹ÌÁö
-    [SerializeField] private int maxAmmo;         // ÅºÃ¢ Å©±â
-    [SerializeField] private float armorPiercing; // ¹æ¾î·Â °üÅë
-    [SerializeField] private float reloadTime;    // ÀçÀåÀü ½Ã°£
-    [SerializeField] private ATKType attackType;  // °ø°ÝÅ¸ÀÔ
-    [SerializeField] private float roundPerMinute = 1f;// Åº ¹ß»çÁÖ±â
+    [SerializeField] private float power;         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private int maxAmmo;         // ÅºÃ¢ Å©ï¿½ï¿½
+    [SerializeField] private float armorPiercing; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private float reloadTime;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+    [SerializeField] private ATKType attackType;  // ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½
+    [SerializeField] private float roundPerMinute = 1f; // Åº ï¿½ß»ï¿½ï¿½Ö±ï¿½
 
-    [SerializeField] public int RandomReload = 1; // ¾Ö´Ï¸ÞÀÌ¼Ç Å¸ÀÔ (ÀåÀü ¸ð¼ÇÀÌ º¹¼ö ÀÖ´Â Ä³¸¯ÅÍÀÇ °æ¿ì 1 ÀÌ¿ÜÀÇ ¼ýÀÚ)
+    [SerializeField] public int RandomReload = 1; // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ Å¸ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 1 ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 
     [Header("Weapon Visuals")]
-    [SerializeField] private GameObject projectilePrefab;   // ÅºÈ¯ ÇÁ¸®ÆÕ
-    [SerializeField] private GameObject cartridgeParticle;  // ÅºÇÇ ÇÁ¸®ÆÕ
-    [SerializeField] private string weaponHolsterName = "WeaponPivot"; // ÃÑÀÇ À§Ä¡ ÀÌ¸§
-    [SerializeField] private string bulletTransformName = "fire_01";   // ÃÑ¾ËÀÌ ¼ÒÈ¯µÇ´Â À§Ä¡ ÀÌ¸§
-    [SerializeField] private string cartridgeTransformName = "fire_02"; // ÅºÇÇ°¡ ¼ÒÈ¯µÇ´Â À§Ä¡ ÀÌ¸§
-    [SerializeField] private GameObject flameParticle;       // ÃÑ±¸ È­¿° ÀÌÆåÆ®
+    [SerializeField] private GameObject projectilePrefab;   // ÅºÈ¯ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private GameObject cartridgeParticle;  // Åºï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private string weaponHolsterName = "WeaponPivot"; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½Ì¸ï¿½
+    [SerializeField] private string bulletTransformName = "fire_01";   // ï¿½Ñ¾ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ç´ï¿½ ï¿½ï¿½Ä¡ ï¿½Ì¸ï¿½
+    [SerializeField] private string cartridgeTransformName = "fire_02"; // Åºï¿½Ç°ï¿½ ï¿½ï¿½È¯ï¿½Ç´ï¿½ ï¿½ï¿½Ä¡ ï¿½Ì¸ï¿½
+    [SerializeField] private GameObject flameParticle;       // ï¿½Ñ±ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
 
     [Header("Impulse Setting")]
     [SerializeField] private Vector3 impulseDirection;
@@ -44,6 +44,7 @@ public class WeaponBase : Entity
     [SerializeField] private Vector3 hitParticleScaleOffset = Vector3.one;
 
     [Header("Weapon Offset Setting")]
+    [SerializeField] private Transform centerSphere;
     private Transform weaponTransform;
     private Transform bulletTransform;
     private Transform cartridgePoint;
@@ -75,17 +76,17 @@ public class WeaponBase : Entity
         if(bulletTransform == null)
         {
             bulletTransform = transform.FindChildByName(bulletTransformName);
-            Debug.Assert(bulletTransform != null, $"{GetInstanceID()}ÀÇ BulletTransform - fire02°¡ nullÀÔ´Ï´Ù.");
+            Debug.Assert(bulletTransform != null, $"{GetInstanceID()}ï¿½ï¿½ BulletTransform - fire02ï¿½ï¿½ nullï¿½Ô´Ï´ï¿½.");
         }
     }
 
-    public virtual void InitializeAmmo() // °ÔÀÓÀÌ ½ÃÀÛÇÏ¸é¼­ ÃÑÀÌ ÃÊ±âÈ­ µÉ ¶§ È£Ãâ
+    public virtual void InitializeAmmo() // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸é¼­ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½
     {
-        Debug.Assert(maxAmmo > 0, $"{gameObject.GetInstanceID()}ÀÇ ÅºÃ¢ÀÌ {maxAmmo} ÀÔ´Ï´Ù.");
+        Debug.Assert(maxAmmo > 0, $"{gameObject.GetInstanceID()}ï¿½ï¿½ ÅºÃ¢ï¿½ï¿½ {maxAmmo} ï¿½Ô´Ï´ï¿½.");
         currentAmmo = maxAmmo;
     }
 
-    // Åº¾à ¼Òºñ
+    // Åºï¿½ï¿½ ï¿½Òºï¿½
     public virtual bool AmmoUse(int amount = 1)
     {
         if (amount <= 0) return false;
@@ -94,7 +95,7 @@ public class WeaponBase : Entity
         return true;
     }
 
-    // Åº¾à Ãß°¡ (¸®ÅÏ: ½ÇÁ¦ Ãß°¡µÈ ¼ö)
+    // Åºï¿½ï¿½ ï¿½ß°ï¿½ (ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½)
     public int AddAmmo(int amount)
     {
         if (amount <= 0) return 0;
@@ -105,47 +106,47 @@ public class WeaponBase : Entity
 
     public void Attack()
     {
-        // ¹ß»ç Áß È¤Àº ÅºÃ¢ÀÌ ºñ¾ú´Ù¸é Áßº¹ ¹ß»ç ¹æÁö
+        // ï¿½ß»ï¿½ ï¿½ï¿½ È¤ï¿½ï¿½ ÅºÃ¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ßºï¿½ ï¿½ß»ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (IsFiring || IsReloading || IsEmpty)
             return;
 
-        StartCoroutine(FireCoroutine());  // ÄÚ·çÆ¾ È£Ãâ
+        StartCoroutine(FireCoroutine());  // ï¿½Ú·ï¿½Æ¾ È£ï¿½ï¿½
     }
 
     private IEnumerator FireCoroutine()
     {
-        IsFiring = true;  // ¹ß»ç ½ÃÀÛ ¹× Firing Flag True 
+        IsFiring = true;  // ï¿½ß»ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Firing Flag True 
 
-        Fire(1, 0, 11, this);         // ¹ß»ç ½ÇÇà
+        Fire(1, 0, 11, this);         // ï¿½ß»ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        // RPM ½Ã°£¸¸Å­ ´ë±â
+        // RPM ï¿½Ã°ï¿½ï¿½ï¿½Å­ ï¿½ï¿½ï¿½
         yield return new WaitForSeconds(roundPerMinute);
 
-        // ¹ß»ç°¡ ¿Ï·áµÇ¾úÀ¸¹Ç·Î ¹ß»ç Áß »óÅÂ ÃÊ±âÈ­
+        // ï¿½ß»ç°¡ ï¿½Ï·ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½ß»ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         IsFiring = false;
     }
 
     public void Fire(float range, float damageDelay, LayerMask hitLayerMask, MonoBehaviour caller)
     {
         RaycastHit hit;
-        Vector3 fireDirection = weaponTransform.forward; // ¹ß»ç ¹æÇâ
-        Vector3 startPoint = bulletTransform.localToWorldMatrix.GetPosition();   // ÃÑ¾Ë ¹ß»ç À§Ä¡
+        Vector3 fireDirection = weaponTransform.forward; // ï¿½ß»ï¿½ ï¿½ï¿½ï¿½ï¿½
+        Vector3 startPoint = bulletTransform.localToWorldMatrix.GetPosition();   // ï¿½Ñ¾ï¿½ ï¿½ß»ï¿½ ï¿½ï¿½Ä¡
 
         if (AmmoUse(1) != true)
             return;
 
-        // ·¹ÀÌÄ³½ºÆ®·Î Å¸°Ý È®ÀÎ
+        // ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½Æ®ï¿½ï¿½ Å¸ï¿½ï¿½ È®ï¿½ï¿½
         if (Physics.Raycast(startPoint, fireDirection, out hit, range, hitLayerMask))
         {
-            // Å¸°ÝµÈ °´Ã¼ÀÇ ÀÌ¸§ Ãâ·Â
-            Debug.Log($"¸íÁßÇÑ °´Ã¼ ÀÌ¸§: {hit.collider.name}");
+            // Å¸ï¿½Ýµï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½Ì¸ï¿½: {hit.collider.name}");
 
-            // MonoBehaviour¸¦ °¡Áø caller°¡ ÄÚ·çÆ¾ ½ÇÇà
+            // MonoBehaviourï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ callerï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½
             caller.StartCoroutine(ApplyDamageWithDelay(hit, damageDelay, power));
         }
         else
         {
-            Debug.Log("¸ñÇ¥¿¡ ¸íÁßÇÏÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
         }
 
         FireProjectile();
@@ -154,7 +155,7 @@ public class WeaponBase : Entity
     {
         if (projectilePrefab == null || bulletTransform == null)
         {
-            Debug.LogWarning("Åõ»çÃ¼ ÇÁ¸®ÆÕ ¶Ç´Â ¹ß»ç À§Ä¡°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ß»ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
@@ -193,13 +194,13 @@ public class WeaponBase : Entity
         if (target != null)
         {
             if (target.GetDamage(power))
-                Debug.Log($"µ¥¹ÌÁö {power} Àû¿ë ¿Ï·á.");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {power} ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½.");
             else
-                Debug.Log($"µ¥¹ÌÁö ¹ÌÀû¿ë");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
         }
         else 
         {
-            Debug.LogWarning("µ¥¹ÌÁö¸¦ Àû¿ëÇÒ ¼ö ¾ø´Â ´ë»óÀÔ´Ï´Ù.");
+            Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.");
         }
     }
 
@@ -212,7 +213,7 @@ public class WeaponBase : Entity
         }
         else
         {
-            Debug.Log("ÀçÀåÀüÀÌ ÇÊ¿äÇÏÁö ¾Ê½À´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
             return false;
         }
         return true;
@@ -222,17 +223,17 @@ public class WeaponBase : Entity
     {
         IsReloading = true;
 
-        // ÀçÀåÀü »ç¿îµå³ª ÆÄÆ¼Å¬ ÀÌÆåÆ® È£Ãâ (Ãß°¡ È¿°ú)
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½å³ª ï¿½ï¿½Æ¼Å¬ ï¿½ï¿½ï¿½ï¿½Æ® È£ï¿½ï¿½ (ï¿½ß°ï¿½ È¿ï¿½ï¿½)
         Sound();
         Particle();
 
-        // ÀçÀåÀü ½Ã°£ ´ë±â
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½
         yield return new WaitForSeconds(reloadTime);
 
-        currentAmmo = maxAmmo; // Åº¾àÀ» °¡µæ Ã¤¿ò
+        currentAmmo = maxAmmo; // Åºï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½
 
-        // ÀçÀåÀü ¿Ï·á ÈÄ »ç¿îµå/È¿°ú Ã³¸® (¼±ÅÃ »çÇ×)
-        Debug.Log("ÀçÀåÀü ¿Ï·á!");
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½/È¿ï¿½ï¿½ Ã³ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½!");
 
         IsReloading = false;
     }
@@ -244,7 +245,7 @@ public class WeaponBase : Entity
             weaponTransform = transform.root.FindChildByName(weaponHolsterName);
             if (weaponTransform == null)
             {
-                Debug.LogError($"¹«±â È¦½ºÅÍ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù: {weaponHolsterName}");
+                Debug.LogError($"ï¿½ï¿½ï¿½ï¿½ È¦ï¿½ï¿½ï¿½Í¸ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½: {weaponHolsterName}");
                 return;
             }
         }
@@ -254,7 +255,7 @@ public class WeaponBase : Entity
             bulletTransform = weaponTransform.FindChildByName(bulletTransformName);
             if (bulletTransform == null)
             {
-                Debug.LogError($"ÅºÈ¯ ¹ß»ç À§Ä¡¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù: {bulletTransformName}");
+                Debug.LogError($"ÅºÈ¯ ï¿½ß»ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½: {bulletTransformName}");
                 return;
             }
         }
@@ -264,7 +265,7 @@ public class WeaponBase : Entity
             cartridgePoint = weaponTransform.FindChildByName(cartridgeTransformName);
             if (cartridgePoint == null)
             {
-                Debug.LogError($"ÅºÇÇ ¹ß»ç À§Ä¡¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù: {cartridgeTransformName}");
+                Debug.LogError($"Åºï¿½ï¿½ ï¿½ß»ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½: {cartridgeTransformName}");
                 return;
             }
         }
@@ -282,5 +283,5 @@ public class WeaponBase : Entity
     protected virtual void Sound() { }
     protected virtual void Particle() { }
 
-    // ¾Ö´Ï¸ÞÀÌ¼Ç ÀÌº¥Æ®¿¡¼­ WeaponComponent°¡ È£Ãâ -> ÀÚ½Ä¿¡¼­ ±¸Çö
+    // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ï¿½ï¿½ WeaponComponentï¿½ï¿½ È£ï¿½ï¿½ -> ï¿½Ú½Ä¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }

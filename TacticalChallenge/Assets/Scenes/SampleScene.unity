@@ -14499,6 +14499,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5043925170628054050, guid: 8705f080af707e04eb9999c1565b5ac0,
         type: 3}
+      propertyPath: centerSphere
+      value: 
+      objectReference: {fileID: 2052876956}
+    - target: {fileID: 5043925170628054050, guid: 8705f080af707e04eb9999c1565b5ac0,
+        type: 3}
       propertyPath: armorPiercing
       value: 0.5
       objectReference: {fileID: 0}
