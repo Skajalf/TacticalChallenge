@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -17,21 +18,30 @@ public class Projectile : MonoBehaviour
     // 충돌 시 총알 파괴
     private void OnTriggerEnter(Collider other)
     {
-        ObjectPoolingManager.Instance.ReturnToPool(gameObject);
-        gameObject.SetActive(false);
+        if (other.CompareTag("Enemy") || other.CompareTag("Environment"))
+        {
+            ObjectPoolingManager.Instance.ReturnToPool(gameObject);
+            gameObject.SetActive(false);
+        }
     }
 
     public bool Shoot(Vector3 initialLocation, Vector3 direction, float speed, float time)
     {
-        // WeaponBase.Fire()에서 호출하는게 좋을 것 같음. 그러려면, public static으로 되어있어야 할 것이고.. 
-        // initialLocation은 로컬포지션(weapon 하단에 붙을 듯)이 될 거고, direction과 speed, time 모두 그렇다.
         if (rb != null)
         {
-            rb.velocity = direction * speed; // 속도 설정
+            rb.velocity = direction * speed; // direction 벡터에 속도를 곱하여 적용
         }
 
-        // if(time > time) PoolManager.Return(gameObject)
+        // 일정 시간 후 오브젝트 풀로 반환하는 코루틴 시작
+        StartCoroutine(ReturnToPool(time));
+
         return true;
+    }
+
+    private IEnumerator ReturnToPool(float time)
+    {
+        yield return new WaitForSeconds(time);
+        ObjectPoolingManager.Instance.ReturnToPool(gameObject);
     }
 
     public void OnDisable()

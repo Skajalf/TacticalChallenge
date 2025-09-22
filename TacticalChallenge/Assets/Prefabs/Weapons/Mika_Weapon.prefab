@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373432360769727475}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.014568961, y: 0.045961846, z: 0.006095401, w: -0.9988183}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.002, y: -0.021, z: 0.432}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 4939294749665288767}
   - component: {fileID: 8662264654627401755}
   - component: {fileID: 4992152753726612042}
-  - component: {fileID: 5043925170628054050}
+  - component: {fileID: 2692514546171363411}
   m_Layer: 6
   m_Name: Mika_Weapon
   m_TagString: Untagged
@@ -242,7 +242,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.21662997, y: 0.19993438, z: 0.74170184}
   m_Center: {x: 0.050071906, y: 0.039898705, z: 0.08341298}
---- !u!114 &5043925170628054050
+--- !u!114 &2692514546171363411
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -251,16 +251,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 3015174873635946888}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86a82d4d0ee78b54ba981291d3df88b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b2ee608468dc2b4a9e640145a6d834b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 
-  power: 5
-  maxAmmo: 30
-  armorPiercing: 0.5
-  reloadTime: 3
-  attackType: 0
-  RandomReload: 2
+  power: 10
+  maxAmmo: 25
+  armorPiercing: 5
+  reloadTime: 2
+  attackType: 1
+  roundPerMinute: 1
+  RandomReload: 1
   projectilePrefab: {fileID: 5281290268849229969, guid: 7f11e453c15223441a6272b6c59f5f07,
     type: 3}
   cartridgeParticle: {fileID: 0}

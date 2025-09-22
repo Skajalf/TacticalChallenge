@@ -11,7 +11,7 @@ enum ATKType
     Mystic
 }
 
-public abstract class WeaponBase : Entity
+public class WeaponBase : Entity
 {
     [Header("Weapon Data Setting")]
     [SerializeField] private float power;         // 무기 데미지
@@ -158,18 +158,33 @@ public abstract class WeaponBase : Entity
             return;
         }
 
-        // 투사체 인스턴스 생성
-        var projectileInstance = ObjectPoolingManager.Instance.GetFromPool(projectilePrefab, bulletTransform.localToWorldMatrix.GetPosition(), bulletTransform.rotation, weaponTransform);
-        Debug.Log($"{bulletTransform.localToWorldMatrix.GetPosition()} : 총알 위치 / {bulletTransform.rotation} : 총구방향"); 
+        RaycastHit hit;
+        Vector3 fireDirection = Camera.main.transform.forward;
+        Vector3 targetPoint;
+
+        if (Physics.Raycast(bulletTransform.position, fireDirection, out hit, 1000f))
+        {
+            targetPoint = hit.point;
+        }
+        else
+        {
+            targetPoint = bulletTransform.position + fireDirection * 1000f;
+        }
+
+        Vector3 projectileDirection = (targetPoint - bulletTransform.position).normalized;
+
+        var projectileInstance = ObjectPoolingManager.Instance.GetFromPool(projectilePrefab, bulletTransform.position, Quaternion.LookRotation(projectileDirection));
 
         if (projectileInstance != null)
         {
-            // 무기 정보 전달
-            projectileInstance.GetComponent<Projectile>().Shoot(bulletTransform.localToWorldMatrix.GetPosition(), bulletTransform.rotation.eulerAngles, 75f, 10f);
+            var projectile = projectileInstance.GetComponent<Projectile>();
+            if (projectile != null)
+            {
+                projectile.Shoot(bulletTransform.position, projectileDirection, 75f, 10f);
+            }
         }
     }
 
-    // 데미지 콜 하는 부분. 나중엔 서버측의 메서드를 가져다 이용해야할 것.
     private IEnumerator ApplyDamageWithDelay(RaycastHit hit, float delay, float power)
     {
         yield return new WaitForSeconds(delay);
