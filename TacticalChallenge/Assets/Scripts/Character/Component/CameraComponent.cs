@@ -174,39 +174,48 @@ public class CameraComponent : MonoBehaviour
         Vector3 dir = (targetTransform.position - camPos).normalized;
         float dist = Vector3.Distance(camPos, targetTransform.position);
 
-        var hits = Physics.RaycastAll(camPos, dir, dist, obstructionMask)
+        var currentHits = Physics.RaycastAll(camPos, dir, dist, obstructionMask)
             .Select(h => h.collider.GetComponent<Renderer>())
             .Where(r => r != null)
-            .Distinct();
+            .Distinct()
+            .ToList();
 
-        foreach (var rend in hits)
+        foreach (var rend in currentHits)
         {
-            if (obstructions.ContainsKey(rend)) continue;
-            var info = new ObstructionInfo
+            if (!obstructions.ContainsKey(rend))
             {
-                rend = rend,
-                originalMats = rend.sharedMaterials,
-                fadeMat = new Material(transparentMaterial),
-                state = FadeState.FadingOut,
-                timer = 0f
-            };
-            obstructions[rend] = info;
-            rend.materials = Enumerable.Repeat(info.fadeMat, info.originalMats.Length).ToArray();
+                var info = new ObstructionInfo
+                {
+                    rend = rend,
+                    originalMats = rend.sharedMaterials,
+                    fadeMat = new Material(transparentMaterial),
+                    state = FadeState.FadingOut,
+                    timer = 0f
+                };
+                obstructions[rend] = info;
+                rend.materials = Enumerable.Repeat(info.fadeMat, info.originalMats.Length).ToArray();
+            }
+            else
+            {
+                var info = obstructions[rend];
+                if (info.state != FadeState.FadingOut)
+                {
+                    info.state = FadeState.Hold;
+                    info.timer = 0f;
+                }
+            }
         }
 
+        var removedObstructions = new List<Renderer>();
         foreach (var kv in obstructions)
         {
+            var rend = kv.Key;
             var info = kv.Value;
-            bool currentlyHit = hits.Contains(info.rend);
-            if (!currentlyHit && info.state == FadeState.Hold)
+
+            if (!currentHits.Contains(rend) && info.state != FadeState.FadingIn)
             {
                 info.state = FadeState.FadingIn;
                 info.timer = 0f;
-            }
-            else if (!currentlyHit && info.state == FadeState.FadingOut)
-            {
-                info.state = FadeState.FadingIn;
-                info.timer = fadeDuration * (info.timer / fadeDuration);
             }
         }
 
