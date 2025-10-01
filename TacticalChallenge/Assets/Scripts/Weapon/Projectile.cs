@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float speed = 75.0f; // 총알 속도
+    [SerializeField] private float speed = 0.1f; // 총알 속도
     [SerializeField] private float destroyTime = 10.0f; // 일정 시간 후 총알 비활성화
 
     private Rigidbody rb; // Rigidbody 컴포넌트
