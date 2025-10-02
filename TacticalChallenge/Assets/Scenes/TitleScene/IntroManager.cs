@@ -3,181 +3,215 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 using System.Collections;
-using TMPro; // TextMeshPro 사용을 위한 네임스페이스
+using TMPro;
 
 public class IntroManager : MonoBehaviour
 {
-    // === UI 및 Scene 설정 (Inspector에서 연결) ===
     public Image fadePanel;
-    public TextMeshProUGUI clickToStartText; // TMP 대응
+    public TextMeshProUGUI clickToStartText;
     public string lobbySceneName = "LobbyScene";
     public float fadeDuration = 1.0f;
-    public float minLogoDisplayTime = 3.0f; // 로고의 최소 노출 시간 (초)
-
-    // === VideoPlayer 설정 ===
+    public float minLogoDisplayTime = 3.0f;
     public VideoPlayer logoVideoPlayer;
     public VideoPlayer titleVideoPlayer;
 
+    private const float LOGO_TRANSITION_FADE_DURATION = 1.0f;
+
     private AsyncOperation asyncLoad;
     private bool isReadyToStart = false;
+    private bool lobbyLoaded = false;
+    private bool titlePlaying = false;
+    private float logoPlayStartTime = 0f;
 
     void Start()
     {
-        // 초기화: 타이틀 비디오와 텍스트는 숨깁니다.
-        titleVideoPlayer.gameObject.SetActive(false);
-        clickToStartText.gameObject.SetActive(false);
+        if (clickToStartText != null) clickToStartText.gameObject.SetActive(false);
 
-        // 1. 비디오 Prepare 호출 및 로딩 시작
-        logoVideoPlayer.Prepare();
+        if (titleVideoPlayer != null) StartCoroutine(PrepareTitleVideo());
+
+        if (logoVideoPlayer != null) logoVideoPlayer.Prepare();
+
         StartCoroutine(LoadLobbySceneAsync());
-
-        // 2. 준비와 최소 시간을 기다리는 핵심 코루틴 실행
         StartCoroutine(WaitForVideoPreparationAndStart());
+        if (logoVideoPlayer != null) logoVideoPlayer.loopPointReached += OnLogoVideoFinished;
 
-        // 3. 로고 동영상의 재생 완료 이벤트 구독
-        logoVideoPlayer.loopPointReached += OnLogoVideoFinished;
-
-        // **주의: logoVideoPlayer.Play()와 StartCoroutine(FadeIn())은 WaitForVideoPreparationAndStart() 내부에서 호출됩니다.**
+        if (fadePanel != null)
+        {
+            fadePanel.color = new Color(fadePanel.color.r, fadePanel.color.g, fadePanel.color.b, 1f);
+            StartCoroutine(FadeIn(fadeDuration));
+        }
     }
 
     void Update()
     {
-        // 로딩 완료 + 클릭 대기 중일 때 입력 감지
         if (isReadyToStart && Input.anyKeyDown)
         {
             StartLobbyTransition();
         }
     }
 
-    // ===================================
-    // == 1. 비디오 준비 및 최소 시간 관리 ==
-    // ===================================
-    IEnumerator WaitForVideoPreparationAndStart()
+    IEnumerator PrepareTitleVideo()
     {
-        float startTime = Time.time;
+        if (titleVideoPlayer == null) yield break;
 
-        // 1. 비디오 준비 대기
-        while (!logoVideoPlayer.isPrepared)
+        titleVideoPlayer.Prepare();
+
+        while (!titleVideoPlayer.isPrepared)
         {
             yield return null;
         }
+    }
 
-        // 2. 준비 완료 후 재생 및 페이드 인 시작
-        logoVideoPlayer.Play();
-        StartCoroutine(FadeIn());
-
-        // 3. 최소 노출 시간 강제 대기
-        float elapsedTime = Time.time - startTime;
-        float remainingTime = minLogoDisplayTime - elapsedTime;
-
-        if (remainingTime > 0)
+    IEnumerator WaitForVideoPreparationAndStart()
+    {
+        while (logoVideoPlayer != null && !logoVideoPlayer.isPrepared)
         {
-            yield return new WaitForSeconds(remainingTime);
+            yield return null;
+        }
+        if (logoVideoPlayer != null)
+        {
+            logoPlayStartTime = Time.time;
+            logoVideoPlayer.Play();
         }
     }
 
-    // =============================
-    // == 2. 로고 종료 및 타이틀 전환 ==
-    // =============================
     void OnLogoVideoFinished(VideoPlayer vp)
     {
-        logoVideoPlayer.loopPointReached -= OnLogoVideoFinished;
-        // 로고 종료 시 1초 대기 후 타이틀로 전환
-        StartCoroutine(TransitionToTitleAfterDelay(1.0f));
+        if (logoVideoPlayer != null) logoVideoPlayer.loopPointReached -= OnLogoVideoFinished;
+
+        StartCoroutine(EnforceMinTimeAndTransition());
     }
 
-    IEnumerator TransitionToTitleAfterDelay(float delay)
+    IEnumerator EnforceMinTimeAndTransition()
     {
-        // 1초간 대기 (로고 영상의 마지막 프레임 또는 검은 화면 유지)
-        yield return new WaitForSeconds(delay);
+        float elapsedTime = Time.time - logoPlayStartTime;
+        float timeToWait = minLogoDisplayTime - elapsedTime;
 
-        // 대기 후 타이틀 비디오로 전환 시작
-        logoVideoPlayer.gameObject.SetActive(false);
-        titleVideoPlayer.gameObject.SetActive(true);
-
-        // 타이틀 비디오는 무한 반복 설정
-        titleVideoPlayer.isLooping = true;
-        titleVideoPlayer.Play();
-    }
-
-
-    // ========================
-    // == 3. 비동기 로딩 관리 ==
-    // ========================
-    IEnumerator LoadLobbySceneAsync()
-    {
-        // 로딩 시작 직전에 GC를 강제 실행하여 로딩 중 랜덤 멈춤 방지 (최적화)
-        System.GC.Collect();
-
-        asyncLoad = SceneManager.LoadSceneAsync(lobbySceneName);
-
-        // NullReferenceException 방지
-        if (asyncLoad == null)
+        if (timeToWait > 0f)
         {
-            Debug.LogError($"씬 로딩 실패: '{lobbySceneName}'을 Build Settings에 추가했는지 확인하세요.");
+            yield return new WaitForSeconds(timeToWait);
+        }
+
+        StartCoroutine(FadeLogoToTitle());
+    }
+
+    IEnumerator FadeLogoToTitle()
+    {
+        if (fadePanel == null)
+        {
+            StartCoroutine(ImmediateTitleTransition());
             yield break;
         }
 
-        asyncLoad.allowSceneActivation = false;
+        yield return StartCoroutine(FadeOut(LOGO_TRANSITION_FADE_DURATION));
 
+        if (logoVideoPlayer != null) logoVideoPlayer.gameObject.SetActive(false);
+
+        if (titleVideoPlayer != null)
+        {
+            titleVideoPlayer.gameObject.SetActive(true);
+            while (!titleVideoPlayer.isPrepared)
+            {
+                yield return null;
+            }
+            titleVideoPlayer.isLooping = true;
+            titleVideoPlayer.Play();
+            titlePlaying = true;
+        }
+
+        yield return StartCoroutine(FadeIn(LOGO_TRANSITION_FADE_DURATION));
+
+        TryEnableClick();
+    }
+
+    IEnumerator ImmediateTitleTransition()
+    {
+        if (logoVideoPlayer != null) logoVideoPlayer.gameObject.SetActive(false);
+
+        if (titleVideoPlayer != null)
+        {
+            titleVideoPlayer.gameObject.SetActive(true);
+            while (!titleVideoPlayer.isPrepared)
+            {
+                yield return null;
+            }
+            titleVideoPlayer.isLooping = true;
+            titleVideoPlayer.Play();
+            titlePlaying = true;
+        }
+        TryEnableClick();
+    }
+
+    IEnumerator LoadLobbySceneAsync()
+    {
+        asyncLoad = SceneManager.LoadSceneAsync(lobbySceneName);
+        if (asyncLoad == null) yield break;
+        asyncLoad.allowSceneActivation = false;
         while (asyncLoad.progress < 0.9f)
         {
             yield return null;
         }
-
-        OnLoadingComplete();
+        lobbyLoaded = true;
+        TryEnableClick();
     }
 
-    void OnLoadingComplete()
+    void TryEnableClick()
     {
-        // 로딩 완료 후, 타이틀 동영상이 재생 중일 때만 텍스트를 띄웁니다.
-        if (titleVideoPlayer.isPlaying)
+        if (lobbyLoaded && titlePlaying && !isReadyToStart)
         {
             isReadyToStart = true;
-            clickToStartText.gameObject.SetActive(true);
+            if (clickToStartText != null) clickToStartText.gameObject.SetActive(true);
+            if (fadePanel != null) fadePanel.raycastTarget = false;
         }
-    }
-
-    // ========================
-    // == 4. 페이드 및 전환 ==
-    // ========================
-    IEnumerator FadeIn()
-    {
-        // 로고가 밝아지며 등장하는 페이드 인
-        float timer = 0f;
-        while (timer < fadeDuration)
-        {
-            timer += Time.deltaTime;
-            float alpha = Mathf.Lerp(1f, 0f, timer / fadeDuration);
-            fadePanel.color = new Color(0f, 0f, 0f, alpha);
-            yield return null;
-        }
-        fadePanel.color = new Color(0f, 0f, 0f, 0f);
     }
 
     void StartLobbyTransition()
     {
-        // 로비 씬으로 넘어가기 위해 모든 입력 무시
+        if (!isReadyToStart) return;
         isReadyToStart = false;
-
-        // 최종 페이드 아웃 시작
-        StartCoroutine(FadeOutAndLoad());
+        StartCoroutine(FadeOutAndLoad(fadeDuration));
     }
 
-    IEnumerator FadeOutAndLoad()
+    IEnumerator FadeOutAndLoad(float duration)
     {
-        // 화면이 검은색으로 어두워지는 페이드 아웃
+        if (fadePanel == null)
+        {
+            if (asyncLoad != null) asyncLoad.allowSceneActivation = true;
+            yield break;
+        }
+
+        yield return StartCoroutine(FadeOut(duration));
+
+        if (asyncLoad != null) asyncLoad.allowSceneActivation = true;
+    }
+
+    IEnumerator FadeIn(float duration)
+    {
+        if (fadePanel == null) yield break;
         float timer = 0f;
-        while (timer < fadeDuration)
+        while (timer < duration)
         {
             timer += Time.deltaTime;
-            float alpha = Mathf.Lerp(0f, 1f, timer / fadeDuration);
-            fadePanel.color = new Color(0f, 0f, 0f, alpha);
+            float alpha = Mathf.Lerp(1f, 0f, timer / duration);
+            fadePanel.color = new Color(fadePanel.color.r, fadePanel.color.g, fadePanel.color.b, alpha);
             yield return null;
         }
-        fadePanel.color = new Color(0f, 0f, 0f, 1f);
+        fadePanel.color = new Color(fadePanel.color.r, fadePanel.color.g, fadePanel.color.b, 0f);
+        if (fadePanel != null) fadePanel.raycastTarget = false;
+    }
 
-        // 검은 화면 상태에서 씬 활성화
-        asyncLoad.allowSceneActivation = true;
+    IEnumerator FadeOut(float duration)
+    {
+        if (fadePanel == null) yield break;
+        if (fadePanel != null) fadePanel.raycastTarget = true;
+        float timer = 0f;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float alpha = Mathf.Lerp(0f, 1f, timer / duration);
+            fadePanel.color = new Color(fadePanel.color.r, fadePanel.color.g, fadePanel.color.b, alpha);
+            yield return null;
+        }
+        fadePanel.color = new Color(fadePanel.color.r, fadePanel.color.g, fadePanel.color.b, 1f);
     }
 }
