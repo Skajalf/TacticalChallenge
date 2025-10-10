@@ -2,6 +2,16 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class OptionCategory
+{
+    public Button categoryButton;
+    public GameObject[] contentPanels;
+}
 
 public class LobbyManager : MonoBehaviour
 {
@@ -25,10 +35,20 @@ public class LobbyManager : MonoBehaviour
 
     public float pushDistance = 120f;
 
+    public Slider masterVolumeSlider;
+    public AudioMixer mainAudioMixer;
+    private const string MASTER_VOLUME_PARAM = "MasterVolume";
+
+    public string scenarioModeSceneName = "ScenarioModeScene";
+    public string defenceModeSceneName = "DefenceModeScene";
+
     private Vector2[] finalPositions;
     private Vector2[] gameSelectOriginalPositions;
 
     private bool isSinglePlayExpanded = false;
+
+    public List<OptionCategory> optionCategories;
+    private OptionCategory currentActiveCategory;
 
     void Start()
     {
@@ -97,6 +117,48 @@ public class LobbyManager : MonoBehaviour
                 }
             }
         }
+
+        if (masterVolumeSlider != null && mainAudioMixer != null)
+        {
+            masterVolumeSlider.onValueChanged.RemoveAllListeners();
+            masterVolumeSlider.onValueChanged.AddListener(SetMasterVolume);
+
+            float savedVolume = PlayerPrefs.GetFloat(MASTER_VOLUME_PARAM, 1f);
+            masterVolumeSlider.value = savedVolume;
+            SetMasterVolume(savedVolume);
+        }
+
+        if (singlePlaySubButtons != null && singlePlaySubButtons.Length > 1)
+        {
+            Button scenarioButton = singlePlaySubButtons[0].GetComponent<Button>();
+            if (scenarioButton != null)
+            {
+                scenarioButton.onClick.RemoveAllListeners();
+                scenarioButton.onClick.AddListener(StartScenarioMode);
+            }
+
+            Button defenceButton = singlePlaySubButtons[1].GetComponent<Button>();
+            if (defenceButton != null)
+            {
+                defenceButton.onClick.RemoveAllListeners();
+                defenceButton.onClick.AddListener(StartDefenceMode);
+            }
+        }
+
+        bool wasOptionsActive = false;
+
+        if (optionsModalWindow != null && !optionsModalWindow.activeSelf)
+        {
+            optionsModalWindow.SetActive(true);
+            wasOptionsActive = true;
+        }
+
+        SetupOptionCategoryButtons();
+
+        if (optionsModalWindow != null && wasOptionsActive)
+        {
+            optionsModalWindow.SetActive(false);
+        }
     }
 
     void Update()
@@ -155,6 +217,69 @@ public class LobbyManager : MonoBehaviour
             cg.interactable = false;
             cg.blocksRaycasts = false;
         }
+    }
+
+    private void SetupOptionCategoryButtons()
+    {
+        if (optionCategories == null || optionCategories.Count == 0)
+        {
+            Debug.LogError("Option Categories 리스트가 설정되지 않았습니다. 인스펙터 설정을 확인하세요.");
+            return;
+        }
+
+        for (int i = 0; i < optionCategories.Count; i++)
+        {
+            OptionCategory category = optionCategories[i];
+
+            if (category.categoryButton == null) continue;
+
+            int index = i;
+
+            category.categoryButton.onClick.RemoveAllListeners();
+            category.categoryButton.onClick.AddListener(() => OnCategoryButtonClicked(index));
+
+            if (i == 0)
+            {
+                currentActiveCategory = category;
+
+                foreach (GameObject panel in category.contentPanels)
+                {
+                    if (panel != null) panel.SetActive(true);
+                }
+            }
+            else
+            {
+                foreach (GameObject panel in category.contentPanels)
+                {
+                    if (panel != null) panel.SetActive(false);
+                }
+            }
+        }
+    }
+
+    public void OnCategoryButtonClicked(int categoryIndex)
+    {
+        OptionCategory newCategory = optionCategories[categoryIndex];
+
+        if (newCategory == currentActiveCategory)
+        {
+            return;
+        }
+
+        if (currentActiveCategory != null)
+        {
+            foreach (GameObject panel in currentActiveCategory.contentPanels)
+            {
+                if (panel != null) panel.SetActive(false);
+            }
+        }
+
+        foreach (GameObject panel in newCategory.contentPanels)
+        {
+            if (panel != null) panel.SetActive(true);
+        }
+
+        currentActiveCategory = newCategory;
     }
 
     IEnumerator AnimateButtonsSequentially()
@@ -430,6 +555,25 @@ public class LobbyManager : MonoBehaviour
             buttonGroup.interactable = true;
             buttonGroup.blocksRaycasts = true;
         }
+
+        if (optionCategories != null && optionCategories.Count > 0)
+        {
+            if (currentActiveCategory != null)
+            {
+                foreach (GameObject panel in currentActiveCategory.contentPanels)
+                {
+                    if (panel != null) panel.SetActive(false);
+                }
+            }
+
+            OptionCategory firstCategory = optionCategories[0];
+            currentActiveCategory = firstCategory;
+
+            foreach (GameObject panel in firstCategory.contentPanels)
+            {
+                if (panel != null) panel.SetActive(true);
+            }
+        }
     }
 
     public void OnCreditsClicked()
@@ -462,5 +606,38 @@ public class LobbyManager : MonoBehaviour
             buttonGroup.interactable = true;
             buttonGroup.blocksRaycasts = true;
         }
+    }
+
+    public void SetMasterVolume(float value)
+    {
+        if (mainAudioMixer == null) return;
+
+        float dB = Mathf.Log10(value) * 20;
+
+        mainAudioMixer.SetFloat(MASTER_VOLUME_PARAM, dB);
+
+        PlayerPrefs.SetFloat(MASTER_VOLUME_PARAM, value);
+        PlayerPrefs.Save();
+    }
+
+    public void StartScenarioMode()
+    {
+        if (string.IsNullOrEmpty(scenarioModeSceneName))
+        {
+            Debug.LogError("Scenario Mode Scene Name이 LobbyManager 컴포넌트에 설정되지 않았습니다.");
+            return;
+        }
+        SceneManager.LoadScene(scenarioModeSceneName);
+    }
+
+    public void StartDefenceMode()
+    {
+        if (string.IsNullOrEmpty(defenceModeSceneName))
+        {
+            Debug.LogError("Defence Mode Scene Name이 LobbyManager 컴포넌트에 설정되지 않았습니다.");
+            return;
+        }
+
+        SceneManager.LoadScene(defenceModeSceneName);
     }
 }
