@@ -627,7 +627,7 @@ public class LobbyManager : MonoBehaviour
             Debug.LogError("Scenario Mode Scene Name이 LobbyManager 컴포넌트에 설정되지 않았습니다.");
             return;
         }
-        SceneManager.LoadScene(scenarioModeSceneName);
+        LoadingSceneUI.LoadScene(scenarioModeSceneName);
     }
 
     public void StartDefenceMode()
@@ -638,6 +638,6 @@ public class LobbyManager : MonoBehaviour
             return;
         }
 
-        SceneManager.LoadScene(defenceModeSceneName);
+        LoadingSceneUI.LoadScene(defenceModeSceneName);
     }
 }
