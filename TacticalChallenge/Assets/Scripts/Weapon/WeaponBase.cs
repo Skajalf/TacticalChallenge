@@ -13,22 +13,22 @@ enum ATKType
 public class WeaponBase : Entity
 {
     [Header("Weapon Data Setting")]
-    [SerializeField] private float power;         // ���� ������
-    [SerializeField] private int maxAmmo;         // źâ ũ��
-    [SerializeField] private float armorPiercing; // ���� ����
-    [SerializeField] private float reloadTime;    // ������ �ð�
-    [SerializeField] private ATKType attackType;  // ����Ÿ��
-    [SerializeField] private float roundPerMinute = 1f; // ź �߻��ֱ�
+    [SerializeField] private float power;
+    [SerializeField] private int maxAmmo;
+    [SerializeField] private float armorPiercing;
+    [SerializeField] private float reloadTime;
+    [SerializeField] private ATKType attackType;
+    [SerializeField] private float roundPerMinute = 1f;
 
-    [SerializeField] public int RandomReload = 1; // �ִϸ��̼� Ÿ�� (���� ����� ���� �ִ� ĳ������ ��� 1 �̿��� ����)
+    [SerializeField] public int RandomReload = 1;
 
     [Header("Weapon Visuals")]
-    [SerializeField] private GameObject projectilePrefab;   // źȯ ������
-    [SerializeField] private GameObject cartridgeParticle;  // ź�� ������
-    [SerializeField] private string weaponHolsterName = "WeaponPivot"; // ���� ��ġ �̸�
-    [SerializeField] private string bulletTransformName = "fire_01";   // �Ѿ��� ��ȯ�Ǵ� ��ġ �̸�
-    [SerializeField] private string cartridgeTransformName = "fire_02"; // ź�ǰ� ��ȯ�Ǵ� ��ġ �̸�
-    [SerializeField] private GameObject flameParticle;       // �ѱ� ȭ�� ����Ʈ
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private GameObject cartridgeParticle;
+    [SerializeField] private string weaponHolsterName = "WeaponPivot";
+    [SerializeField] private string bulletTransformName = "fire_01";
+    [SerializeField] private string cartridgeTransformName = "fire_02";
+    [SerializeField] private GameObject flameParticle;
 
     [Header("Impulse Setting")]
     [SerializeField] private Vector3 impulseDirection;
@@ -52,7 +52,7 @@ public class WeaponBase : Entity
 
     protected bool IsReloading { get; set; }
     protected bool IsFiring { get; set; }
-    
+
     protected int currentAmmo = 0;
 
     public int CurrentAmmo
@@ -72,20 +72,19 @@ public class WeaponBase : Entity
     protected void Init()
     {
         IsFiring = false;
-        if(bulletTransform == null)
+        if (bulletTransform == null)
         {
             bulletTransform = transform.FindChildByName(bulletTransformName);
-            Debug.Assert(bulletTransform != null, $"{GetInstanceID()}�� BulletTransform - fire02�� null�Դϴ�.");
+            Debug.Assert(bulletTransform != null, $"{GetInstanceID()}에 {bulletTransformName}이(가) 없습니다.");
         }
     }
 
-    public virtual void InitializeAmmo() // ������ �����ϸ鼭 ���� �ʱ�ȭ �� �� ȣ��
+    public virtual void InitializeAmmo()
     {
-        Debug.Assert(maxAmmo > 0, $"{gameObject.GetInstanceID()}�� źâ�� {maxAmmo} �Դϴ�.");
+        Debug.Assert(maxAmmo > 0, $"{gameObject.GetInstanceID()}의 탄약 크기가 {maxAmmo} 입니다.");
         currentAmmo = maxAmmo;
     }
 
-    // ź�� �Һ�
     public virtual bool AmmoUse(int amount = 1)
     {
         if (amount <= 0) return false;
@@ -94,7 +93,6 @@ public class WeaponBase : Entity
         return true;
     }
 
-    // ź�� �߰� (����: ���� �߰��� ��)
     public int AddAmmo(int amount)
     {
         if (amount <= 0) return 0;
@@ -105,82 +103,81 @@ public class WeaponBase : Entity
 
     public void Attack()
     {
-        // �߻� �� Ȥ�� źâ�� ����ٸ� �ߺ� �߻� ����
         if (IsFiring || IsReloading || IsEmpty)
             return;
 
-        StartCoroutine(FireCoroutine());  // �ڷ�ƾ ȣ��
+        StartCoroutine(FireCoroutine());
     }
 
     private IEnumerator FireCoroutine()
     {
-        IsFiring = true;  // �߻� ���� �� Firing Flag True 
+        IsFiring = true;
 
-        Fire(1, 0, 11, this);         // �߻� ����
+        Fire(1000f, 0, 11, this);
 
-        // RPM �ð���ŭ ���
         yield return new WaitForSeconds(roundPerMinute);
 
-        // �߻簡 �Ϸ�Ǿ����Ƿ� �߻� �� ���� �ʱ�ȭ
         IsFiring = false;
     }
 
     public void Fire(float range, float damageDelay, LayerMask hitLayerMask, MonoBehaviour caller)
     {
-        RaycastHit hit;
-        Vector3 fireDirection = weaponTransform.forward; // �߻� ����
-        Vector3 startPoint = bulletTransform.localToWorldMatrix.GetPosition();   // �Ѿ� �߻� ��ġ
-
         if (AmmoUse(1) != true)
             return;
 
-        // ����ĳ��Ʈ�� Ÿ�� Ȯ��
-        if (Physics.Raycast(startPoint, fireDirection, out hit, range, hitLayerMask))
-        {
-            // Ÿ�ݵ� ��ü�� �̸� ���
-            Debug.Log($"������ ��ü �̸�: {hit.collider.name}");
+        RaycastHit hit;
+        Vector3 fireDirection = Camera.main.transform.forward;
+        Vector3 rayStartPoint = Camera.main.transform.position;
 
-            // MonoBehaviour�� ���� caller�� �ڷ�ƾ ����
+        Vector3 targetPoint = rayStartPoint + fireDirection * range;
+
+        if (Physics.Raycast(rayStartPoint, fireDirection, out hit, range, hitLayerMask))
+        {
+            targetPoint = hit.point;
+
+            Debug.Log($"데미지 판정: 타격된 객체: {hit.collider.name}");
+
             caller.StartCoroutine(ApplyDamageWithDelay(hit, damageDelay, power));
         }
         else
         {
-            Debug.Log("��ǥ�� �������� �ʾҽ��ϴ�.");
+            Debug.Log("데미지 판정: 타겟을 맞추지 못했습니다.");
         }
 
-        FireProjectile();
+        FireProjectile(targetPoint);
     }
-    private void FireProjectile()
+
+    private void FireProjectile(Vector3 targetPoint)
     {
         if (projectilePrefab == null || bulletTransform == null)
         {
-            Debug.LogWarning("����ü ������ �Ǵ� �߻� ��ġ�� �������� �ʾҽ��ϴ�.");
+            Debug.LogWarning("투사체 프리팹 또는 발사 위치가 설정되지 않았습니다.");
             return;
         }
 
-        RaycastHit hit;
-        Vector3 fireDirection = Camera.main.transform.forward;
-        Vector3 targetPoint;
+        Vector3 startPosition = bulletTransform.position;
 
-        if (Physics.Raycast(bulletTransform.position, fireDirection, out hit, 1000f))
-        {
-            targetPoint = hit.point;
-        }
-        else
-        {
-            targetPoint = bulletTransform.position + fireDirection * 1000f;
-        }
+        // 총알의 이동 방향: 총구에서 카메라 Raycast 타겟을 향하도록 계산
+        Vector3 projectileDirection = (targetPoint - startPosition).normalized;
 
-        Vector3 projectileDirection = (targetPoint - bulletTransform.position).normalized;
+        // ⭐ 총알이 뒤로 날아가는 문제를 해결하기 위해 회전 시 방향 벡터를 반전
+        // 이는 프리팹 모델의 로컬 Z축이 앞을 향하지 않을 때 발생합니다.
+        Vector3 rotationDirection = projectileDirection * -1f;
 
-        var projectileInstance = ObjectPoolingManager.Instance.GetFromPool(projectilePrefab, bulletTransform.position, Quaternion.LookRotation(projectileDirection));
+        // 투사체를 총구 위치에서 생성하고 반전된 방향으로 회전시킵니다.
+        var projectileInstance = ObjectPoolingManager.Instance.GetFromPool(
+            projectilePrefab,
+            startPosition,
+            Quaternion.LookRotation(rotationDirection) // 회전 시 반전된 방향 사용
+        );
 
         if (projectileInstance != null)
         {
             var projectile = projectileInstance.GetComponent<Projectile>();
             if (projectile != null)
             {
-                projectile.Shoot(bulletTransform.position, projectileDirection, 75f, 10f);
+                // 실제 이동 방향은 반전 없이 정방향을 사용합니다.
+                projectile.Shoot(startPosition, projectileDirection, 75f, 10f);
             }
         }
     }
@@ -193,16 +190,15 @@ public class WeaponBase : Entity
         if (target != null)
         {
             if (target.GetDamage(power))
-                Debug.Log($"������ {power} ���� �Ϸ�.");
+                Debug.Log($"데미지 {power} 적용 완료.");
             else
-                Debug.Log($"������ ������");
+                Debug.Log($"데미지 적용 실패");
         }
-        else 
+        else
         {
-            Debug.LogWarning("�������� ������ �� ���� ����Դϴ�.");
+            Debug.LogWarning("데미지를 줄 수 있는 대상이 아닙니다.");
         }
     }
-
 
     public virtual bool Reload()
     {
@@ -212,7 +208,7 @@ public class WeaponBase : Entity
         }
         else
         {
-            Debug.Log("�������� �ʿ����� �ʽ��ϴ�.");
+            Debug.Log("재장전이 필요하지 않습니다.");
             return false;
         }
         return true;
@@ -222,17 +218,14 @@ public class WeaponBase : Entity
     {
         IsReloading = true;
 
-        // ������ ���峪 ��ƼŬ ����Ʈ ȣ�� (�߰� ȿ��)
         Sound();
         Particle();
 
-        // ������ �ð� ���
         yield return new WaitForSeconds(reloadTime);
 
-        currentAmmo = maxAmmo; // ź���� ���� ä��
+        currentAmmo = maxAmmo;
 
-        // ������ �Ϸ� �� ����/ȿ�� ó�� (���� ����)
-        Debug.Log("������ �Ϸ�!");
+        Debug.Log("재장전 완료!");
 
         IsReloading = false;
     }
@@ -244,7 +237,7 @@ public class WeaponBase : Entity
             weaponTransform = transform.root.FindChildByName(weaponHolsterName);
             if (weaponTransform == null)
             {
-                Debug.LogError($"���� Ȧ���͸� ã�� �� �����ϴ�: {weaponHolsterName}");
+                Debug.LogError($"무기 홀스터를 찾을 수 없습니다: {weaponHolsterName}");
                 return;
             }
         }
@@ -254,7 +247,7 @@ public class WeaponBase : Entity
             bulletTransform = weaponTransform.FindChildByName(bulletTransformName);
             if (bulletTransform == null)
             {
-                Debug.LogError($"źȯ �߻� ��ġ�� ã�� �� �����ϴ�: {bulletTransformName}");
+                Debug.LogError($"탄환 발사 위치를 찾을 수 없습니다: {bulletTransformName}");
                 return;
             }
         }
@@ -264,7 +257,7 @@ public class WeaponBase : Entity
             cartridgePoint = weaponTransform.FindChildByName(cartridgeTransformName);
             if (cartridgePoint == null)
             {
-                Debug.LogError($"ź�� �߻� ��ġ�� ã�� �� �����ϴ�: {cartridgeTransformName}");
+                Debug.LogError($"탄피 배출 위치를 찾을 수 없습니다: {cartridgeTransformName}");
                 return;
             }
         }
@@ -275,12 +268,10 @@ public class WeaponBase : Entity
 
     public virtual void UnEquip()
     {
-        
+
     }
 
     protected virtual void Impulse() { }
     protected virtual void Sound() { }
     protected virtual void Particle() { }
-
-    // �ִϸ��̼� �̺�Ʈ���� WeaponComponent�� ȣ�� -> �ڽĿ��� ����
 }

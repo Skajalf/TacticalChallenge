@@ -107,7 +107,7 @@ CapsuleCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
-  m_Direction: 1
+  m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6274212153756230666
 MonoBehaviour:
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be96d84c92c487d4896d9f2bb69714cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: -0.001
+  speed: 1
   destroyTime: 10
   weapon: {fileID: 0}
 --- !u!54 &2693651073556082735
