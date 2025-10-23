@@ -262,7 +262,7 @@ MonoBehaviour:
   attackType: 1
   roundPerMinute: 1
   RandomReload: 1
-  projectilePrefab: {fileID: 5281290268849229969, guid: 7f11e453c15223441a6272b6c59f5f07,
+  projectilePrefab: {fileID: 3710516060863984807, guid: 7f11e453c15223441a6272b6c59f5f07,
     type: 3}
   cartridgeParticle: {fileID: 0}
   weaponHolsterName: WeaponPivot
@@ -276,6 +276,7 @@ MonoBehaviour:
   damageParticle: {fileID: 0}
   hitParticlePositionOffset: {x: 0, y: 0, z: 0}
   hitParticleScaleOffset: {x: 1, y: 1, z: 1}
+  centerSphere: {fileID: 0}
 --- !u!1 &4627335679588089230
 GameObject:
   m_ObjectHideFlags: 0

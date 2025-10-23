@@ -997,7 +997,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pools:
-  - prefab: {fileID: 5281290268849229969, guid: 7f11e453c15223441a6272b6c59f5f07,
+  - prefab: {fileID: 3710516060863984807, guid: 7f11e453c15223441a6272b6c59f5f07,
       type: 3}
     spawnCount: 300
     spawnPoint: {fileID: 1995148377}
@@ -2742,7 +2742,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 45
   orthographic: 0
@@ -14384,145 +14384,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1908185956
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 19.86537
-      objectReference: {fileID: 0}
-    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.74399996
-      objectReference: {fileID: 0}
-    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 19.617
-      objectReference: {fileID: 0}
-    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1158254512580254418, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3015174873635946888, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_Name
-      value: Mika_Weapon
-      objectReference: {fileID: 0}
-    - target: {fileID: 4511322518409151781, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4511322518409151781, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4511322518409151781, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4511322518409151781, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4511322518409151781, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4511322518409151781, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5043925170628054050, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: ID
-      value: Mika
-      objectReference: {fileID: 0}
-    - target: {fileID: 5043925170628054050, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: power
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5043925170628054050, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: maxAmmo
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 5043925170628054050, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: reloadTime
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5043925170628054050, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: centerSphere
-      value: 
-      objectReference: {fileID: 2052876956}
-    - target: {fileID: 5043925170628054050, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: armorPiercing
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5043925170628054050, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 5281290268849229969, guid: 7f11e453c15223441a6272b6c59f5f07,
-        type: 3}
-    - target: {fileID: 5043925170628054050, guid: 8705f080af707e04eb9999c1565b5ac0,
-        type: 3}
-      propertyPath: hitParticlePositionOffset.x
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8705f080af707e04eb9999c1565b5ac0, type: 3}
 --- !u!1 &1912026911
 GameObject:
   m_ObjectHideFlags: 0
@@ -16308,7 +16169,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 45
     OrthographicSize: 5
-    NearClipPlane: 0.3
+    NearClipPlane: 0.01
     FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
@@ -39332,7 +39193,6 @@ SceneRoots:
   - {fileID: 2066961803}
   - {fileID: 1737590687}
   - {fileID: 1905907113}
-  - {fileID: 1908185956}
   - {fileID: 2050923516}
   - {fileID: 1025216872}
   - {fileID: 1374762578}

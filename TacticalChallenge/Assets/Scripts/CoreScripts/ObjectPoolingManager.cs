@@ -135,8 +135,11 @@ public class ObjectPoolingManager : MonoBehaviour
         }
 
         obj.SetActive(false);
+
+        obj.transform.localPosition = Vector3.zero;
+        obj.transform.localRotation = Quaternion.identity;
+
         obj.transform.SetParent(pool.parent, false);
         pool.inactive.Enqueue(obj);
-        pool.allObjects.Add(obj);
     }
 }

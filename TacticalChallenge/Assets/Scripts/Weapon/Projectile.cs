@@ -1,21 +1,32 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float speed = 0.1f; // 총알 속도
-    [SerializeField] private float destroyTime = 10.0f; // 일정 시간 후 총알 비활성화
+    [SerializeField] private float speed = 0.1f;
+    [SerializeField] private float destroyTime = 10.0f;
 
-    private Rigidbody rb; // Rigidbody 컴포넌트
-    public WeaponBase weapon; // Weapon 정보를 저장할 변수
+    private Rigidbody rb;
+    private Collider projectileCollider;
+    public WeaponBase weapon;
 
-    // Awake 메서드에서 Rigidbody 가져오기
+    private List<Vector3> trajectoryPoints = new List<Vector3>();
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        projectileCollider = GetComponent<Collider>();
     }
 
-    // 충돌 시 총알 파괴
+    private void FixedUpdate()
+    {
+        if (gameObject.activeInHierarchy)
+        {
+            trajectoryPoints.Add(transform.position);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy") || other.CompareTag("Environment"))
@@ -27,16 +38,24 @@ public class Projectile : MonoBehaviour
 
     public bool Shoot(Vector3 initialLocation, Vector3 direction, float speed, float time)
     {
-        if (rb != null)
-        {
-            rb.velocity = direction * speed; // direction 벡터에 속도를 곱하여 적용
-        }
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
 
-        // 일정 시간 후 오브젝트 풀로 반환하는 코루틴 시작
+        trajectoryPoints.Clear();
+        trajectoryPoints.Add(initialLocation);
+
+        transform.position = initialLocation;
+        transform.rotation = Quaternion.LookRotation(direction);
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.velocity = direction * speed;
+
         StartCoroutine(ReturnToPool(time));
 
         return true;
     }
+
 
     private IEnumerator ReturnToPool(float time)
     {
@@ -46,6 +65,45 @@ public class Projectile : MonoBehaviour
 
     public void OnDisable()
     {
-        // 파괴되거나, 비활성화 시킬 때 => PoolManager로 반납할 때...
+        trajectoryPoints.Clear();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (projectileCollider == null)
+        {
+            projectileCollider = GetComponent<Collider>();
+            if (projectileCollider == null) return;
+        }
+
+        if (projectileCollider is SphereCollider sphereCollider)
+        {
+            Vector3 center = transform.position + transform.TransformVector(sphereCollider.center);
+            float radius = sphereCollider.radius * Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(center, radius);
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(center, transform.forward * radius * 3f);
+        }
+        else
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(projectileCollider.bounds.center, projectileCollider.bounds.size);
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(transform.position, transform.forward * projectileCollider.bounds.extents.magnitude * 2f);
+        }
+
+        if (trajectoryPoints.Count > 1)
+        {
+            Gizmos.color = Color.green;
+
+            for (int i = 0; i < trajectoryPoints.Count - 1; i++)
+            {
+                Gizmos.DrawLine(trajectoryPoints[i], trajectoryPoints[i + 1]);
+            }
+        }
     }
 }

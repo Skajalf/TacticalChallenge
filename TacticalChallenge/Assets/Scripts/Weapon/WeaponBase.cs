@@ -129,20 +129,14 @@ public class WeaponBase : Entity
 
         RaycastHit hit;
 
+        Vector3 cameraPosition = Camera.main.transform.position;
         Vector3 cameraDirection = Camera.main.transform.forward;
 
-        Vector3 rayStartPoint = bulletTransform.position;
-        Vector3 cameraPosition = Camera.main.transform.position;
+        Vector3 targetPoint = cameraPosition + cameraDirection * range;
 
-        Vector3 cameraTarget = cameraPosition + cameraDirection * range;
+        Debug.Log($"[Fire Check] 카메라 위치: {cameraPosition}");
 
-        Vector3 fireDirection = (cameraTarget - rayStartPoint).normalized;
-
-        Vector3 targetPoint = rayStartPoint + fireDirection * range;
-
-        Debug.Log($"[Fire Check] 총구 위치: {rayStartPoint}, 카메라 위치: {cameraPosition}");
-
-        if (Physics.Raycast(rayStartPoint, fireDirection, out hit, range, hitLayerMask))
+        if (Physics.Raycast(cameraPosition, cameraDirection, out hit, range, hitLayerMask))
         {
             targetPoint = hit.point;
 
@@ -166,21 +160,22 @@ public class WeaponBase : Entity
             return;
         }
 
-        Vector3 startPosition = bulletTransform.position;
+        Vector3 cameraPosition = Camera.main.transform.position;
+        Vector3 cameraForward = Camera.main.transform.forward;
 
-        Vector3 projectileDirection = (targetPoint - startPosition).normalized;
+        const float VISUAL_START_OFFSET_FROM_CAMERA = 0.1f;
+        Vector3 visualStartPosition = cameraPosition + cameraForward * VISUAL_START_OFFSET_FROM_CAMERA;
 
-        float offsetDistance = 0.25f;
-        Vector3 correctedPosition = startPosition + projectileDirection * offsetDistance;
+        Vector3 projectileDirection = (targetPoint - visualStartPosition).normalized;
 
-        Debug.Log($"[Proj] 보정된 발사 시작 위치: {correctedPosition}, 목표 지점: {targetPoint}");
+        Debug.Log($"[Proj] 시각적 발사 시작 위치 (카메라 근처): {visualStartPosition}, 목표 지점: {targetPoint}");
 
-        Vector3 rotationDirection = projectileDirection * -1f;
+        Quaternion rotation = Quaternion.LookRotation(projectileDirection);
 
         var projectileInstance = ObjectPoolingManager.Instance.GetFromPool(
             projectilePrefab,
-            correctedPosition,
-            Quaternion.LookRotation(rotationDirection)
+            visualStartPosition,
+            rotation
         );
 
         if (projectileInstance != null)
@@ -188,7 +183,7 @@ public class WeaponBase : Entity
             var projectile = projectileInstance.GetComponent<Projectile>();
             if (projectile != null)
             {
-                projectile.Shoot(correctedPosition, projectileDirection, 75f, 10f);
+                projectile.Shoot(visualStartPosition, projectileDirection, 75f, 10f);
             }
         }
     }
