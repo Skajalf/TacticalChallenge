@@ -8469,7 +8469,7 @@ GameObject:
   - component: {fileID: 1155138322}
   - component: {fileID: 1155138324}
   - component: {fileID: 1155138323}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WeaponDetect
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -113,7 +113,9 @@ public class WeaponBase : Entity
     {
         IsFiring = true;
 
-        Fire(1000f, 0, 11, this);
+        int playableLayer = LayerMask.GetMask("Playable");
+
+        Fire(1000f, 0, playableLayer, this);
 
         yield return new WaitForSeconds(roundPerMinute);
 
@@ -126,22 +128,31 @@ public class WeaponBase : Entity
             return;
 
         RaycastHit hit;
-        Vector3 fireDirection = Camera.main.transform.forward;
-        Vector3 rayStartPoint = Camera.main.transform.position;
+
+        Vector3 cameraDirection = Camera.main.transform.forward;
+
+        Vector3 rayStartPoint = bulletTransform.position;
+        Vector3 cameraPosition = Camera.main.transform.position;
+
+        Vector3 cameraTarget = cameraPosition + cameraDirection * range;
+
+        Vector3 fireDirection = (cameraTarget - rayStartPoint).normalized;
 
         Vector3 targetPoint = rayStartPoint + fireDirection * range;
+
+        Debug.Log($"[Fire Check] 총구 위치: {rayStartPoint}, 카메라 위치: {cameraPosition}");
 
         if (Physics.Raycast(rayStartPoint, fireDirection, out hit, range, hitLayerMask))
         {
             targetPoint = hit.point;
 
-            Debug.Log($"데미지 판정: 타격된 객체: {hit.collider.name}");
+            Debug.Log($"[Fire] 데미지 판정 성공! 타겟: {hit.collider.name}, 좌표: {targetPoint}");
 
             caller.StartCoroutine(ApplyDamageWithDelay(hit, damageDelay, power));
         }
         else
         {
-            Debug.Log("데미지 판정: 타겟을 맞추지 못했습니다.");
+            Debug.Log($"[Fire] 데미지 판정 실패 (빗나감). 최대 도달 좌표: {targetPoint}");
         }
 
         FireProjectile(targetPoint);
@@ -157,18 +168,19 @@ public class WeaponBase : Entity
 
         Vector3 startPosition = bulletTransform.position;
 
-        // 총알의 이동 방향: 총구에서 카메라 Raycast 타겟을 향하도록 계산
         Vector3 projectileDirection = (targetPoint - startPosition).normalized;
 
-        // ⭐ 총알이 뒤로 날아가는 문제를 해결하기 위해 회전 시 방향 벡터를 반전
-        // 이는 프리팹 모델의 로컬 Z축이 앞을 향하지 않을 때 발생합니다.
+        float offsetDistance = 0.25f;
+        Vector3 correctedPosition = startPosition + projectileDirection * offsetDistance;
+
+        Debug.Log($"[Proj] 보정된 발사 시작 위치: {correctedPosition}, 목표 지점: {targetPoint}");
+
         Vector3 rotationDirection = projectileDirection * -1f;
 
-        // 투사체를 총구 위치에서 생성하고 반전된 방향으로 회전시킵니다.
         var projectileInstance = ObjectPoolingManager.Instance.GetFromPool(
             projectilePrefab,
-            startPosition,
-            Quaternion.LookRotation(rotationDirection) // 회전 시 반전된 방향 사용
+            correctedPosition,
+            Quaternion.LookRotation(rotationDirection)
         );
 
         if (projectileInstance != null)
@@ -176,8 +188,7 @@ public class WeaponBase : Entity
             var projectile = projectileInstance.GetComponent<Projectile>();
             if (projectile != null)
             {
-                // 실제 이동 방향은 반전 없이 정방향을 사용합니다.
-                projectile.Shoot(startPosition, projectileDirection, 75f, 10f);
+                projectile.Shoot(correctedPosition, projectileDirection, 75f, 10f);
             }
         }
     }
