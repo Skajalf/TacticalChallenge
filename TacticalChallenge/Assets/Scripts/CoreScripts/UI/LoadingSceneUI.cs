@@ -7,6 +7,7 @@ using Michsky.MUIP;
 public class LoadingSceneUI : MonoBehaviour
 {
     private static string nextScene;
+    private static string nextGameMode;
 
     [Header("로딩 시간 설정")]
     [SerializeField] private float minLoadTime = 1.0f;
@@ -21,10 +22,16 @@ public class LoadingSceneUI : MonoBehaviour
     private float noiseScale = 0.5f;
     private float targetFakeProgress;
 
-    public static void LoadScene(string sceneName)
+    public static void LoadScene(string sceneName, string gameMode = null)
     {
         nextScene = sceneName;
+        nextGameMode = gameMode;
         SceneManager.LoadScene("LoadingScene");
+    }
+
+    public static string GetNextGameMode()
+    {
+        return nextGameMode;
     }
 
     public static float GetMinLoadingDuration()

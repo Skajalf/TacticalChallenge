@@ -39,6 +39,8 @@ public class LobbyManager : MonoBehaviour
     public AudioMixer mainAudioMixer;
     private const string MASTER_VOLUME_PARAM = "MasterVolume";
 
+    [Header("Scene Names")]
+    public string formationSceneName = "FormationScene";
     public string scenarioModeSceneName = "ScenarioModeScene";
     public string defenceModeSceneName = "DefenceModeScene";
 
@@ -622,22 +624,22 @@ public class LobbyManager : MonoBehaviour
 
     public void StartScenarioMode()
     {
-        if (string.IsNullOrEmpty(scenarioModeSceneName))
+        if (string.IsNullOrEmpty(formationSceneName))
         {
-            Debug.LogError("Scenario Mode Scene Name이 LobbyManager 컴포넌트에 설정되지 않았습니다.");
+            Debug.LogError("Formation Scene Name이 LobbyManager 컴포넌트에 설정되지 않았습니다.");
             return;
         }
-        LoadingSceneUI.LoadScene(scenarioModeSceneName);
+        LoadingSceneUI.LoadScene(formationSceneName, "ScenarioMode");
     }
 
     public void StartDefenceMode()
     {
-        if (string.IsNullOrEmpty(defenceModeSceneName))
+        if (string.IsNullOrEmpty(formationSceneName))
         {
-            Debug.LogError("Defence Mode Scene Name이 LobbyManager 컴포넌트에 설정되지 않았습니다.");
+            Debug.LogError("Formation Scene Name이 LobbyManager 컴포넌트에 설정되지 않았습니다.");
             return;
         }
 
-        LoadingSceneUI.LoadScene(defenceModeSceneName);
+        LoadingSceneUI.LoadScene(formationSceneName, "DefenceMode");
     }
 }
